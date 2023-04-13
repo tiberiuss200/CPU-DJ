@@ -47,6 +47,3 @@ def search_for_artist(token, artist_name):
 token = get_token()
 artist_search_result = search_for_artist(token, "Eminem")
 print(artist_search_result)
-
-
-
