@@ -39,7 +39,6 @@ def search_for_artist(token, artist_name):
     query_url = url + query
     result = get(query_url, headers=headers)
     json_result = json.loads(result.content)
-    json_result = json_result.to_csv()
     print(json_result)
 
 token = get_token()
