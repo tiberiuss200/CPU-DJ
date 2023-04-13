@@ -36,7 +36,9 @@ def dearch_for_artist(token, artist_name):
     query = f"q={artist_name}&type=artist&limit=1"
     
     query_url = url + query
-    result = get(query_urn, header=headers)
+    result = get(query_urn, headers=headers)
     json_result = json.loads(result.content)
     print(json_result)
 
+token = get_token()
+search_for_artist(token, "Eminem")
