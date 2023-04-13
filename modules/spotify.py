@@ -40,5 +40,5 @@ def search_for_playlist(token, mood):
     return json_result
   
 token = get_token()
-playlist_search_result = search_for_playlist(token, "Sad")
+playlist_search_result = search_for_playlist(token, "SAD! boi")
 print(playlist_search_result)
