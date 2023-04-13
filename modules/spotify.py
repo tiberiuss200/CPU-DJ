@@ -29,7 +29,7 @@ def get_token():
 def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
 
-def search_for_artist(token, mood):
+def search_for_playlist(token, mood):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
     query = f"?q={mood}&type=playlist&limit=1"
@@ -40,5 +40,5 @@ def search_for_artist(token, mood):
     return json_result
   
 token = get_token()
-artist_search_result = search_for_artist(token, "Sad")
-print(artist_search_result)
+playlist_search_result = search_for_playlist(token, "Sad")
+print(playlist_search_result)
