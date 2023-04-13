@@ -41,4 +41,4 @@ def search_for_artist(token, artist_name):
     print(json_result)
 
 token = get_token()
-search_for_artist(token, "Eminem")
+search_for_artist(token, "ACDC")
