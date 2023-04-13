@@ -44,8 +44,9 @@ def search_for_artist(token, artist_name):
     json_result = json.loads(result.content)
     return json_result
   
+token = get_token()
 artist_search_result = search_for_artist(token, "Eminem")
 print(artist_search_result)
 
-token = get_token()
+
 
