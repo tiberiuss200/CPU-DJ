@@ -43,8 +43,9 @@ def search_for_artist(token, artist_name):
     result = get(query_url, headers=headers)
     json_result = json.loads(result.content)
     return json_result
-    
-print(json_result)
+  
+artist_search_result = search_for_artist()
+print(artist_search_result)
 
 token = get_token()
 search_for_artist(token, "Eminem")
