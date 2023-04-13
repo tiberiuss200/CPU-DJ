@@ -1,6 +1,7 @@
 import asyncio
 import psutil
 
+#update the CPU dictionary variable
 async def update_cpu_dict(cpudict):
     while True:
         cpudict["cpu_percent"] = psutil.cpu_percent()
