@@ -32,7 +32,7 @@ def get_auth_header(token):
 def search_for_artist(token, mood):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
-    query = f"?q=playlist&type=tag:{mood}&limit=1"
+    query = f"?q={mood}&type=playlist&limit=1"
     
     query_url = url + query
     result = get(query_url, headers=headers)
