@@ -17,7 +17,6 @@ def get_token():
     auth_string = client_id + ":" + client_secret
     auth_bytes = auth_string.encode("utf-8")
     auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
-    
     url = "https://accounts.spotify.com/api/token"
     headers = {
         "Accept": "application/json",
@@ -37,7 +36,6 @@ def search_for_playlist(token, mood):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
     query = f"?q={mood}&type=playlist&limit=1"
-    
     query_url = url + query
     result = get(query_url, headers=headers)
     json_result = json.loads(result.content)["playlists"]["items"]
@@ -54,15 +52,10 @@ def get_song(token, playlist_id):
         json_result = json.loads(result.content)["items"]
         return json_result
 
-  
 token = get_token()
 result = search_for_playlist(token, "SAD")
 playlist_id = "5aAC7SE7vWgcOKatnRAZ42"
 songs = get_song(token, "5aAC7SE7vWgcOKatnRAZ42")
-
-
-    
-
     
 print("Songs In Playlist:")
 print("------------------")
