@@ -59,7 +59,7 @@ songs = get_song(token, playlist_id)
     
 print("Songs In Playlist " + playlist_id + " :")
 print("-------------------------------------------")
-for index, item in enumerate(songs):
+for index, item in enumerate(songs, start=1):
     try:
         name = item["track"]["name"]
         print(index, name)     
