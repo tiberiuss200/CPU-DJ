@@ -4,6 +4,9 @@ import os
 import base64
 import json
 
+class X:
+    def __getitem__(self, i):
+        return f"Value {i}"
 
 load_dotenv()
 
@@ -17,6 +20,7 @@ def get_token():
     
     url = "https://accounts.spotify.com/api/token"
     headers = {
+        "Accept": "application/json",
         "Authorization": "Basic " + auth_base64,
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -43,6 +47,29 @@ def search_for_playlist(token, mood):
     else:
         return json_result[0]
   
+def get_song(token, playlist_id):
+        url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+        headers = get_auth_header(token)
+        result = get(url, headers=headers)
+        json_result = json.loads(result.content)["items"]
+        return json_result
+
+  
 token = get_token()
-playlist_search_result = search_for_playlist(token, "SAD")
-print(playlist_search_result)
+result = search_for_playlist(token, "SAD")
+playlist_id = "5aAC7SE7vWgcOKatnRAZ42"
+songs = get_song(token, "5aAC7SE7vWgcOKatnRAZ42")
+
+
+    
+
+    
+print("Songs In Playlist:")
+print("------------------")
+for index, item in enumerate(songs):
+    try:
+        name = item["track"]["name"]
+        print(index, name)     
+    except TypeError:
+        pass
+    
