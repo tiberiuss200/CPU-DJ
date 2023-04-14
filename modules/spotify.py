@@ -55,7 +55,7 @@ def get_song(token, playlist_id):
 token = get_token()
 result = search_for_playlist(token, "SAD")
 playlist_id = "5aAC7SE7vWgcOKatnRAZ42"
-songs = get_song(token, "5aAC7SE7vWgcOKatnRAZ42")
+songs = get_song(token, playlist_id)
     
 print("Songs In Playlist:")
 print("------------------")
