@@ -46,7 +46,7 @@ def search_for_playlist(token, mood):
         return json_result[0]
   
 def get_song(token, playlist_id):
-        url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+        url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100"
         headers = get_auth_header(token)
         result = get(url, headers=headers)
         json_result = json.loads(result.content)["items"]
