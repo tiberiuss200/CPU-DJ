@@ -36,8 +36,12 @@ def search_for_playlist(token, mood):
     
     query_url = url + query
     result = get(query_url, headers=headers)
-    json_result = json.loads(result.content)
-    return json_result
+    json_result = json.loads(result.content)["playlists"]["items"]
+    if len(json_result) == 0:
+        print("No Playlist Found")
+        return None
+    else:
+        return json_result[0]
   
 token = get_token()
 playlist_search_result = search_for_playlist(token, "SAD")
