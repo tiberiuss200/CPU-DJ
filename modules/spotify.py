@@ -57,8 +57,8 @@ result = search_for_playlist(token, "SAD")
 playlist_id = "5aAC7SE7vWgcOKatnRAZ42"
 songs = get_song(token, playlist_id)
     
-print("Songs In Playlist:")
-print("------------------")
+print("Songs In Playlist " + playlist_id + " :")
+print("-------------------------------------------")
 for index, item in enumerate(songs):
     try:
         name = item["track"]["name"]
