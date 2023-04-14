@@ -63,7 +63,7 @@ for index, item in enumerate(songs, start=1):
     try:
         name = item["track"]["name"]
         print(index, name)     
-    except TypeError:
+    except TypeError or name == "":
         pass
-    
+
 ## 69 nice
