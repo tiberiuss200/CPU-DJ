@@ -1,9 +1,12 @@
 from dotenv import load_dotenv
+from requests import post, get
 import os
 import base64
-from requests import post, get
 import json
-import csv
+
+class X:
+    def __getitem__(self, i):
+        return f"Value {i}"
 
 load_dotenv()
 
@@ -14,9 +17,9 @@ def get_token():
     auth_string = client_id + ":" + client_secret
     auth_bytes = auth_string.encode("utf-8")
     auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
-    
     url = "https://accounts.spotify.com/api/token"
     headers = {
+        "Accept": "application/json",
         "Authorization": "Basic " + auth_base64,
         "Content-Type": "application/x-www-form-urlencoded"
     }
@@ -29,16 +32,38 @@ def get_token():
 def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
 
-def search_for_artist(token, artist_name):
+def search_for_playlist(token, mood):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
-    query = f"?q={artist_name}&type=artist&limit=1"
-    
+    query = f"?q={mood}&type=playlist&limit=1"
     query_url = url + query
     result = get(query_url, headers=headers)
-    json_result = json.loads(result.content)
-    return json_result
+    json_result = json.loads(result.content)["playlists"]["items"]
+    if len(json_result) == 0:
+        print("No Playlist Found")
+        return None
+    else:
+        return json_result[0]
   
+def get_song(token, playlist_id):
+        url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100"
+        headers = get_auth_header(token)
+        result = get(url, headers=headers)
+        json_result = json.loads(result.content)["items"]
+        return json_result
+
 token = get_token()
-artist_search_result = search_for_artist(token, "Eminem")
-print(artist_search_result)
+result = search_for_playlist(token, "SAD")
+playlist_id = "5aAC7SE7vWgcOKatnRAZ42"
+songs = get_song(token, playlist_id)
+    
+print("Songs In Playlist " + playlist_id + " :")
+print("-------------------------------------------")
+for index, item in enumerate(songs, start=1):
+    try:
+        name = item["track"]["name"]
+        print(index, name)     
+    except TypeError or name == "":
+        pass
+
+## 69 nice
