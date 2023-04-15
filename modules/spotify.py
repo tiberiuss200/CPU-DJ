@@ -8,10 +8,26 @@ class X:
     def __getitem__(self, i):
         return f"Value {i}"
 
+
 load_dotenv()
 
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
+
+def main():
+    token = get_token()
+    result = search_for_playlist(token, "SAD")
+    playlist_id = "5aAC7SE7vWgcOKatnRAZ42"
+    songs = get_song(token, playlist_id)
+    
+    print("Songs In Playlist " + playlist_id + " :")
+    print("-------------------------------------------")
+    for index, item in enumerate(songs, start=1):
+        try:
+            name = item["track"]["name"]
+            print(index, name)     
+        except TypeError or name == "":
+            pass
 
 def get_token():
     auth_string = client_id + ":" + client_secret
@@ -52,18 +68,5 @@ def get_song(token, playlist_id):
         json_result = json.loads(result.content)["items"]
         return json_result
 
-token = get_token()
-result = search_for_playlist(token, "SAD")
-playlist_id = "5aAC7SE7vWgcOKatnRAZ42"
-songs = get_song(token, playlist_id)
-    
-print("Songs In Playlist " + playlist_id + " :")
-print("-------------------------------------------")
-for index, item in enumerate(songs, start=1):
-    try:
-        name = item["track"]["name"]
-        print(index, name)     
-    except TypeError or name == "":
-        pass
 
 ## 69 nice

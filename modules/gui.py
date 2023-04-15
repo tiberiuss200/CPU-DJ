@@ -1,10 +1,11 @@
 import sys
-
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
 
 # Only needed for access to command line arguments
 import sys
+
+import spotify
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
@@ -30,6 +31,7 @@ class MainWindow(QMainWindow):
         print("Song generated!")
         self.button.setText("Song Generated.")
         self.button.setEnabled(False)
+        spotify.main()
 
 
     def the_button_was_released(self):
