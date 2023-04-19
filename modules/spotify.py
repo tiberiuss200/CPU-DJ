@@ -25,9 +25,11 @@ def main():
     for index, item in enumerate(songs, start=1):
         try:
             name = item["track"]["name"]
-            print(index, name)     
+            # print(index, name)     
         except TypeError or name == "":
             pass
+    
+    return songs
 
 def get_token():
     auth_string = client_id + ":" + client_secret
