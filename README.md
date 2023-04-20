@@ -2,7 +2,7 @@
 
 Dependencies:
 
-pip install PyQt6 matplotlib psutil gputil requests python-dotenv
+pip install PyQt6 matplotlib psutil gputil requests python-dotenv jupyter notebook
 
 (windows)
-python -m pip install PyQt6 matplotlib psutil gputil requests python-dotenv
+python -m pip install PyQt6 matplotlib psutil gputil requests python-dotenv jupyter notebook
