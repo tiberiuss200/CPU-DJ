@@ -4,7 +4,7 @@ from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QVBoxLayout, QWidget
 from array import *
 
-import spotify
+import modules.spotify as spotify
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
@@ -116,7 +116,7 @@ window = MainWindow()
 window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
 # Start the event loop.
-app.exec()
+# app.exec()
 
 # Your application won't reach here until you exit and the event
 # loop has stopped.
