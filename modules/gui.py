@@ -23,13 +23,6 @@ class MainWindow(QMainWindow):
         mainWindow.thread_pool = QThreadPool()
         mainWindow.thread_pool.setMaxThreadCount(10)
 
-        # an easy way to run the CPU processing tasks in the background!
-        # this assumes they are always tracking stats currently and does not account for starting/stopping at will.
-        # we will have to implement that later
-        # note: does not currently start tasks?  probably because app.exec hasn't started yet.  find a way to kickstart it.
-        from modules.processing import prep_tasks
-        prep_tasks(mainWindow)
-
         mainWindow.array1 = array
         # array[4] = 
         # mainWindow.array1
@@ -43,12 +36,19 @@ class MainWindow(QMainWindow):
         mainWindow.button.setChecked(mainWindow.button_is_checked)
         mainWindow.button.setFixedSize(QSize(400, 300))
 
+        from modules.processing import prep_tasks
+        mainWindow.taskButton = QPushButton("Start tasks")
+        mainWindow.taskButton.setCheckable(True)
+        mainWindow.taskButton.released.connect(lambda: prep_tasks(window))
+        mainWindow.taskButton.setFixedSize(QSize(200,100))
+
         # mainWindow.input = QLineEdit()
         # mainWindow.input.textChanged.connect(mainWindow.label.setText)
 
         mainWindow.layout = QVBoxLayout()
         # mainWindow.layout.addWidget(mainWindow.input)
         mainWindow.layout.addWidget(mainWindow.button)
+        mainWindow.layout.addWidget(mainWindow.taskButton)
 
         container = QWidget()
         container.setLayout(mainWindow.layout)
@@ -128,8 +128,20 @@ app = QApplication(sys.argv)
 window = MainWindow()
 window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
+
+# an easy way to run the CPU processing tasks in the background!
+# this assumes they are always tracking stats currently and does not account for starting/stopping at will.
+# # we will have to implement that later
+# note: does not currently start tasks?  probably because app.exec hasn't started yet.  find a way to kickstart it.
+# edit: moving it below `window.show`
+# from modules.processing import prep_tasks
+# from modules.tasks import startupTasksTimer
+# timer_onStartUp = startupTasksTimer(window)
+# timer_onStartUp.timeout.connect(lambda: prep_tasks(window))
+# timer_onStartUp.start()
+
 # Start the event loop.
-# app.exec()
+app.exec()
 
 # Your application won't reach here until you exit and the event
 # loop has stopped.

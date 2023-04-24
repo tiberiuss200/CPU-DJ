@@ -1,7 +1,7 @@
 import traceback
 import time
 from PyQt6.QtCore import (Q_ARG, QMetaObject, QMutex, QMutexLocker, QObject,
-                          QRunnable, Qt, QThreadPool, pyqtSignal, pyqtSlot)
+                          QRunnable, Qt, QThreadPool, pyqtSignal, pyqtSlot, QTimer)
 
 # unabashedly using this as a base
 # https://github.com/mochisue/pyqt-async-sample/blob/main/src/sample.py
@@ -53,12 +53,15 @@ def wait(msec):
 # default signal handler functions
 # might be needed depending on your task
 def finish_default():
+    print("task finish")
     return True
 
 def error_default():
+    print("task error")
     return True
 
 def result_default():
+    print("task result")
     return True
 
 # note to Ty:
@@ -85,6 +88,13 @@ def start(window, fxn_thread, handle_finish=finish_default, handle_error=error_d
         workerObj.signals.result.connect(handle_result)
         window.thread_pool.start(workerObj)
     return workerObj
+
+# need some kind of function to signal to app when things have started...
+def startupTasksTimer(window):
+    timer_onStartUp = QTimer(window)
+    timer_onStartUp.setSingleShot(True)
+    timer_onStartUp.setInterval(0)
+    return timer_onStartUp
 
 #eof
 
