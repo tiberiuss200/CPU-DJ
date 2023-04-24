@@ -1,7 +1,6 @@
 import modules.processing as processing
 import modules.gui as gui
 import modules.spotify as spotify
-import asyncio
 import modules.state as state
 
 #background_tasks = set()
