@@ -1,13 +1,18 @@
 import sys
 import random
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QVBoxLayout, QWidget
 from array import *
 
-import spotify
+import modules.spotify as spotify
+from modules.processing import prep_tasks
+import modules.state as state
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
+    # stuff for modules.tasks... it needs to be declared outside of __init__ for some reason? -D
+    stopWorkers = pyqtSignal()
+
     def __init__(mainWindow):
         super().__init__()
 
@@ -16,6 +21,9 @@ class MainWindow(QMainWindow):
         mainWindow.button_is_checked = True
         mainWindow.display = ["empty"]
 
+        # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
+        mainWindow.thread_pool = QThreadPool()
+        mainWindow.thread_pool.setMaxThreadCount(10)
 
         mainWindow.array1 = array
         # array[4] = 
@@ -30,12 +38,18 @@ class MainWindow(QMainWindow):
         mainWindow.button.setChecked(mainWindow.button_is_checked)
         mainWindow.button.setFixedSize(QSize(400, 300))
 
+        mainWindow.taskButton = QPushButton("Start tasks")
+        mainWindow.taskButton.setCheckable(True)
+        mainWindow.taskButton.released.connect(lambda: prep_tasks(window))
+        mainWindow.taskButton.setFixedSize(QSize(200,100))
+
         # mainWindow.input = QLineEdit()
         # mainWindow.input.textChanged.connect(mainWindow.label.setText)
 
         mainWindow.layout = QVBoxLayout()
         # mainWindow.layout.addWidget(mainWindow.input)
         mainWindow.layout.addWidget(mainWindow.button)
+        mainWindow.layout.addWidget(mainWindow.taskButton)
 
         container = QWidget()
         container.setLayout(mainWindow.layout)
@@ -114,6 +128,20 @@ app = QApplication(sys.argv)
 
 window = MainWindow()
 window.show()  # IMPORTANT!!!!! Windows are hidden by default.
+
+
+# an easy way to run the CPU processing tasks in the background!
+# this assumes they are always tracking stats currently and does not account for starting/stopping at will.
+# # we will have to implement that later
+# note: does not currently start tasks?  probably because app.exec hasn't started yet.  find a way to kickstart it.
+# edit: moving it below `window.show`
+app.lastWindowClosed.connect(state.signalTasks)
+
+# from modules.processing import prep_tasks
+# from modules.tasks import startupTasksTimer
+# timer_onStartUp = startupTasksTimer(window)
+# timer_onStartUp.timeout.connect(lambda: prep_tasks(window))
+# timer_onStartUp.start()
 
 # Start the event loop.
 app.exec()
