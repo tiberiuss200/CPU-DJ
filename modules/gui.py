@@ -1,6 +1,6 @@
 import sys
 import random
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QVBoxLayout, QWidget
 from array import *
 
@@ -8,6 +8,9 @@ import modules.spotify as spotify
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
+    # stuff for modules.tasks... it needs to be declared outside of __init__ for some reason? -D
+    stopWorkers = pyqtSignal()
+
     def __init__(mainWindow):
         super().__init__()
 
@@ -16,6 +19,16 @@ class MainWindow(QMainWindow):
         mainWindow.button_is_checked = True
         mainWindow.display = ["empty"]
 
+        # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
+        mainWindow.thread_pool = QThreadPool()
+        mainWindow.thread_pool.setMaxThreadCount(10)
+
+        # an easy way to run the CPU processing tasks in the background!
+        # this assumes they are always tracking stats currently and does not account for starting/stopping at will.
+        # we will have to implement that later
+        # note: does not currently start tasks?  probably because app.exec hasn't started yet.  find a way to kickstart it.
+        from modules.processing import prep_tasks
+        prep_tasks(mainWindow)
 
         mainWindow.array1 = array
         # array[4] = 
