@@ -56,8 +56,8 @@ def finish_default():
     print("task finish")
     return True
 
-def error_default():
-    print("task error")
+def error_default(message):
+    print(message)
     return True
 
 def result_default():

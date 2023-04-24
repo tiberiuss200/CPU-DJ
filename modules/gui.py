@@ -5,6 +5,8 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLin
 from array import *
 
 import modules.spotify as spotify
+from modules.processing import prep_tasks
+import modules.state as state
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
@@ -36,7 +38,6 @@ class MainWindow(QMainWindow):
         mainWindow.button.setChecked(mainWindow.button_is_checked)
         mainWindow.button.setFixedSize(QSize(400, 300))
 
-        from modules.processing import prep_tasks
         mainWindow.taskButton = QPushButton("Start tasks")
         mainWindow.taskButton.setCheckable(True)
         mainWindow.taskButton.released.connect(lambda: prep_tasks(window))
@@ -134,6 +135,8 @@ window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 # # we will have to implement that later
 # note: does not currently start tasks?  probably because app.exec hasn't started yet.  find a way to kickstart it.
 # edit: moving it below `window.show`
+app.lastWindowClosed.connect(state.signalTasks)
+
 # from modules.processing import prep_tasks
 # from modules.tasks import startupTasksTimer
 # timer_onStartUp = startupTasksTimer(window)
