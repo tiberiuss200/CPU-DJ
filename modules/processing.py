@@ -34,6 +34,7 @@ def prep_tasks(window):
     tasks.start(window, print_dict)
     uri_to_embed("junk")
     
+    
     #that's it!  ez
 
 def uri_to_embed(uri): 

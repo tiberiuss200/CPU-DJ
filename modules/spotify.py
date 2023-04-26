@@ -61,7 +61,7 @@ def search_for_playlist(token, mood):
         print("No Playlist Found")
         return None
     else:
-        return json_result[0]
+        return json_result
   
 def get_song(token, playlist_id):
         url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100"
