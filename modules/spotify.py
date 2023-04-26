@@ -20,7 +20,7 @@ def main():
     playlist_id = get_playlist_id(token, "SAD")
     songs = get_song(token, playlist_id)
     
-    print("Songs In Playlist " + playlist_id + " :")
+    print("Songs In Playlist " + playlist_id + " ")
     print("-------------------------------------------")
     for index, item in enumerate(songs, start=1):
         try:
@@ -66,10 +66,10 @@ def search_for_playlist(token, mood):
 def get_playlist_id(token, mood):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
-    query = f"?q={mood}&type=playlist&limit=1"
+    query = f"?q={mood}&type=playlist&limit=1&offset=100"
     query_url = url + query
     result = get(query_url, headers=headers)
-    id_result = json.loads(result.content)["playlists"]["items"]["id"]
+    id_result = json.loads(result.content)["playlists"]["items"][0]['id']
     if len(id_result) == 0:
         print("No Playlist Found")
         return None
