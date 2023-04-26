@@ -32,7 +32,6 @@ def prep_tasks(window):
     #test
     tasks.start(window, update_cpu_dict)
     tasks.start(window, print_dict)
-    uri_to_embed("junk")
 
     
     #that's it!  ez
@@ -58,10 +57,11 @@ def uri_to_embed(uri):
     """
     rough = uri_to_embed.__doc__
     toWrite = rough.replace("[[URI]]",uri)
-    with open("embed.html", 'w') as html:
+    path = "embed.html"
+    with open(path, 'w') as html:
         html.write(toWrite)
     
-    return "embed.html"
+    return path
 
 
 
