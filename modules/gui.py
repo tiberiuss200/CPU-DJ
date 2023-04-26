@@ -85,9 +85,11 @@ class MainWindow(QMainWindow):
         for index, item in enumerate(songs, start=1):
             try:
                 name = item["track"]["name"]
+                uri = item["track"]["uri"]
                 # print(index, name)
-                array1 = [index, name]
+                arrayNU = [name, uri]
                 # print(mainWindow.array1)
+                array1 = arrayNU + [index]
                 array3 = array3 + array2
                 array2 = array2 + array1
                 
@@ -97,12 +99,12 @@ class MainWindow(QMainWindow):
     
         print("-------------------------------------------")
 
-        mainWindow.display[0] = "test text2"
-        mainWindow.display[0] = (str(array2[2])+' '+str(array2[3])) 
+        #mainWindow.display[0] = "test text2"
+        mainWindow.display[0] = (str(array2[2])+' '+str(array2[0])+' '+str(array2[3]))
         
         # print(array2)
      
-        print(array2)  
+        print(array2)
 
         print(mainWindow.display)
 
