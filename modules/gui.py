@@ -1,22 +1,39 @@
 import sys
 import random
 from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QWidget
+from PyQt6.QtGui import QPalette, QColor
 from array import *
 
 import modules.spotify as spotify
 from modules.processing import prep_tasks
 import modules.state as state
 
+class Color(QWidget):
+
+    def __init__(self, color):
+        super(Color, self).__init__()
+        self.setAutoFillBackground(True)
+
+        palette = self.palette()
+        palette.setColor(QPalette.ColorRole.Window, QColor(color))
+        self.setPalette(palette)
+        self.setMinimumSize(45, 60)
+        self.resize(45, 60)
+
+
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
     # stuff for modules.tasks... it needs to be declared outside of __init__ for some reason? -D
     stopWorkers = pyqtSignal()
 
+
     def __init__(mainWindow):
         super().__init__()
-
+        frameCounter = 0
         mainWindow.setWindowTitle("CPU-DJ")
+        mainWindow.setMinimumSize(200, 200)
+        mainWindow.resize(200, 200)
 
         mainWindow.button_is_checked = True
         mainWindow.display = ["empty"]
@@ -30,47 +47,91 @@ class MainWindow(QMainWindow):
         # mainWindow.array1
         mainWindow.array2 = [0]
         mainWindow.array3 = [0]
-
-        mainWindow.button = QPushButton("Generate Song")
-        mainWindow.button.setCheckable(True)
-        mainWindow.button.clicked.connect(mainWindow.the_button_was_clicked)
-        mainWindow.button.released.connect(mainWindow.the_button_was_released)
-        mainWindow.button.setChecked(mainWindow.button_is_checked)
-        mainWindow.button.setFixedSize(QSize(400, 300))
-
+        
+        mainWindow.generateButton = QPushButton("Generate Song")
         mainWindow.taskButton = QPushButton("Start tasks")
-        mainWindow.taskButton.setCheckable(True)
-        mainWindow.taskButton.released.connect(lambda: prep_tasks(window))
-        mainWindow.taskButton.setFixedSize(QSize(200,100))
+        mainWindow.button_setup()
 
-        # mainWindow.input = QLineEdit()
-        # mainWindow.input.textChanged.connect(mainWindow.label.setText)
+        # self.input = QLineEdit()
+        # self.input.textChanged.connect(self.playlistDisplay.setText)
 
         mainWindow.layout = QVBoxLayout()
+        row1 = QHBoxLayout()
+        row2 = QHBoxLayout()
+        row3 = QHBoxLayout()
+        row4 = QHBoxLayout()
+        row5 = QHBoxLayout()
+
+        row1.addWidget(Color('red'))
+
+        row1.addWidget(mainWindow.generateButton)
+        row1.addWidget(mainWindow.taskButton)
+
+        row2.addWidget(Color('red'))
+        row2.addWidget(Color('yellow'))
+        row2.addWidget(Color('purple'))
+
+        row3.addWidget(Color('red'))
+        row3.addWidget(Color('yellow'))
+        row3.addWidget(Color('purple'))
+
+        row4.addWidget(Color('red'))
+        row4.addWidget(Color('yellow'))
+        row4.addWidget(Color('purple'))
+
+        row5.addWidget(Color('red'))
+        row5.addWidget(Color('yellow'))
+        row5.addWidget(Color('purple'))
+
+        mainWindow.layout.addLayout(row1)
+        mainWindow.layout.addLayout(row2)
+        mainWindow.layout.addLayout(row3)
+        mainWindow.layout.addLayout(row4)
+        mainWindow.layout.addLayout(row5)
+
+
         # mainWindow.layout.addWidget(mainWindow.input)
-        mainWindow.layout.addWidget(mainWindow.button)
-        mainWindow.layout.addWidget(mainWindow.taskButton)
+
+
+        # testing displays
+        mainWindow.display[0]="test text"
+        
+        mainWindow.name = "test2"
+        mainWindow.playlistDisplay = QLabel()
+
+        mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
+        mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
         container = QWidget()
         container.setLayout(mainWindow.layout)
 
-
         # Set the central widget of the Window.
         mainWindow.setCentralWidget(container)
 
+        frameCounter+=1
+        print(frameCounter)
 
-        mainWindow.display[0]="test text"
-        
-        mainWindow.name = "test2"
-        mainWindow.label = QLabel()
 
-        mainWindow.label.setText("Failed - QLabel Set Text")
-        mainWindow.label.setText(mainWindow.display[0])
+    def button_setup(mainWindow):
+        mainWindow.generateButton.setCheckable(True)
+        mainWindow.generateButton.clicked.connect(mainWindow.generate_list)
+        mainWindow.generateButton.released.connect(mainWindow.the_button_was_released)
+        mainWindow.generateButton.setChecked(mainWindow.button_is_checked)
+        mainWindow.generateButton.setMinimumSize(45, 60)
+        mainWindow.generateButton.resize(45, 60)
+
+        mainWindow.taskButton.setCheckable(True)
+        mainWindow.taskButton.released.connect(lambda: prep_tasks(window))
+
+        mainWindow.setMinimumSize(45, 60)
+        mainWindow.resize(45, 60)
     
-    def the_button_was_clicked(mainWindow):
+    def generate_list(mainWindow):
         print("Song generated!")
-        mainWindow.button.setText("Song Generated.")
-        mainWindow.button.setEnabled(False)
+        mainWindow.generateButton.setText("Song Generated.")
+        mainWindow.generateButton.setEnabled(False)
+
+
         songs = spotify.main()
 
         # show_Playlist(songs, mainWindow, QLabel)
@@ -78,9 +139,8 @@ class MainWindow(QMainWindow):
         #to[0] = "Passed - QLabel Set Text"
         array1 = []
         array2 = []
-        array3 = []
 
-        mainWindow.layout.addWidget(mainWindow.label)
+        mainWindow.layout.addWidget(mainWindow.playlistDisplay)
 
         for index, item in enumerate(songs, start=1):
             try:
@@ -90,7 +150,6 @@ class MainWindow(QMainWindow):
                 arrayNU = [name, uri]
                 # print(mainWindow.array1)
                 array1 = arrayNU + [index]
-                array3 = array3 + array2
                 array2 = array2 + array1
 
 
@@ -113,7 +172,7 @@ class MainWindow(QMainWindow):
 
         print(mainWindow.display)
 
-        mainWindow.label.setText(mainWindow.display[0])
+        mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
     def the_button_was_released(mainWindow):
         mainWindow.button_is_checked = True
@@ -149,6 +208,7 @@ app.lastWindowClosed.connect(state.signalTasks)
 # timer_onStartUp = startupTasksTimer(window)
 # timer_onStartUp.timeout.connect(lambda: prep_tasks(window))
 # timer_onStartUp.start()
+
 
 # Start the event loop.
 app.exec()
