@@ -92,15 +92,16 @@ class MainWindow(QMainWindow):
                 array1 = arrayNU + [index]
                 array3 = array3 + array2
                 array2 = array2 + array1
-                
+
 
             except TypeError or name == "":
                 pass
-    
+
         print("-------------------------------------------")
 
         #mainWindow.display[0] = "test text2"
         mainWindow.display[0] = (str(array2[2])+' '+str(array2[0])+' '+str(array2[3]))
+
         
         # print(array2)
      
