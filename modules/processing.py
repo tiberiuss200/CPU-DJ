@@ -32,8 +32,37 @@ def prep_tasks(window):
     #test
     tasks.start(window, update_cpu_dict)
     tasks.start(window, print_dict)
+    uri_to_embed("junk")
     
     #that's it!  ez
+
+def uri_to_embed(uri): 
+    """
+    <html>
+        <script src=\"https://open.spotify.com/embed-podcast/iframe-api/v1\" async></script>
+        <script>
+            window.onSpotifyIframeApiReady = (IFrameAPI) => {
+                const element = document.getElementById('embed-iframe');
+                const options = {
+                    uri: '[[URI]]'
+                };
+                const callback = (EmbedController) => {};
+                IFrameAPI.createController(element, options, callback);
+            };
+        </script>
+        <body> 
+            <div id="embed-iframe"></div>
+        </body> 
+    </html>
+    """
+    rough = uri_to_embed.__doc__
+    toWrite = rough.replace("[[URI]]",uri)
+    with open("embed.html", 'w') as html:
+        html.write(toWrite)
+    
+    return "embed.html"
+
+
 
 
 #eof
