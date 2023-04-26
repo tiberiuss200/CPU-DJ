@@ -131,46 +131,17 @@ class MainWindow(QMainWindow):
         mainWindow.generateButton.setText("Song Generated.")
         mainWindow.generateButton.setEnabled(False)
 
+        mainWindow.layout.addWidget(mainWindow.playlistDisplay)
 
         songs = spotify.main()
 
         # show_Playlist(songs, mainWindow, QLabel)
 
-        #to[0] = "Passed - QLabel Set Text"
-        array1 = []
-        array2 = []
-
-        mainWindow.layout.addWidget(mainWindow.playlistDisplay)
-
-        for index, item in enumerate(songs, start=1):
-            try:
-                name = item["track"]["name"]
-                uri = item["track"]["uri"]
-                # print(index, name)
-                arrayNU = [name, uri]
-                # print(mainWindow.array1)
-                array1 = arrayNU + [index]
-                array2 = array2 + array1
-
-
-            except TypeError or name == "":
-                pass
-
-        print("-------------------------------------------")
-
-        #mainWindow.display[0] = "test text2"
-        mainWindow.display[0] = (str(array2[2])+' '+str(array2[0])+' '+str(array2[1]))
-        # index 2 of array2 = song number
-        # index 0 of array2 = song title
-        # index 1 of array2 = URI
-        from modules.processing import uri_to_embed
-        uri_to_embed(str(array2[1]))
-        
         # print(array2)
      
-        print(array2)
+      #  print(array2)
 
-        print(mainWindow.display)
+       # print(mainWindow.display)
 
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
