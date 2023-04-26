@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
         print("-------------------------------------------")
 
         #mainWindow.display[0] = "test text2"
-        mainWindow.display[0] = (str(array2[2])+' '+str(array2[0])+' '+str(array2[3]))
+        mainWindow.display[0] = (str(array2[2])+' '+str(array2[0])+' '+str(array2[1]))
 
         
         # print(array2)
