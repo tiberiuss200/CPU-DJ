@@ -68,8 +68,8 @@ class MainWindow(QMainWindow):
         self.generateButton.setCheckable(True)
         self.generateButton.clicked.connect(self.generate_list)
         self.generateButton.released.connect(self.the_button_was_released)
-        self.button.setChecked(self.button_is_checked)
-        self.button.setFixedSize(QSize(400, 300))
+        self.generateButton.setChecked(self.button_is_checked)
+        self.generateButton.setFixedSize(QSize(400, 300))
 
         self.taskButton.setCheckable(True)
         self.taskButton.released.connect(lambda: prep_tasks(window))
@@ -78,8 +78,8 @@ class MainWindow(QMainWindow):
 
     def generate_list(self):
         print("Song generated!")
-        self.button.setText("Song Generated.")
-        self.button.setEnabled(False)
+        self.generateButton.setText("Song Generated.")
+        self.generateButton.setEnabled(False)
         songs = spotify.main()
 
         # show_Playlist(songs, self, QLabel)
