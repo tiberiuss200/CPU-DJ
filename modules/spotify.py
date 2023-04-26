@@ -17,7 +17,7 @@ client_secret = os.getenv("CLIENT_SECRET")
 def main():
     token = get_token()
     result = search_for_playlist(token, "SAD")
-    playlist_id = "5aAC7SE7vWgcOKatnRAZ42"
+    playlist_id = get_playlist_id(token, "SAD")
     songs = get_song(token, playlist_id)
     
     print("Songs In Playlist " + playlist_id + " :")
@@ -62,13 +62,26 @@ def search_for_playlist(token, mood):
         return None
     else:
         return playlist_result
-  
+
+def get_playlist_id(token, mood):
+    url = "https://api.spotify.com/v1/search"
+    headers = get_auth_header(token)
+    query = f"?q={mood}&type=playlist&limit=1"
+    query_url = url + query
+    result = get(query_url, headers=headers)
+    id_result = json.loads(result.content)["playlists"]["items"]
+    if len(id_result) == 0:
+        print("No Playlist Found")
+        return None
+    else:
+        return id_result
+
 def get_song(token, playlist_id):
         url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100"
         headers = get_auth_header(token)
         result = get(url, headers=headers)
-        json_result = json.loads(result.content)["items"]
-        return json_result
+        song_result = json.loads(result.content)["items"]
+        return song_result
 
 
 
