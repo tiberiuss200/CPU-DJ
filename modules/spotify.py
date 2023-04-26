@@ -43,8 +43,8 @@ def get_token():
     }
     data = {"grant_type": "client_credentials"}
     result = post(url, headers=headers, data=data)
-    json_result = json.loads(result.content)
-    token = json_result["access_token"]
+    t_result = json.loads(result.content)
+    token = t_result["access_token"]
     return token
 
 def get_auth_header(token):
@@ -57,7 +57,7 @@ def search_for_playlist(token, mood):
     query_url = url + query
     result = get(query_url, headers=headers)
     playlist_result = json.loads(result.content)["playlists"]["items"]
-    if len(json_result) == 0:
+    if len(playlist_result) == 0:
         print("No Playlist Found")
         return None
     else:
