@@ -12,84 +12,90 @@ import modules.state as state
 class MainWindow(QMainWindow):
     # stuff for modules.tasks... it needs to be declared outside of __init__ for some reason? -D
     stopWorkers = pyqtSignal()
+    frameCounter = 0
 
-    def __init__(mainWindow):
+    def __init__(self, frameCounter):
         super().__init__()
 
-        mainWindow.setWindowTitle("CPU-DJ")
+        self.setWindowTitle("CPU-DJ")
 
-        mainWindow.button_is_checked = True
-        mainWindow.display = ["empty"]
+        self.button_is_checked = True
+        self.display = ["empty"]
 
         # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
-        mainWindow.thread_pool = QThreadPool()
-        mainWindow.thread_pool.setMaxThreadCount(10)
+        self.thread_pool = QThreadPool()
+        self.thread_pool.setMaxThreadCount(10)
 
-        mainWindow.array1 = array
+        self.array1 = array
         # array[4] = 
-        # mainWindow.array1
-        mainWindow.array2 = [0]
-        mainWindow.array3 = [0]
+        # self.array1
+        self.array2 = [0]
+        self.array3 = [0]
+        
+        self.generateButton = QPushButton("Generate Song")
+        self.taskButton = QPushButton("Start tasks")
+        self.button_setup()
 
-        mainWindow.button = QPushButton("Generate Song")
-        mainWindow.button.setCheckable(True)
-        mainWindow.button.clicked.connect(mainWindow.the_button_was_clicked)
-        mainWindow.button.released.connect(mainWindow.the_button_was_released)
-        mainWindow.button.setChecked(mainWindow.button_is_checked)
-        mainWindow.button.setFixedSize(QSize(400, 300))
 
-        mainWindow.taskButton = QPushButton("Start tasks")
-        mainWindow.taskButton.setCheckable(True)
-        mainWindow.taskButton.released.connect(lambda: prep_tasks(window))
-        mainWindow.taskButton.setFixedSize(QSize(200,100))
+        # self.input = QLineEdit()
+        # self.input.textChanged.connect(self.label.setText)
 
-        # mainWindow.input = QLineEdit()
-        # mainWindow.input.textChanged.connect(mainWindow.label.setText)
-
-        mainWindow.layout = QVBoxLayout()
-        # mainWindow.layout.addWidget(mainWindow.input)
-        mainWindow.layout.addWidget(mainWindow.button)
-        mainWindow.layout.addWidget(mainWindow.taskButton)
+        self.layout = QVBoxLayout()
+        # self.layout.addWidget(self.input)
+        self.layout.addWidget(self.generateButton)
+        self.layout.addWidget(self.taskButton)
 
         container = QWidget()
-        container.setLayout(mainWindow.layout)
-
+        container.setLayout(self.layout)
 
         # Set the central widget of the Window.
-        mainWindow.setCentralWidget(container)
+        self.setCentralWidget(container)
 
 
-        mainWindow.display[0]="test text"
+        # testing displays
+        self.display[0]="test text"
         
-        mainWindow.name = "test2"
-        mainWindow.label = QLabel()
+        self.name = "test2"
+        self.playlistDisplay = QLabel()
 
-        mainWindow.label.setText("Failed - QLabel Set Text")
-        mainWindow.label.setText(mainWindow.display[0])
-    
-    def the_button_was_clicked(mainWindow):
+        self.playlistDisplay.setText("Failed - QLabel Set Text")
+        self.playlistDisplay.setText(self.display[0])
+
+        frameCounter+=1
+        print(frameCounter)
+        
+    def button_setup(self):
+        self.generateButton.setCheckable(True)
+        self.generateButton.clicked.connect(self.generate_list)
+        self.generateButton.released.connect(self.the_button_was_released)
+        self.button.setChecked(self.button_is_checked)
+        self.button.setFixedSize(QSize(400, 300))
+
+        self.taskButton.setCheckable(True)
+        self.taskButton.released.connect(lambda: prep_tasks(window))
+        self.taskButton.setFixedSize(QSize(200,100))
+
+
+    def generate_list(self):
         print("Song generated!")
-        mainWindow.button.setText("Song Generated.")
-        mainWindow.button.setEnabled(False)
+        self.button.setText("Song Generated.")
+        self.button.setEnabled(False)
         songs = spotify.main()
 
-        # show_Playlist(songs, mainWindow, QLabel)
+        # show_Playlist(songs, self, QLabel)
 
         #to[0] = "Passed - QLabel Set Text"
         array1 = []
         array2 = []
-        array3 = []
 
-        mainWindow.layout.addWidget(mainWindow.label)
+        self.layout.addWidget(self.playlistDisplay)
 
         for index, item in enumerate(songs, start=1):
             try:
                 name = item["track"]["name"]
                 # print(index, name)
-                array1 = [index, name]
-                # print(mainWindow.array1)
-                array3 = array3 + array2
-                array2 = array2 + array1
+                array1 += [index, name]
+                # print(self.array1)
                 
 
             except TypeError or name == "":
@@ -97,26 +103,35 @@ class MainWindow(QMainWindow):
     
         print("-------------------------------------------")
 
-        mainWindow.display[0] = "test text2"
-        mainWindow.display[0] = (str(array2[2])+' '+str(array2[3])) 
+        self.display[0] = "test text2"
         
+        x=0
+        while(x<len(array1)):
+            array1[x]=str(array1[x])
+            x+=1
+        
+        x=0
+        while(x<len(array1)):
+            print(array1[x]+" "+array1[x+1])
+            x+=2
+
+        # self.display[0] = (str(array2[2])+' '+str(array2[3])) 
+        
+        # self.display(array2[x])
         # print(array2)
-     
-        print(array2)  
 
-        print(mainWindow.display)
+        print(self.display)
 
-        mainWindow.label.setText(mainWindow.display[0])
+        self.playlistDisplay.setText(self.display[0])
 
-    def the_button_was_released(mainWindow):
-        mainWindow.button_is_checked = True
-        print(mainWindow.button_is_checked)
+    def the_button_was_released(self):
+        self.button_is_checked = True
+        print(self.button_is_checked)
 
-def show_Playlist(songs, mainWindow, QLabel):
-    return
-        
+    def show_Playlist(songs, self, QLabel):
+        return
     
-    # print(str(mainWindow.array3[2])+' '+mainWindow.array3[3])
+        # print(str(self.array3[2])+' '+self.array3[3])
     
 
 # You need one (and only one) QApplication instance per application.
@@ -125,8 +140,9 @@ def show_Playlist(songs, mainWindow, QLabel):
 app = QApplication(sys.argv)
 
 # Create a Qt main window, which will be our window.
+frameCounter = 0;
 
-window = MainWindow()
+window = MainWindow(frameCounter)
 window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
 
