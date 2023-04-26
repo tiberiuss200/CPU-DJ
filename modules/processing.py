@@ -32,7 +32,6 @@ def prep_tasks(window):
     #test
     tasks.start(window, update_cpu_dict)
     tasks.start(window, print_dict)
-    uri_to_embed("junk")
 
     
     #that's it!  ez
