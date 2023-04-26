@@ -66,7 +66,7 @@ def search_for_playlist(token, mood):
 def get_playlist_id(token, mood):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
-    query = f"?q=SAD&type=playlist&limit=1"
+    query = f"?q={mood}&type=playlist&limit=1"
     query_url = url + query
     result = get(query_url, headers=headers)
     id_result = json.loads(result.content)["playlists"]["items"]["id"]
