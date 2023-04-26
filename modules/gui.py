@@ -101,7 +101,11 @@ class MainWindow(QMainWindow):
 
         #mainWindow.display[0] = "test text2"
         mainWindow.display[0] = (str(array2[2])+' '+str(array2[0])+' '+str(array2[1]))
-
+        # index 2 of array2 = song number
+        # index 0 of array2 = song title
+        # index 1 of array2 = URI
+        from modules.processing import uri_to_embed
+        uri_to_embed(str(array2[1]))
         
         # print(array2)
      
