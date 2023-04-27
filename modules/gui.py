@@ -42,56 +42,11 @@ class MainWindow(QMainWindow):
         mainWindow.thread_pool = QThreadPool()
         mainWindow.thread_pool.setMaxThreadCount(10)
 
-        mainWindow.array1 = array
-        # array[4] = 
-        # mainWindow.array1
-        mainWindow.array2 = [0]
-        mainWindow.array3 = [0]
-        
         mainWindow.generateButton = QPushButton("Generate Song")
         mainWindow.taskButton = QPushButton("Start tasks")
         mainWindow.button_setup()
 
-        # self.input = QLineEdit()
-        # self.input.textChanged.connect(self.playlistDisplay.setText)
-
-        mainWindow.layout = QVBoxLayout()
-        row1 = QHBoxLayout()
-        row2 = QHBoxLayout()
-        row3 = QHBoxLayout()
-        row4 = QHBoxLayout()
-        row5 = QHBoxLayout()
-
-        row1.addWidget(Color('red'))
-
-        row1.addWidget(mainWindow.generateButton)
-        row1.addWidget(mainWindow.taskButton)
-
-        row2.addWidget(Color('red'))
-        row2.addWidget(Color('yellow'))
-        row2.addWidget(Color('purple'))
-
-        row3.addWidget(Color('red'))
-        row3.addWidget(Color('yellow'))
-        row3.addWidget(Color('purple'))
-
-        row4.addWidget(Color('red'))
-        row4.addWidget(Color('yellow'))
-        row4.addWidget(Color('purple'))
-
-        row5.addWidget(Color('red'))
-        row5.addWidget(Color('yellow'))
-        row5.addWidget(Color('purple'))
-
-        mainWindow.layout.addLayout(row1)
-        mainWindow.layout.addLayout(row2)
-        mainWindow.layout.addLayout(row3)
-        mainWindow.layout.addLayout(row4)
-        mainWindow.layout.addLayout(row5)
-
-
-        # mainWindow.layout.addWidget(mainWindow.input)
-
+        mainWindow.layout = mainWindow.bench_layout()
 
         # testing displays
         mainWindow.display[0]= "URI Generated. Check console."
@@ -111,6 +66,43 @@ class MainWindow(QMainWindow):
         frameCounter+=1
         print(frameCounter)
 
+    def bench_layout(mainWindow):
+        
+        mainWindow.row1 = QHBoxLayout()
+        mainWindow.row2 = QHBoxLayout()
+        mainWindow.row3 = QHBoxLayout()
+        mainWindow.row4 = QHBoxLayout()
+        mainWindow.row5 = QHBoxLayout()
+
+        mainWindow.row1.addWidget(Color('red'))
+        mainWindow.row1.addWidget(mainWindow.generateButton)
+        mainWindow.row1.addWidget(mainWindow.taskButton)
+        
+        mainWindow.row2.addWidget(Color('red'))
+        mainWindow.row2.addWidget(Color('yellow'))
+        mainWindow.row2.addWidget(Color('purple'))
+
+        mainWindow.row3.addWidget(Color('red'))
+        mainWindow.row3.addWidget(Color('yellow'))
+        mainWindow.row3.addWidget(Color('purple'))
+
+        mainWindow.row4.addWidget(Color('red'))
+        mainWindow.row4.addWidget(Color('yellow'))
+        mainWindow.row4.addWidget(Color('purple'))
+
+        mainWindow.row5.addWidget(Color('red'))
+        mainWindow.row5.addWidget(Color('yellow'))
+        mainWindow.row5.addWidget(Color('purple'))
+
+        containerBench = QVBoxLayout()
+
+        containerBench.addLayout(mainWindow.row1)
+        containerBench.addLayout(mainWindow.row2)
+        containerBench.addLayout(mainWindow.row3)
+        containerBench.addLayout(mainWindow.row4)
+        containerBench.addLayout(mainWindow.row5)
+
+        return containerBench
 
     def button_setup(mainWindow):
         mainWindow.generateButton.setCheckable(True)
@@ -122,32 +114,36 @@ class MainWindow(QMainWindow):
 
         mainWindow.taskButton.setCheckable(True)
         mainWindow.taskButton.released.connect(lambda: prep_tasks(window))
-
-        mainWindow.setMinimumSize(45, 60)
-        mainWindow.resize(45, 60)
+        mainWindow.taskButton.setMinimumSize(45, 60)
+        mainWindow.taskButton.resize(45, 60)
+        return
     
     def generate_list(mainWindow):
         print("URI generated!")
         mainWindow.generateButton.setText("URI Generated.")
         mainWindow.generateButton.setEnabled(False)
 
-        mainWindow.layout.addWidget(mainWindow.playlistDisplay)
+        item = mainWindow.row4.itemAt(0)
+        rm = item.widget()
+        rm.deleteLater()
+        item = mainWindow.row4.itemAt(1)
+        rm = item.widget()
+        rm.deleteLater()
+        item = mainWindow.row4.itemAt(2)
+        rm = item.widget()
+        rm.deleteLater()
+
+        mainWindow.row4.addWidget(mainWindow.playlistDisplay)
 
         songs = spotify.main()
 
-        # show_Playlist(songs, mainWindow, QLabel)
-
-        # print(array2)
-     
-      #  print(array2)
-
-       # print(mainWindow.display)
-
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
+        return
 
     def the_button_was_released(mainWindow):
         mainWindow.button_is_checked = True
         print(mainWindow.button_is_checked)
+        return
 
 def show_Playlist(songs, mainWindow, QLabel):
     return

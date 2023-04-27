@@ -29,7 +29,7 @@ def main():
 
             uris.append(uri)
 
-        except TypeError or name == "":
+        except TypeError or uri == "":
             pass
 
     print("-------------------------------------------")
