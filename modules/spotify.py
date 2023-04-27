@@ -21,13 +21,9 @@ def main():
     playlist_id = get_playlist_id(token, "SAD")
     songs = get_song(token, playlist_id)
 
-
-
-        #to[0] = "Passed - QLabel Set Text"
-
     uris = []
 
-    for index, item in enumerate(songs, start=1):
+    for index, item in enumerate(songs, start=0):
         try:
             uri = item["track"]["uri"]
 
