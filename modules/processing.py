@@ -56,7 +56,7 @@ def uri_to_embed(uri):
     </html>
     """
     rough = uri_to_embed.__doc__
-    toWrite = rough.replace("[[URI]]",uri)
+    toWrite = rough.replace("[[URI]]", str(uri))
     path = "embed.html"
     with open(path, 'w') as html:
         html.write(toWrite)

@@ -24,41 +24,25 @@ def main():
 
 
         #to[0] = "Passed - QLabel Set Text"
-    array1 = []
-    array2 = []
 
+    uris = []
 
-
-    for index, item in enumerate(songs, start=0):
+    for index, item in enumerate(songs, start=1):
         try:
-            name = item["track"]["name"]
             uri = item["track"]["uri"]
-            index = index + 1
-            # print(index, name)
-            arrayName = [name]
-            arrayUri = [uri]
-            # print(mainWindow.array1)
-            array1 = [index] + arrayName + arrayUri
-            array2 = array2 + array1
+
+            uris.append(uri)
 
         except TypeError or name == "":
             pass
 
     print("-------------------------------------------")
 
-        #mainWindow.display[0] = "test text2"
-    print(random.choice(array1))
-        # index 2 of array2 = song number
-        # index 0 of array2 = song title
-        # index 1 of array2 = URI
     from modules.processing import uri_to_embed
-    uri_to_embed(uri)
-
-
-
-
-    return songs
-
+    final_uri = random.choice(uris)
+    uri_to_embed(final_uri)
+    print(final_uri)
+    return final_uri
 
 def get_token():
     auth_string = client_id + ":" + client_secret

@@ -127,7 +127,7 @@ class MainWindow(QMainWindow):
         mainWindow.resize(45, 60)
     
     def generate_list(mainWindow):
-        print("Song generated!")
+        print("URI generated!")
         mainWindow.generateButton.setText("Song Generated.")
         mainWindow.generateButton.setEnabled(False)
 
