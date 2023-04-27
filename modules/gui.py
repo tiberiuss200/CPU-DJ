@@ -94,9 +94,9 @@ class MainWindow(QMainWindow):
 
 
         # testing displays
-        mainWindow.display[0]="test text"
-        
-        mainWindow.name = "test2"
+        mainWindow.display[0]= "URI Generated. Check console."
+
+        mainWindow.name = "Test"
         mainWindow.playlistDisplay = QLabel()
 
         mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
@@ -128,7 +128,7 @@ class MainWindow(QMainWindow):
     
     def generate_list(mainWindow):
         print("URI generated!")
-        mainWindow.generateButton.setText("Song Generated.")
+        mainWindow.generateButton.setText("URI Generated.")
         mainWindow.generateButton.setEnabled(False)
 
         mainWindow.layout.addWidget(mainWindow.playlistDisplay)
