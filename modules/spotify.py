@@ -34,7 +34,7 @@ def main():
 
     print("-------------------------------------------")
 
-    from modules.processing import uri_to_embed
+    #from modules.processing import uri_to_embed
     final_uri = random.choice(uris)
     uri_to_embed(final_uri)
     print(final_uri)
@@ -92,5 +92,31 @@ def get_song(token, playlist_id):
         song_result = json.loads(result.content)["items"]
         return song_result
 
-
+# moved from processing because of the tasks I created bitching about this function -D
+def uri_to_embed(uri): 
+    """
+    <html>
+        <script src=\"https://open.spotify.com/embed-podcast/iframe-api/v1\" async></script>
+        <script>
+            window.onSpotifyIframeApiReady = (IFrameAPI) => {
+                const element = document.getElementById('embed-iframe');
+                const options = {
+                    uri: '[[URI]]'
+                };
+                const callback = (EmbedController) => {};
+                IFrameAPI.createController(element, options, callback);
+            };
+        </script>
+        <body> 
+            <div id="embed-iframe"></div>
+        </body> 
+    </html>
+    """
+    rough = uri_to_embed.__doc__
+    toWrite = rough.replace("[[URI]]", str(uri))
+    path = "embed.html"
+    with open(path, 'w') as html:
+        html.write(toWrite)
+    
+    return path
 

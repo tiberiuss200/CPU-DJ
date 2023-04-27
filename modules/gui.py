@@ -2,6 +2,7 @@ import sys
 import random
 from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QWidget
+#from PySide6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtGui import QPalette, QColor
 from array import *
 
@@ -35,7 +36,6 @@ class MainWindow(QMainWindow):
         mainWindow.setMinimumSize(200, 200)
         mainWindow.resize(200, 200)
 
-        mainWindow.button_is_checked = True
         mainWindow.display = ["empty"]
 
         # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
@@ -44,6 +44,8 @@ class MainWindow(QMainWindow):
 
         mainWindow.generateButton = QPushButton("Generate Song")
         mainWindow.taskButton = QPushButton("Start tasks")
+        mainWindow.generateButton.button_is_checked = True
+        mainWindow.taskButton.button_is_checked = True
         mainWindow.button_setup()
 
         mainWindow.layout = mainWindow.bench_layout()
@@ -53,6 +55,7 @@ class MainWindow(QMainWindow):
 
         mainWindow.name = "Test"
         mainWindow.playlistDisplay = QLabel()
+        #mainWindow.songEmbed = QWebEngineView()
 
         mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
@@ -108,15 +111,22 @@ class MainWindow(QMainWindow):
         mainWindow.generateButton.setCheckable(True)
         mainWindow.generateButton.clicked.connect(mainWindow.generate_list)
         mainWindow.generateButton.released.connect(mainWindow.the_button_was_released)
-        mainWindow.generateButton.setChecked(mainWindow.button_is_checked)
+        mainWindow.generateButton.setChecked(mainWindow.generateButton.button_is_checked)
         mainWindow.generateButton.setMinimumSize(45, 60)
         mainWindow.generateButton.resize(45, 60)
 
         mainWindow.taskButton.setCheckable(True)
-        mainWindow.taskButton.released.connect(lambda: prep_tasks(window))
+        mainWindow.taskButton.released.connect(mainWindow.taskButtonPressed)
+        mainWindow.taskButton.setChecked(mainWindow.taskButton.button_is_checked)
+        mainWindow.taskButton.released.connect(mainWindow.the_button_was_released)
         mainWindow.taskButton.setMinimumSize(45, 60)
         mainWindow.taskButton.resize(45, 60)
         return
+    
+    def taskButtonPressed(mainWindow):
+        prep_tasks(mainWindow)
+        mainWindow.taskButton.setEnabled(False)
+        mainWindow.taskButton.setText("Tasks started.")
     
     def generate_list(mainWindow):
         print("URI generated!")
@@ -136,13 +146,17 @@ class MainWindow(QMainWindow):
         mainWindow.row4.addWidget(mainWindow.playlistDisplay)
 
         songs = spotify.main()
+        #mainWindow.songEmbed.load("embed.html")
+        #mainWindow.row4.addWidget(mainWindow.songEmbed)
+        #mainWindow.songEmbed.show()
 
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
         return
 
     def the_button_was_released(mainWindow):
-        mainWindow.button_is_checked = True
-        print(mainWindow.button_is_checked)
+        mainWindow.generateButton.button_is_checked = True
+        mainWindow.taskButton.button_is_checked = True
+        #print(mainWindow.button_is_checked)
         return
 
 def show_Playlist(songs, mainWindow, QLabel):

@@ -36,32 +36,7 @@ def prep_tasks(window):
     
     #that's it!  ez
 
-def uri_to_embed(uri): 
-    """
-    <html>
-        <script src=\"https://open.spotify.com/embed-podcast/iframe-api/v1\" async></script>
-        <script>
-            window.onSpotifyIframeApiReady = (IFrameAPI) => {
-                const element = document.getElementById('embed-iframe');
-                const options = {
-                    uri: '[[URI]]'
-                };
-                const callback = (EmbedController) => {};
-                IFrameAPI.createController(element, options, callback);
-            };
-        </script>
-        <body> 
-            <div id="embed-iframe"></div>
-        </body> 
-    </html>
-    """
-    rough = uri_to_embed.__doc__
-    toWrite = rough.replace("[[URI]]", str(uri))
-    path = "embed.html"
-    with open(path, 'w') as html:
-        html.write(toWrite)
-    
-    return path
+
 
 
 
