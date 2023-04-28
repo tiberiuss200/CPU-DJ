@@ -75,13 +75,17 @@ def result_default():
 # GUESS WHO CREATED A FUNCTION DEDICATED TO STARTING TASKS AS IF THEY ARE COROUTINES BUT ACTUALLY THREADS!!  THIS GUY!!
 # It's pretty easy to use, check processing.py in prep_tasks for an example.
 
-def start(window, fxn_thread, handle_finish=finish_default, handle_error=error_default, handle_result=result_default, *args, **kwargs):
+def start(window, fxn_thread, *args, **kwargs):
     # window in gui.py is literally just called window.  circular imports stopped this from being awesome...
     # from modules.gui import window
+    handle_finish=finish_default
+    handle_error=error_default
+    handle_result=result_default
 
     workerObj = None
     if window.thread_pool.activeThreadCount() < window.thread_pool.maxThreadCount():
         workerObj = Task(fxn_thread, *args, **kwargs)
+        workerObj.window = window
         window.stopWorkers.connect(workerObj.stop)
         workerObj.signals.finish.connect(handle_finish)
         workerObj.signals.error.connect(handle_error)

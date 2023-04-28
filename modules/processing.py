@@ -28,6 +28,7 @@ def print_dict(self):
     return True
     #end
 
+
 def prep_tasks(window):
     #test
     tasks.start(window, update_cpu_dict)

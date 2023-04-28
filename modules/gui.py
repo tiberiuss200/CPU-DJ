@@ -1,14 +1,17 @@
 import sys
 import random
-from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal
+from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QWidget
-#from PySide6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtGui import QPalette, QColor
 from array import *
 
 import modules.spotify as spotify
 from modules.processing import prep_tasks
 import modules.state as state
+import modules.tasks as tasks
+
+app_path = ""
 
 class Color(QWidget):
 
@@ -44,8 +47,8 @@ class MainWindow(QMainWindow):
 
         mainWindow.generateButton = QPushButton("Generate Song")
         mainWindow.taskButton = QPushButton("Start tasks")
-        mainWindow.generateButton.button_is_checked = True
-        mainWindow.taskButton.button_is_checked = True
+        mainWindow.generateButton.button_is_checked = False
+        mainWindow.taskButton.button_is_checked = False
         mainWindow.button_setup()
 
         mainWindow.layout = mainWindow.bench_layout()
@@ -55,7 +58,9 @@ class MainWindow(QMainWindow):
 
         mainWindow.name = "Test"
         mainWindow.playlistDisplay = QLabel()
-        #mainWindow.songEmbed = QWebEngineView()
+        mainWindow.songEmbed = QWebEngineView()
+        mainWindow.emotionReading = QLabel()
+        mainWindow.cpuInfo = QLabel()
 
         mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
@@ -125,8 +130,44 @@ class MainWindow(QMainWindow):
     
     def taskButtonPressed(mainWindow):
         prep_tasks(mainWindow)
+        mainWindow.processingUI()
         mainWindow.taskButton.setEnabled(False)
         mainWindow.taskButton.setText("Tasks started.")
+    
+    def processingUI(mainWindow):
+        item = mainWindow.row2.itemAt(0)
+        rm = item.widget()
+        rm.deleteLater()
+        item = mainWindow.row2.itemAt(1)
+        rm = item.widget()
+        rm.deleteLater()
+        item = mainWindow.row2.itemAt(2)
+        rm = item.widget()
+        rm.deleteLater()
+        mainWindow.emotionReading.setText("...")
+        mainWindow.cpuInfo.setText("...")
+        mainWindow.row2.addWidget(mainWindow.emotionReading)
+        mainWindow.row2.addWidget(mainWindow.cpuInfo)
+        tasks.start(mainWindow, mainWindow.setDictToUI, mainWindow)
+
+    def setDictToUI(mainWindow, testArg, any):
+        while not state.mainFinished:
+            emotions = ("Happy.", "Stressed.", "Angry.", "Bored.")
+            emotionText = "Your computer is feeling "
+            if state.cpudict["cpu_percent"] > 90.0:
+                emotionText = emotionText + emotions[2]
+            elif state.cpudict["cpu_percent"] < 5.0:
+                emotionText = emotionText + emotions[3]
+            elif state.cpudict["cpu_percent"] < 50.0:
+                emotionText = emotionText + emotions[0]
+            else:
+                emotionText = emotionText + emotions[1]
+            mainWindow.emotionReading.setText(emotionText)
+
+            infoText = "CPU Percent: " + str(state.cpudict["cpu_percent"]) + "%"
+            mainWindow.cpuInfo.setText(infoText)
+            tasks.wait(1000)
+        return True
     
     def generate_list(mainWindow):
         print("URI generated!")
@@ -143,12 +184,12 @@ class MainWindow(QMainWindow):
         rm = item.widget()
         rm.deleteLater()
 
-        mainWindow.row4.addWidget(mainWindow.playlistDisplay)
+        #mainWindow.row4.addWidget(mainWindow.playlistDisplay)
 
         songs = spotify.main()
-        #mainWindow.songEmbed.load("embed.html")
-        #mainWindow.row4.addWidget(mainWindow.songEmbed)
-        #mainWindow.songEmbed.show()
+        mainWindow.songEmbed.setHtml(open("embed.html").read())
+        mainWindow.row4.addWidget(mainWindow.songEmbed)
+        mainWindow.songEmbed.show()
 
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
         return
@@ -170,6 +211,7 @@ def show_Playlist(songs, mainWindow, QLabel):
 # Pass in sys.argv to allow command line arguments for your app.
 # If you know you won't use command line arguments QApplication([]) works too.
 app = QApplication(sys.argv)
+app_path = app.applicationDirPath()
 
 # Create a Qt main window, which will be our window.
 
