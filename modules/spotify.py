@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from requests import post, get
+import modules.state as state
 import os
 import base64
 import json
@@ -17,8 +18,9 @@ client_secret = os.getenv("CLIENT_SECRET")
 
 def main():
     token = get_token()
-    result = search_for_playlist(token, "SAD")
-    playlist_id = get_playlist_id(token, "SAD")
+    emotion = state.emotion
+    result = search_for_playlist(token, emotion)
+    playlist_id = get_playlist_id(token, emotion)
     songs = get_song(token, playlist_id)
 
     uris = []
@@ -33,7 +35,7 @@ def main():
             pass
 
     print("-------------------------------------------")
-
+    print("Emotion" + emotion)
     #from modules.processing import uri_to_embed
     final_uri = random.choice(uris)
     uri_to_embed(final_uri)
