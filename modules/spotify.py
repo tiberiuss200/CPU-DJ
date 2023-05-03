@@ -10,7 +10,6 @@ class X:
     def __getitem__(self, i):
         return f"Value {i}"
 
-
 load_dotenv()
 
 client_id = os.getenv("CLIENT_ID")
