@@ -7,8 +7,10 @@ emotion = "emotion_default"
 def signalTasks():
     global mainFinished
     mainFinished = True
+    return True
 
 def signalStarted():
     global tasksStarted
     tasksStarted = True
+    return True
 
