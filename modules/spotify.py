@@ -35,7 +35,7 @@ def main():
             pass
 
     print("-------------------------------------------")
-    print("Emotion" + emotion)
+    print("Emotion: " + emotion)
     #from modules.processing import uri_to_embed
     final_uri = random.choice(uris)
     uri_to_embed(final_uri)
