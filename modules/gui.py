@@ -156,12 +156,16 @@ class MainWindow(QMainWindow):
             emotionText = "Your computer is feeling "
             if state.cpudict["cpu_percent"] > 90.0:
                 emotionText = emotionText + emotions[2]
+                state.emotion = emotions[2]
             elif state.cpudict["cpu_percent"] < 5.0:
                 emotionText = emotionText + emotions[3]
+                state.emotion = emotions[3]
             elif state.cpudict["cpu_percent"] < 50.0:
                 emotionText = emotionText + emotions[0]
+                state.emotion = emotions[0]
             else:
                 emotionText = emotionText + emotions[1]
+                state.emotion = emotions[1]
             mainWindow.emotionReading.setText(emotionText)
 
             infoText = "CPU Percent: " + str(state.cpudict["cpu_percent"]) + "%"
