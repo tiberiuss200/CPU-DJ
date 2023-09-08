@@ -79,9 +79,12 @@ async def notTkMainloop(window: tk.Tk, interval: float):
     window.update()
     await asyncio.sleep(interval)
 
-    while window.winfo_exists():
+    while window != None:
         window.update()
         await asyncio.sleep(interval)
+    
+    state.background_tasks.close()
+    
 
 if __name__ == "__main__":
     setup()
