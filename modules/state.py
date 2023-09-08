@@ -1,8 +1,11 @@
+from asyncio import get_event_loop
+
 mainFinished = False
 tasksStarted = False
 cpudict = {"cpu_percent": 0.0, "filler": 0.0}
 gpudict = {"filler": 0.0}
 emotion = "emotion_default"
+background_tasks = get_event_loop()
 
 def signalTasks():
     global mainFinished
