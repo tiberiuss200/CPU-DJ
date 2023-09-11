@@ -78,12 +78,18 @@ def setup_row3(row3: tk.Frame):
 async def notTkMainloop(window: tk.Tk, interval: float):
     window.update()
     await asyncio.sleep(interval)
+    isActive = True
 
-    while window != None:
+    while isActive:
         window.update()
+        try:
+            isActive = window.winfo_exists()
+        except:
+            isActive = False
         await asyncio.sleep(interval)
-    
-    state.background_tasks.close()
+        
+    state.background_tasks.stop()
+    # no need for close statement
     
 
 if __name__ == "__main__":
