@@ -1,19 +1,13 @@
 from asyncio import get_event_loop
 
-mainFinished = False
-tasksStarted = False
+# CPU info storage
 cpudict = {"cpu_percent": 0.0, "filler": 0.0}
+# GPU info storage
 gpudict = {"filler": 0.0}
+# the current read emotion
 emotion = "emotion_default"
+# the event loop for asyncio
 background_tasks = get_event_loop()
-
-def signalTasks():
-    global mainFinished
-    mainFinished = True
-    return True
-
-def signalStarted():
-    global tasksStarted
-    tasksStarted = True
-    return True
+# debug flag
+debug = True
 

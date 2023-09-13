@@ -95,6 +95,5 @@ async def notTkMainloop(window: tk.Tk, interval: float):
     state.background_tasks.stop()
     # no need for close statement
     
-
 if __name__ == "__main__":
     setup()
