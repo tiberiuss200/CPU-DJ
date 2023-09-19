@@ -7,6 +7,8 @@ gpudict = {"filler": 0.0}
 emotion = "emotion_default"
 background_tasks = get_event_loop()
 
+pageSelect = 0;
+
 def signalTasks():
     global mainFinished
     mainFinished = True
