@@ -41,24 +41,57 @@ def setup_container(frame: tk.Frame):
     page1.grid(row = 1, column = 0, sticky = "ew")
 
     page2 = tk.Frame(window, width = w_width, height = 0)
-    display_page1(page1)
+    display_page2(page2)
     page2.grid(row = 1, column = 0, sticky = "ew")
     page2.grid_remove()
 
     page3 = tk.Frame(window, width = w_width, height = 0)
-    display_page1(page1)
+    display_page3(page3)
     page3.grid(row = 1, column = 0, sticky = "ew")
-    page2.grid_remove()
+    page3.grid_remove()
 
-    topFrame = tk.Frame(window, width = w_width, height = 100)
-    setup_topFrame(topFrame, window, page1, page2)
+    pageList = [page1, page2, page3]
+
+    topFrame = tk.Frame(window, width = w_width, height = 0)
+    setup_topFrame(topFrame, window, pageList)
     topFrame.grid(            row = 0, column = 0, sticky = "ew")
 
-def setup_topFrame(frame: tk.Frame, window, page1, page2):
+def setup_topFrame(frame: tk.Frame, window, pageList):
     titleLabel = tk.Label(frame, text="CPU-DJ")
     titleLabel.grid(row = 0, column = 0)
-    buttonTest = tk.Button(frame, text = 'TEST', command = lambda: change_page(window, page1, page2))
-    buttonTest.grid(row = 0, column =1)
+    button1 = tk.Button(frame, text = 'Page 1', command = lambda: change_page(window, pageList, 0))
+    button1.grid(row = 0, column =1)
+    button2 = tk.Button(frame, text = 'Page 2', command = lambda: change_page(window, pageList, 1))
+    button2.grid(row = 0, column =2)
+    button3 = tk.Button(frame, text = 'Page 3', command = lambda: change_page(window, pageList, 2))
+    button3.grid(row = 0, column =3)
+
+def change_page(window: tk.Frame, pageList, num):
+    if (state.pageSelect == num):
+        return
+    if (num == 0):
+        state.pageSelect = num
+        pageList[0].grid()
+        pageList[1].grid_remove()
+        pageList[2].grid_remove()
+        print("page 1")
+        return
+    if (num == 1):
+        state.pageSelect = num
+        pageList[0].grid_remove()
+        pageList[1].grid()
+        pageList[2].grid_remove()
+        print("page 2")
+        return
+    if (num == 2):
+        state.pageSelect = num
+        pageList[0].grid_remove()
+        pageList[1].grid_remove()
+        pageList[2].grid()
+        print("page 3")
+        return
+    else:
+        return
 
 def display_page1(frame: tk.Frame):
 
@@ -72,32 +105,22 @@ def display_page1(frame: tk.Frame):
     f_row3.grid(row = 3, column = 0, sticky = "ew")
     f_row4.grid(row = 4, column = 0, sticky = "ew")
 
-    setup_row1(f_row1)
-    setup_row3(f_row3)
-
-def change_page(window: tk.Frame, page1, page2):
-    if (state.pageSelect == 0):
-        state.pageSelect = 1
-        page1.grid_remove()
-        page2.grid()
-        print("page 2")
-        return
-    else:
-        state.pageSelect = 0;
-        page2.grid_remove()
-        page1.grid()
-        print("page 1")
-        return
+    page1_row1(f_row1)
+    page1_row3(f_row3)
 
 
-def setup_page2(frame: tk.Frame):
+def display_page2(frame: tk.Frame):
     titleLabel = tk.Label(frame, text="Page 2")
+    titleLabel.grid(row = 0, column = 0)
+
+def display_page3(frame: tk.Frame):
+    titleLabel = tk.Label(frame, text="Page 3")
     titleLabel.grid(row = 0, column = 0)
 
 # Row 1:
 # Left side: emotion block.
 # Right side: basic information block
-def setup_row1(row1: tk.Frame):
+def page1_row1(row1: tk.Frame):
     row1.columnconfigure(1, weight=1)
     row1.rowconfigure(1, weight=1)
 
@@ -117,7 +140,7 @@ def setup_row1(row1: tk.Frame):
 
 # Row 3:
 # Spotify view.
-def setup_row3(row3: tk.Frame):
+def page1_row3(row3: tk.Frame):
     labeltemp = tk.Label(row3, text="We need a new webview library...")
     labeltemp.grid(row = 0, column = 0)
     #we need a new web view library...
