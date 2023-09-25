@@ -166,5 +166,5 @@ async def notTkMainloop(window: tk.Tk, interval: float):
     # no need for close statement
     
 if __name__ == "__main__":
-    pageSelect = 0;
+    pageSelect = 0
     setup()

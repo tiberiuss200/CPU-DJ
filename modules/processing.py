@@ -13,15 +13,15 @@ def main_setup():
 #update the CPU dictionary variable
 async def update_cpu_dict(cpudict):
     print("Tracking.")
-    while not state.mainFinished:
+    while True:
         cpudict["cpu_percent"] = psutil.cpu_percent()
         await asyncio.sleep(1)
     print("Update CPU dictionaries task ended.")
 
 async def waitFinish():
-    while not state.mainFinished:
+    while True:
         await asyncio.sleep(1)
-    stop_signal = False
+    #stop_signal = False
     await asyncio.sleep(3)
 
 async def print_dict(cpudict):
@@ -30,7 +30,7 @@ async def print_dict(cpudict):
         return
     print("Starting.")
     await asyncio.sleep(5)
-    while not state.mainFinished:
+    while True:
         prettyPrint = json.dumps(cpudict)
         print(prettyPrint)
         await asyncio.sleep(1)

@@ -10,4 +10,4 @@ emotion = "emotion_default"
 background_tasks = get_event_loop()
 # debug flag
 debug = True
-
+pageSelect = 0
