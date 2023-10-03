@@ -94,3 +94,5 @@ def uri_to_embed(uri):
     
     return path
 
+if __name__ == "__main__":
+    main()
