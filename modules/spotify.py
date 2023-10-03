@@ -17,6 +17,8 @@ def main():
     token = get_token()
     songs = get_track_reccomendation(token, "rock", 25, 50, 75)
     uri = get_uri(token, "rock", 25, 50, 75)
+    print(songs)
+    print(uri)
     print("-------------------------------------------")
     #from modules.processing import uri_to_embed
     uri_to_embed(uri)
@@ -50,8 +52,6 @@ def get_track_reccomendation(token, genre, energy, tempo, valence):
         song_result = json.loads(result.content)["tracks"][0]["name"]
         song_url = json.loads(result.content)["tracks"][0]["external_urls"]["spotify"]
         song_uri = json.loads(result.content)["tracks"][0]["uri"]
-        print(song_result)
-        print(song_url)
         return song_result
 def get_uri(token, genre, energy, tempo, valence):
         url = f"https://api.spotify.com/v1/recommendations"
@@ -60,7 +60,6 @@ def get_uri(token, genre, energy, tempo, valence):
         query_url = url + query
         result = get(query_url, headers=headers)
         song_uri = json.loads(result.content)["tracks"][0]["uri"]
-        print(song_uri)
         return song_uri
 # moved from processing because of the tasks I created bitching about this function -D
 def uri_to_embed(uri): 
