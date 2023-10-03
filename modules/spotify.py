@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from requests import post, get
-import modules.state as state
+import state as state
 import os
 import base64
 import json
@@ -18,9 +18,7 @@ client_secret = os.getenv("CLIENT_SECRET")
 def main():
     token = get_token()
     emotion = state.emotion
-    result = search_for_playlist(token, emotion)
-    playlist_id = get_playlist_id(token, emotion)
-    songs = get_song(token, playlist_id)
+    songs = get_track_reccomendation(token, 25, 50, 75)
 
     uris = []
 
@@ -39,6 +37,7 @@ def main():
     final_uri = random.choice(uris)
     uri_to_embed(final_uri)
     print(final_uri)
+    print(song_result)
     return final_uri
 
 def get_token():
@@ -60,39 +59,15 @@ def get_token():
 def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
 
-def search_for_playlist(token, mood):
-    url = "https://api.spotify.com/v1/search"
-    headers = get_auth_header(token)
-    query = f"?q={mood}&type=playlist&limit=1"
-    query_url = url + query
-    result = get(query_url, headers=headers)
-    playlist_result = json.loads(result.content)["playlists"]["items"]
-    if len(playlist_result) == 0:
-        print("No Playlist Found")
-        return None
-    else:
-        return playlist_result
-
-def get_playlist_id(token, mood):
-    url = "https://api.spotify.com/v1/search"
-    headers = get_auth_header(token)
-    query = f"?q={mood}&type=playlist&limit=1&offset=100"
-    query_url = url + query
-    result = get(query_url, headers=headers)
-    id_result = json.loads(result.content)["playlists"]["items"][0]['id']
-    if len(id_result) == 0:
-        print("No Playlist Found")
-        return None
-    else:
-        return id_result
-
-def get_song(token, playlist_id):
-        url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100"
+def get_track_reccomendation(token, genre, energy, tempo, valence):
+        url = f"https://api.spotify.com/v1/recommendations"
         headers = get_auth_header(token)
-        result = get(url, headers=headers)
-        song_result = json.loads(result.content)["items"]
+        query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_vaence={valence}"
+        query_url = url + query
+        result = get(query_url, headers=headers)
+        song_result = json.loads(result.content)[1]
+        print(song_result)
         return song_result
-
 # moved from processing because of the tasks I created bitching about this function -D
 def uri_to_embed(uri): 
     """
