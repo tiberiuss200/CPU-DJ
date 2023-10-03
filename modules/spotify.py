@@ -65,7 +65,7 @@ def get_track_reccomendation(token, genre, energy, tempo, valence):
         query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_vaence={valence}"
         query_url = url + query
         result = get(query_url, headers=headers)
-        song_result = json.loads(result.content)[1]
+        song_result = json.loads(result.content)
         print(song_result)
         return song_result
 # moved from processing because of the tasks I created bitching about this function -D
