@@ -11,7 +11,7 @@ class X:
         return f"Value {i}"
 
 client_id = "016b59b007cf4494869123ecdb2f0687"
-client_secret = "d97260bd8c6645848b0c571c7eff90a0"
+client_secret = "113ddc7d11f940f990e85be0a186399f"
 
 def main():
     token = get_token()
