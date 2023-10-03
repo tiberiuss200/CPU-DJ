@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import asyncio
 import modules.state as state
+import tkinterweb as tkw
 
 window = tk.Tk()
 w_width = 700
@@ -141,10 +142,12 @@ def page1_row1(row1: tk.Frame):
 # Row 3:
 # Spotify view.
 def page1_row3(row3: tk.Frame):
-    labeltemp = tk.Label(row3, text="We need a new webview library...")
-    labeltemp.grid(row = 0, column = 0)
-    #we need a new web view library...
-    #spotifyview = webview.create_window()
+    #labeltemp = tk.Label(row3, text="We need a new webview library...")
+    #labeltemp.grid(row = 0, column = 0)
+    spotifyframe = tkw.HtmlFrame(row3)
+    spotifyframe.load_website("file:///.././embed.html")
+    spotifyframe.grid(row = 0, column = 0)
+
 
 # for tasks to work and while not using Qt's absurd task management...nonsense
 # we have to replace tk's mainloop for anything asynchronous to work
