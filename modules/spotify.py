@@ -16,7 +16,7 @@ client_secret = "113ddc7d11f940f990e85be0a186399f"
 def main():
     token = get_token()
     emotion = state.emotion
-    songs = get_track_reccomendation(token, rock, 25, 50, 75)
+    songs = get_track_reccomendation(token, "rock", 25, 50, 75)
 
     uris = []
 
@@ -63,7 +63,7 @@ def get_track_reccomendation(token, genre, energy, tempo, valence):
         query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_vaence={valence}"
         query_url = url + query
         result = get(query_url, headers=headers)
-        song_result = json.loads(result.content)
+        song_result = json.loads(result.content)["items"][1]
         print(song_result)
         return song_result
 # moved from processing because of the tasks I created bitching about this function -D
