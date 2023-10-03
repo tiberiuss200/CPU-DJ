@@ -10,15 +10,13 @@ class X:
     def __getitem__(self, i):
         return f"Value {i}"
 
-load_dotenv()
-
-client_id = os.getenv("CLIENT_ID")
-client_secret = os.getenv("CLIENT_SECRET")
+client_id = "016b59b007cf4494869123ecdb2f0687"
+client_secret = "d97260bd8c6645848b0c571c7eff90a0"
 
 def main():
     token = get_token()
     emotion = state.emotion
-    songs = get_track_reccomendation(token, 25, 50, 75)
+    songs = get_track_reccomendation(token, rock, 25, 50, 75)
 
     uris = []
 
