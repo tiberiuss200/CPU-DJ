@@ -15,28 +15,12 @@ client_secret = "113ddc7d11f940f990e85be0a186399f"
 
 def main():
     token = get_token()
-    emotion = state.emotion
     songs = get_track_reccomendation(token, "rock", 25, 50, 75)
-
-    uris = []
-
-    for index, item in enumerate(songs, start=0):
-        try:
-            uri = item["track"]["uri"]
-
-            uris.append(uri)
-
-        except TypeError or uri == "":
-            pass
-
+    uri = get_uri(token, "rock", 25, 50, 75)
     print("-------------------------------------------")
-    print("Emotion: " + emotion)
     #from modules.processing import uri_to_embed
-    final_uri = random.choice(uris)
-    uri_to_embed(final_uri)
-    print(final_uri)
-    print(song_result)
-    return final_uri
+    uri_to_embed(uri)
+    return 0
 
 def get_token():
     auth_string = client_id + ":" + client_secret
@@ -65,9 +49,19 @@ def get_track_reccomendation(token, genre, energy, tempo, valence):
         result = get(query_url, headers=headers)
         song_result = json.loads(result.content)["tracks"][0]["name"]
         song_url = json.loads(result.content)["tracks"][0]["external_urls"]["spotify"]
+        song_uri = json.loads(result.content)["tracks"][0]["uri"]
         print(song_result)
         print(song_url)
         return song_result
+def get_uri(token, genre, energy, tempo, valence):
+        url = f"https://api.spotify.com/v1/recommendations"
+        headers = get_auth_header(token)
+        query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_vaence={valence}"
+        query_url = url + query
+        result = get(query_url, headers=headers)
+        song_uri = json.loads(result.content)["tracks"][0]["uri"]
+        print(song_uri)
+        return song_uri
 # moved from processing because of the tasks I created bitching about this function -D
 def uri_to_embed(uri): 
     """
