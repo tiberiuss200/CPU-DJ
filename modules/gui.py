@@ -3,6 +3,7 @@ import tkinter.ttk as ttk
 import asyncio
 import modules.state as state
 import tkinterweb as tkw
+from os import getcwd
 
 window = tk.Tk()
 w_width = 700
@@ -145,7 +146,8 @@ def page1_row3(row3: tk.Frame):
     #labeltemp = tk.Label(row3, text="We need a new webview library...")
     #labeltemp.grid(row = 0, column = 0)
     spotifyframe = tkw.HtmlFrame(row3)
-    spotifyframe.load_website("file:///.././embed.html")
+
+    spotifyframe.load_file("file:///" + getcwd() + "/embed.html")
     spotifyframe.grid(row = 0, column = 0)
 
 
