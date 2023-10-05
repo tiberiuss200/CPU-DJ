@@ -30,8 +30,7 @@ def setup():
     container.grid(           row = 0, column = 0, sticky = "ew")
     setup_container(container)
 
-    #window.mainloop()
-    taskWindow = state.background_tasks.create_task(notTkMainloop(window, 1/120))
+    #taskWindow = state.background_tasks.create_task(notTkMainloop(window, 1/120))
 
 # Top Frame: 
 # Title, with a bench of buttons enabling other things.  This can be mostly blank as long as we are matching prototype.
@@ -153,20 +152,21 @@ def page1_row3(row3: tk.Frame):
 # for tasks to work and while not using Qt's absurd task management...nonsense
 # we have to replace tk's mainloop for anything asynchronous to work
 # - Dan
-async def notTkMainloop(window: tk.Tk, interval: float):
-    window.update()
-    await asyncio.sleep(interval)
-    isActive = True
-
-    while isActive:
-        window.update()
-        try:
-            isActive = window.winfo_exists()
-        except:
-            isActive = False
-        await asyncio.sleep(interval)
-        
-    state.background_tasks.stop()
+# lol nvm -Dan
+#async def notTkMainloop(window: tk.Tk, interval: float):
+#    window.update()
+#    await asyncio.sleep(interval)
+#    isActive = True
+#
+#    while isActive:
+#        window.update()
+#        try:
+#            isActive = window.winfo_exists()
+#        except:
+#            isActive = False
+#        await asyncio.sleep(interval)
+#        
+#    state.background_tasks.stop()
     # no need for close statement
     
 if __name__ == "__main__":

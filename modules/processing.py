@@ -4,38 +4,48 @@ import json
 import modules.state as state
 
 def main_setup():
-    cpu_task = state.background_tasks.create_task(update_cpu_dict(state.cpudict))
+    #cpu_task = state.background_tasks.create_task(update_cpu_dict(state.cpudict))
     #gpu_task = asyncio.create_task(update_gpu_dict(gpudict))
-    debug_task = state.background_tasks.create_task(print_dict(state.cpudict))
+    #debug_task = state.background_tasks.create_task(print_dict(state.cpudict))
     #await gpu_task
-    waitUntilFinished = state.background_tasks.create_task(waitFinish())
+    #waitUntilFinished = state.background_tasks.create_task(waitFinish())
+    update_cpu_dict()
+    print_dict()
 
 #update the CPU dictionary variable
-async def update_cpu_dict(cpudict):
+def update_cpu_dict():
+    def task():
+         state.cpudict["cpu_percent"] = psutil.cpu_percent()
+         state.wait(1000, lambda: task())
+
     print("Tracking.")
-    while True:
-        cpudict["cpu_percent"] = psutil.cpu_percent()
-        await asyncio.sleep(1)
-    print("Update CPU dictionaries task ended.")
+    task()
 
-async def waitFinish():
-    while True:
-        await asyncio.sleep(1)
+    
+   
+    #print("Update CPU dictionaries task ended.")
+
+#async def waitFinish():
+#    while True:
+#        await asyncio.sleep(1)
     #stop_signal = False
-    await asyncio.sleep(3)
+#    await asyncio.sleep(3)
 
-async def print_dict(cpudict):
+def print_dict():
+    def task():
+        prettyPrint = json.dumps(state.cpudict)
+        print(prettyPrint)
+        state.wait(1000, lambda: task())
+    
     if (not state.debug):
         print("Debug flag off.")
         return
     print("Starting.")
-    await asyncio.sleep(5)
-    while True:
-        prettyPrint = json.dumps(cpudict)
-        print(prettyPrint)
-        await asyncio.sleep(1)
-    print("End.")
-    #end
+    state.wait(2000, lambda: task())
+
+    
+
+    #print("End.")
 
 
 #eof
