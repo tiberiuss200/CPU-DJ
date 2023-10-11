@@ -146,7 +146,7 @@ def page1_row3(row3: tk.Frame):
     #labeltemp.grid(row = 0, column = 0)
     url = "file:///" + getcwd() + "\embed.html"
     url = url.replace('\\', '/')
-    spotifyframe = tkw.HtmlFrame(row3)
+    spotifyframe = tkw.HtmlFrame(row3, messages_enabled=False)
     spotifyframe.load_file(url)
     spotifyframe.grid(row = 0, column = 0)
 
