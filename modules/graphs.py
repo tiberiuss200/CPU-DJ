@@ -1,16 +1,24 @@
 from tkinter import *
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 
 
+#def main():
+#    graph()
+
 root = Tk()
-root.geometry("600x300")
 
-def graph():
-    hardwareValues = np.random.normal(15, 5, 50)
-    plt.hist(hardwareValues, 4)
-    plt.show()
 
-button = Button(root, text="Graph", command=graph)
-button.pack()
+fig, ax = plt.subplots()
+
+frame = Frame(root)
+frame.pack()
+
+canvas = FigureCanvasTkAgg(fig, master = frame)
+canvas.get_tk_widget().pack()
+
 root.mainloop()
+
+#if __name__ == "__main__":
+#    main()
