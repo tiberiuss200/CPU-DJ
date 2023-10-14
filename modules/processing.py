@@ -1,51 +1,46 @@
-import asyncio
+#import asyncio
 import psutil
 import json
 import modules.state as state
+import modules.tasks as tasks
 
-def main_setup():
-    #cpu_task = state.background_tasks.create_task(update_cpu_dict(state.cpudict))
-    #gpu_task = asyncio.create_task(update_gpu_dict(gpudict))
-    #debug_task = state.background_tasks.create_task(print_dict(state.cpudict))
-    #await gpu_task
-    #waitUntilFinished = state.background_tasks.create_task(waitFinish())
-    update_cpu_dict()
-    print_dict()
+#background_tasks = set()
+# ^ originally using asyncio, will not work anymore.
 
 #update the CPU dictionary variable
-def update_cpu_dict():
-    def task():
-         state.cpudict["cpu_percent"] = psutil.cpu_percent()
-         state.wait(1000, lambda: task())
-
+def update_cpu_dict(self):
     print("Tracking.")
-    task()
+    while not state.mainFinished:
+        state.cpudict["cpu_percent"] = psutil.cpu_percent()
+        tasks.wait(1000)
+    print("Update CPU dictionaries task ended.")
+    return True
 
-    
-   
-    #print("Update CPU dictionaries task ended.")
 
-#async def waitFinish():
-#    while True:
-#        await asyncio.sleep(1)
-    #stop_signal = False
-#    await asyncio.sleep(3)
-
-def print_dict():
-    def task():
+def print_dict(self):
+    print("Starting.")
+    tasks.wait(5000)
+    while not state.mainFinished:
         prettyPrint = json.dumps(state.cpudict)
         print(prettyPrint)
-        state.wait(1000, lambda: task())
-    
-    if (not state.debug):
-        print("Debug flag off.")
-        return
-    print("Starting.")
-    state.wait(2000, lambda: task())
+        tasks.wait(1000)
+    print("End.")
+    return True
+    #end
+
+
+def prep_tasks(window):
+    #test
+    tasks.start(window, update_cpu_dict)
+    tasks.start(window, print_dict)
+    state.signalStarted()
 
     
+    #that's it!  ez
 
-    #print("End.")
+
+
+
 
 
 #eof
