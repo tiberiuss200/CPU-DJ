@@ -14,9 +14,9 @@ root = Tk()
 
 
 def graph():
-
+    ax.clear()
     x = np.linspace(0, 10, 100)
-    y = psutil.cpu_percent()
+    y = psutil.cpu_percent() * np.sin(2 * x)
     ax.plot(x, y)
 
     canvas.draw()
