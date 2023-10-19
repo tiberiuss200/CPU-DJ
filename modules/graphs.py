@@ -1,23 +1,15 @@
-#from tkinter import *
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import numpy as np
-#import state as state
-import psutil
+import sys
+
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QApplication, QWidget
 
 
+class Window(QWidget):
+    def __init__(self):
+        super().__init__()
 
-def main():
-    graph()
+app = QApplication(sys.argv)
+window = Window()
+window.show()
 
-
-def graph():
-    ax.clear()
-    x = np.linspace(0.0, 10.0, 100)
-    y = psutil.cpu_percent()
-    ax.plot(x, y)
-
-fig, ax = plt.subplots()
-
-if __name__ == "__main__":
-    main()
+sys.exit(app.exec())
