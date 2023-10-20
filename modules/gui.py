@@ -4,7 +4,7 @@ from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtGui import QPalette, QColor
+from PyQt6.QtGui import QPalette, QColor, QIcon
 from array import *
 
 import modules.spotify as spotify
@@ -35,6 +35,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         frameCounter = 0
         mainWindow.setWindowTitle("CPU-DJ")
+        mainWindow.setWindowIcon(QIcon("logo.png"))
         mainWindow.setMinimumSize(200, 200)
         mainWindow.resize(600, 800)
         mainWindow.display = ["empty"]

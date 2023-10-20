@@ -1,42 +1,43 @@
-from tkinter import *
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import numpy as np
-#import state as state
-import psutil
+import sys
+
+from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt6.QtGui import QIcon
+import matplotlib
+matplotlib.use('QtAgg')
+
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.figure import Figure
+
+
+class graph(FigureCanvasQTAgg):
+    def __init__(self, parent=None, width=10, height=10, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111)
+        super(graph, self).__init__(fig)
 
 
 
-#def main():
-#    graph()
+class Window(QWidget):
+    def __init__(self):
+        super(Window, self).__init__()
+        self.setWindowIcon(QIcon("logo.png"))           #Sets the window's icon in the top left of the window to our logo
+        self.setWindowTitle("Graphs Testing")           #Sets the title of the entire window
+        test = graph(self, width=5, height=10, dpi=100)
 
-root = Tk()
+        test.axes.plot([0,1,2,3,4], [3,10,2,5,7])
 
-
-def graph():
-
-    x = np.linspace(0, 10, 100)
-    y = psutil.cpu_percent()
-    ax.plot(x, y)
-
-    canvas.draw()
+        test.show()
 
 
 
 
-fig, ax = plt.subplots()
-frame = Frame(root)
-
-canvas = FigureCanvasTkAgg(fig, master = frame)
-canvas.get_tk_widget().pack()
-
-frame.pack()
 
 
-button=Button(root, text="Graph", command=graph)
-button.pack()
 
-root.mainloop()
 
-#if __name__ == "__main__":
-#    main()
+app = QApplication(sys.argv)
+window = Window()
+window.show()
+
+sys.exit(app.exec())
