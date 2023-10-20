@@ -1,4 +1,4 @@
-from dotenv import load_dotenv          #Sets up the Client ID and Secret
+from dotenv import *          #Sets up the Client ID and Secret
 from requests import post, get          #
 import modules.state as state                   #
 import os                               #
