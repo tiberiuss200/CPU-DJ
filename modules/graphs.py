@@ -23,11 +23,11 @@ class Window(QWidget):
         super(Window, self).__init__()
         self.setWindowIcon(QIcon("logo.png"))           #Sets the window's icon in the top left of the window to our logo
         self.setWindowTitle("Graphs Testing")           #Sets the title of the entire window
-        test= graph(self, width=5, height=10, dpi=100)
+        test = graph(self, width=5, height=10, dpi=100)
 
         test.axes.plot([0,1,2,3,4], [3,10,2,5,7])
 
-        self.show()
+        test.show()
 
 
 
