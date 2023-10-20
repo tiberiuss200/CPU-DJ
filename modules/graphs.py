@@ -7,8 +7,15 @@ from PyQt6.QtGui import QIcon
 class Window(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowIcon(QIcon("logo.png"))
-        self.setWindowTitle("Graphs Testing")
+        self.setWindowIcon(QIcon("logo.png"))           #Sets the window's icon in the top left of the window to our logo
+        self.setWindowTitle("Graphs Testing")           #Sets the title of the entire window
+
+
+
+
+def graph():
+    ...
+
 
 
 
