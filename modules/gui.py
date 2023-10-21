@@ -2,7 +2,7 @@ import sys
 import random
 from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtGui import QPalette, QColor, QIcon
 from array import *
@@ -56,16 +56,20 @@ class MainWindow(QMainWindow):
         
         mainWindow.button_setup()
 
-        
-        mainWindow.Collector = QVBoxLayout()
-        mainWindow.Collector.addLayout(mainWindow.moodPage())
-        mainWindow.Collector.addLayout(mainWindow.dataPage())
+        mainWindow.mood_display = QWidget()
+        mainWindow.mood_display.setLayout(mainWindow.moodPage())
+        mainWindow.data_display = QWidget()
+        mainWindow.data_display.setLayout(mainWindow.dataPage())
+
+        mainWindow.Collector = QStackedLayout()
+        mainWindow.Collector.addWidget(mainWindow.mood_display)
+        mainWindow.Collector.addWidget(mainWindow.data_display)
+
+        mainWindow.Collector.setCurrentWidget(mainWindow.mood_display)
 
         mainWindow.layout = mainWindow.Collector
-
         container = QWidget()
         container.setLayout(mainWindow.layout)
-
         # Set the central widget of the Window.
         mainWindow.setCentralWidget(container)
 
@@ -94,7 +98,7 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow4 = QHBoxLayout()
         mainWindow.moodRow5 = QHBoxLayout()
 
-        mainWindow.moodRow1.addWidget(Color('red'))
+        mainWindow.moodRow1.addWidget(mainWindow.dataButton)
         mainWindow.moodRow1.addWidget(mainWindow.generateButton)
         mainWindow.moodRow1.addWidget(mainWindow.taskButton)
         
@@ -132,9 +136,7 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow4 = QHBoxLayout()
         mainWindow.dataRow5 = QHBoxLayout()
 
-        mainWindow.dataRow1.addWidget(Color('red'))
-        mainWindow.dataRow1.addWidget(mainWindow.generateButton)
-        mainWindow.dataRow1.addWidget(mainWindow.taskButton)
+        mainWindow.dataRow1.addWidget(mainWindow.moodButton)
         
         mainWindow.dataRow2.addWidget(Color('red'))
         mainWindow.dataRow2.addWidget(Color('yellow'))
@@ -207,11 +209,8 @@ class MainWindow(QMainWindow):
 
     def dataButtonPressed(mainWindow):
         # Set the central widget of the Window.
-        mainWindow.moodPage.hide()
-        mainWindow.dataPage.show()
-        mainWindow.container = QWidget()
-        mainWindow.container.setLayout(mainWindow.dataPage.layout)
-        mainWindow.setCentralWidget(mainWindow.container)
+
+        mainWindow.Collector.setCurrentWidget(mainWindow.data_display)
 
         mainWindow.moodButton.setChecked(False)
         mainWindow.dataButton.setChecked(True)
@@ -221,6 +220,9 @@ class MainWindow(QMainWindow):
         return
 
     def moodButtonPressed(mainWindow):
+
+        mainWindow.Collector.setCurrentWidget(mainWindow.mood_display)
+
         mainWindow.dataButton.setChecked(False)
         mainWindow.moodButton.setChecked(True)
 
