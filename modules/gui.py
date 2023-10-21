@@ -57,17 +57,23 @@ class MainWindow(QMainWindow):
         mainWindow.button_setup()
 
         mainWindow.mood_display = QWidget()
-        mainWindow.mood_display.setLayout(mainWindow.moodPage())
         mainWindow.data_display = QWidget()
+        mainWindow.mood_display.setLayout(mainWindow.moodPage())
         mainWindow.data_display.setLayout(mainWindow.dataPage())
 
-        mainWindow.Collector = QStackedLayout()
-        mainWindow.Collector.addWidget(mainWindow.mood_display)
-        mainWindow.Collector.addWidget(mainWindow.data_display)
+        mainWindow.bottom = QStackedLayout()
+        mainWindow.bottom.addWidget(mainWindow.mood_display)
+        mainWindow.bottom.addWidget(mainWindow.data_display)
+        mainWindow.bottom.setCurrentWidget(mainWindow.mood_display)
 
-        mainWindow.Collector.setCurrentWidget(mainWindow.mood_display)
+        mainWindow.top = QWidget()
+        mainWindow.top.setLayout(mainWindow.top_bar())
 
-        mainWindow.layout = mainWindow.Collector
+        mainWindow.collector = QVBoxLayout()
+        mainWindow.collector.addWidget(mainWindow.top)
+        mainWindow.collector.addLayout(mainWindow.bottom)
+
+        mainWindow.layout = mainWindow.collector
         container = QWidget()
         container.setLayout(mainWindow.layout)
         # Set the central widget of the Window.
@@ -90,21 +96,31 @@ class MainWindow(QMainWindow):
 
         #mainWindow.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
 
+    def top_bar(mainWindow):
+        row1 = QHBoxLayout()
+
+        titleBox = QLabel("CPU-DJ")
+        font = titleBox.font()
+        font.setPointSize(30)
+        titleBox.setFont(font)
+        titleBox.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+
+        row1.addWidget(titleBox)
+        row1.addWidget(mainWindow.moodButton)
+        row1.addWidget(mainWindow.dataButton)
+        row1.addWidget(Color('blue'))
+
+        return row1
+
     def moodPage(mainWindow):
-        
-        mainWindow.moodRow1 = QHBoxLayout()
         mainWindow.moodRow2 = QHBoxLayout()
         mainWindow.moodRow3 = QHBoxLayout()
         mainWindow.moodRow4 = QHBoxLayout()
         mainWindow.moodRow5 = QHBoxLayout()
-
-        mainWindow.moodRow1.addWidget(mainWindow.dataButton)
-        mainWindow.moodRow1.addWidget(mainWindow.generateButton)
-        mainWindow.moodRow1.addWidget(mainWindow.taskButton)
         
         mainWindow.moodRow2.addWidget(Color('red'))
-        mainWindow.moodRow2.addWidget(Color('yellow'))
-        mainWindow.moodRow2.addWidget(Color('purple'))
+        mainWindow.moodRow2.addWidget(mainWindow.generateButton)
+        mainWindow.moodRow2.addWidget(mainWindow.taskButton)
 
         mainWindow.moodRow3.addWidget(Color('red'))
         mainWindow.moodRow3.addWidget(Color('yellow'))
@@ -120,7 +136,6 @@ class MainWindow(QMainWindow):
 
         containerBench = QVBoxLayout()
 
-        containerBench.addLayout(mainWindow.moodRow1)
         containerBench.addLayout(mainWindow.moodRow2)
         containerBench.addLayout(mainWindow.moodRow3)
         containerBench.addLayout(mainWindow.moodRow4)
@@ -129,14 +144,10 @@ class MainWindow(QMainWindow):
         return containerBench
 
     def dataPage(mainWindow):
-        
-        mainWindow.dataRow1 = QHBoxLayout()
         mainWindow.dataRow2 = QHBoxLayout()
         mainWindow.dataRow3 = QHBoxLayout()
         mainWindow.dataRow4 = QHBoxLayout()
         mainWindow.dataRow5 = QHBoxLayout()
-
-        mainWindow.dataRow1.addWidget(mainWindow.moodButton)
         
         mainWindow.dataRow2.addWidget(Color('red'))
         mainWindow.dataRow2.addWidget(Color('yellow'))
@@ -156,7 +167,6 @@ class MainWindow(QMainWindow):
 
         containerBench = QVBoxLayout()
 
-        containerBench.addLayout(mainWindow.dataRow1)
         containerBench.addLayout(mainWindow.dataRow2)
         containerBench.addLayout(mainWindow.dataRow3)
         containerBench.addLayout(mainWindow.dataRow4)
@@ -209,8 +219,7 @@ class MainWindow(QMainWindow):
 
     def dataButtonPressed(mainWindow):
         # Set the central widget of the Window.
-
-        mainWindow.Collector.setCurrentWidget(mainWindow.data_display)
+        mainWindow.bottom.setCurrentWidget(mainWindow.data_display)
 
         mainWindow.moodButton.setChecked(False)
         mainWindow.dataButton.setChecked(True)
@@ -220,8 +229,7 @@ class MainWindow(QMainWindow):
         return
 
     def moodButtonPressed(mainWindow):
-
-        mainWindow.Collector.setCurrentWidget(mainWindow.mood_display)
+        mainWindow.bottom.setCurrentWidget(mainWindow.mood_display)
 
         mainWindow.dataButton.setChecked(False)
         mainWindow.moodButton.setChecked(True)
@@ -235,19 +243,19 @@ class MainWindow(QMainWindow):
         return
     
     def processingUI(mainWindow):
-        item = mainWindow.moodRow2.itemAt(0)
+        item = mainWindow.moodRow3.itemAt(0)
         rm = item.widget()
         rm.deleteLater()
-        item = mainWindow.moodRow2.itemAt(1)
+        item = mainWindow.moodRow3.itemAt(1)
         rm = item.widget()
         rm.deleteLater()
-        item = mainWindow.moodRow2.itemAt(2)
+        item = mainWindow.moodRow3.itemAt(2)
         rm = item.widget()
         rm.deleteLater()
         mainWindow.emotionReading.setText("...")
         mainWindow.cpuInfo.setText("...")
-        mainWindow.moodRow2.addWidget(mainWindow.emotionReading)
-        mainWindow.moodRow2.addWidget(mainWindow.cpuInfo)
+        mainWindow.moodRow3.addWidget(mainWindow.emotionReading)
+        mainWindow.moodRow3.addWidget(mainWindow.cpuInfo)
         tasks.start(mainWindow, mainWindow.setDictToUI, mainWindow)
 
     def setDictToUI(mainWindow, testArg, any):
