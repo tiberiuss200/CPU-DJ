@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
         mainWindow.setWindowTitle("CPU-DJ")
         mainWindow.setWindowIcon(QIcon("logo.png"))
         mainWindow.setMinimumSize(200, 200)
-        mainWindow.resize(900, 600)
+        mainWindow.resize(1000, 600)
         mainWindow.display = ["empty"]
 
         # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
@@ -148,8 +148,10 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow3 = QHBoxLayout()
         mainWindow.dataRow4 = QHBoxLayout()
         mainWindow.dataRow5 = QHBoxLayout()
+        mainWindow.dataRow6 = QHBoxLayout()
         
-        mainWindow.dataRow2.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
+        mainWindow.graph1 = QPushButton("Show/Hide Graph")
+        mainWindow.dataRow2.addWidget(Color('red'))
         mainWindow.dataRow2.addWidget(Color('yellow'))
         mainWindow.dataRow2.addWidget(Color('purple'))
 
@@ -165,26 +167,31 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow5.addWidget(Color('yellow'))
         mainWindow.dataRow5.addWidget(Color('purple'))
 
+        mainWindow.dataRow6.addWidget(Color('red'))
+        mainWindow.dataRow6.addWidget(Color('yellow'))
+        mainWindow.dataRow6.addWidget(Color('purple'))
+
         leftSide = QVBoxLayout()
         leftSide.addLayout(mainWindow.dataRow2, 1)
         leftSide.addLayout(mainWindow.dataRow3, 1)
         leftSide.addLayout(mainWindow.dataRow4, 1)
         leftSide.addLayout(mainWindow.dataRow5, 1)
+        leftSide.addLayout(mainWindow.dataRow6, 1)
 
         leftContainer = QWidget()
         leftContainer.setLayout(leftSide)
-        leftContainer.setMinimumSize(400, 800)
+        leftContainer.setMinimumSize(450, 800)
         leftContainer.resize(300, 300)
 
         scrollField = QScrollArea()
         scrollField.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         scrollField.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scrollField.setWidget(leftContainer)
-        scrollField.setMaximumSize(400, 400)
+        scrollField.setMaximumSize(500, 400)
 
         containerBench = QHBoxLayout()
         containerBench.addWidget(scrollField)
-        containerBench.addWidget(Color('red'))
+        containerBench.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow), 1)
 
         return containerBench
 
