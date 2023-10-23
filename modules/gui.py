@@ -2,9 +2,9 @@ import sys
 import random
 from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar, QScrollArea
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtGui import QPalette, QColor, QIcon
+from PyQt6.QtGui import QPalette, QColor, QIcon, QPalette
 from array import *
 
 import modules.spotify as spotify
@@ -23,8 +23,8 @@ class Color(QWidget):
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor(color))
         self.setPalette(palette)
-        self.setMinimumSize(45, 60)
-        self.resize(45, 60)
+        self.setMinimumSize(30, 40)
+        self.resize(30, 60)
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         mainWindow.setWindowTitle("CPU-DJ")
         mainWindow.setWindowIcon(QIcon("logo.png"))
         mainWindow.setMinimumSize(200, 200)
-        mainWindow.resize(600, 800)
+        mainWindow.resize(900, 600)
         mainWindow.display = ["empty"]
 
         # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
@@ -165,17 +165,24 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow5.addWidget(Color('purple'))
 
         leftSide = QVBoxLayout()
+        leftSide.addLayout(mainWindow.dataRow2, 1)
+        leftSide.addLayout(mainWindow.dataRow3, 1)
+        leftSide.addLayout(mainWindow.dataRow4, 1)
+        leftSide.addLayout(mainWindow.dataRow5, 1)
 
-        leftSide.addLayout(mainWindow.dataRow2)
-        leftSide.addLayout(mainWindow.dataRow3)
-        leftSide.addLayout(mainWindow.dataRow4)
-        leftSide.addLayout(mainWindow.dataRow5)
+        leftContainer = QWidget()
+        leftContainer.setLayout(leftSide)
+        leftContainer.setMinimumSize(400, 800)
+        leftContainer.resize(300, 300)
 
-        scroll = QScrollBar()
+        scrollField = QScrollArea()
+        scrollField.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        scrollField.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        scrollField.setWidget(leftContainer)
+        scrollField.setMaximumSize(400, 400)
 
         containerBench = QHBoxLayout()
-        containerBench.addLayout(leftSide)
-        containerBench.addWidget(scroll)
+        containerBench.addWidget(scrollField)
         containerBench.addWidget(Color('red'))
 
         return containerBench
