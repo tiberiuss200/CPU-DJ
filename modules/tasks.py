@@ -2,6 +2,7 @@ import traceback
 import time
 from PyQt6.QtCore import (Q_ARG, QMetaObject, QMutex, QMutexLocker, QObject,
                           QRunnable, Qt, QThreadPool, pyqtSignal, pyqtSlot, QTimer)
+import modules.state as state
 
 # unabashedly using this as a base
 # https://github.com/mochisue/pyqt-async-sample/blob/main/src/sample.py
@@ -14,7 +15,7 @@ class TaskSignal(QObject):
     result = pyqtSignal(object)
 
 class Task(QRunnable):
-    def __init__(self, fn_run, *args, **kwargs):
+    def __init__(self, fn_run: callable, *args, **kwargs):
         # inheritance from QRunnable
         super(Task, self).__init__()
         self.fn_run = fn_run
@@ -31,7 +32,7 @@ class Task(QRunnable):
         try:
             with QMutexLocker(self.mutex):
                 self.is_stop = False
-            result = self.fn_run(self, *self.args, **self.kwargs)
+            result = self.fn_run(*self.args, **self.kwargs)
         except:
             self.signals.error.emit(traceback.format_exc())
         else:
@@ -75,12 +76,13 @@ def result_default():
 # GUESS WHO CREATED A FUNCTION DEDICATED TO STARTING TASKS AS IF THEY ARE COROUTINES BUT ACTUALLY THREADS!!  THIS GUY!!
 # It's pretty easy to use, check processing.py in prep_tasks for an example.
 
-def start(window, fxn_thread, *args, **kwargs):
+def start(fxn_thread, *args, **kwargs):
     # window in gui.py is literally just called window.  circular imports stopped this from being awesome...
     # from modules.gui import window
     handle_finish=finish_default
     handle_error=error_default
     handle_result=result_default
+    window = state.window
 
     workerObj = None
     if window.thread_pool.activeThreadCount() < window.thread_pool.maxThreadCount():

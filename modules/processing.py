@@ -8,7 +8,7 @@ import modules.tasks as tasks
 # ^ originally using asyncio, will not work anymore.
 
 #update the CPU dictionary variable
-def update_cpu_dict(self):
+def update_cpu_dict():
     print("Tracking.")
     while not state.mainFinished:
         state.cpudict["cpu_percent"] = psutil.cpu_percent()
@@ -17,7 +17,7 @@ def update_cpu_dict(self):
     return True
 
 
-def print_dict(self):
+def print_dict():
     print("Starting.")
     tasks.wait(5000)
     while not state.mainFinished:
@@ -31,8 +31,8 @@ def print_dict(self):
 
 def prep_tasks(window):
     #test
-    tasks.start(window, update_cpu_dict)
-    tasks.start(window, print_dict)
+    tasks.start(update_cpu_dict)
+    tasks.start(print_dict)
     state.signalStarted()
 
     

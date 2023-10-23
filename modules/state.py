@@ -3,6 +3,7 @@ tasksStarted = False
 cpudict = {"cpu_percent": 0.0, "filler": 0.0}
 gpudict = {"filler": 0.0}
 emotion = "emotion_default"
+window = None
 
 def signalTasks():
     global mainFinished

@@ -149,8 +149,10 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow3 = QHBoxLayout()
         mainWindow.dataRow4 = QHBoxLayout()
         mainWindow.dataRow5 = QHBoxLayout()
+
+        mainWindow.test_graph = graphs.DataGraph(graphs.test_fxn)
         
-        mainWindow.dataRow2.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
+        mainWindow.dataRow2.addWidget(mainWindow.test_graph)
         mainWindow.dataRow2.addWidget(Color('yellow'))
         mainWindow.dataRow2.addWidget(Color('purple'))
 
@@ -208,6 +210,7 @@ class MainWindow(QMainWindow):
     
     def taskButtonPressed(mainWindow):
         prep_tasks(mainWindow)
+        mainWindow.test_graph.start_task()
         mainWindow.processingUI()
         mainWindow.taskButton.setEnabled(False)
         mainWindow.taskButton.setText("Tasks started.")
@@ -257,9 +260,9 @@ class MainWindow(QMainWindow):
         mainWindow.cpuInfo.setText("...")
         mainWindow.moodRow3.addWidget(mainWindow.emotionReading)
         mainWindow.moodRow3.addWidget(mainWindow.cpuInfo)
-        tasks.start(mainWindow, mainWindow.setDictToUI, mainWindow)
+        tasks.start(mainWindow.setDictToUI)
 
-    def setDictToUI(mainWindow, testArg, any):
+    def setDictToUI(mainWindow):
         while not state.mainFinished:
             emotions = ("Happy.", "Stressed.", "Angry.", "Bored.")
             emotionText = "Your computer is feeling "
@@ -323,8 +326,8 @@ def main():
 
     # Create a Qt main window, which will be our window.
 
-    window = MainWindow()
-    window.show()  # IMPORTANT!!!!! Windows are hidden by default.
+    state.window = MainWindow()
+    state.window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
 
     # an easy way to run the CPU processing tasks in the background!
