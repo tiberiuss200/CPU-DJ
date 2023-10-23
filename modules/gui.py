@@ -11,6 +11,7 @@ import modules.spotify as spotify
 from modules.processing import prep_tasks
 import modules.state as state
 import modules.tasks as tasks
+import modules.graphs as graphs
 
 app_path = ""
 
@@ -148,7 +149,7 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow4 = QHBoxLayout()
         mainWindow.dataRow5 = QHBoxLayout()
         
-        mainWindow.dataRow2.addWidget(Color('red'))
+        mainWindow.dataRow2.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
         mainWindow.dataRow2.addWidget(Color('yellow'))
         mainWindow.dataRow2.addWidget(Color('purple'))
 
