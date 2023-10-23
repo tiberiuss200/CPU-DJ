@@ -7,6 +7,7 @@ import matplotlib
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import modules.tasks as tasks
+import modules.state as state
 from psutil import cpu_percent
 
 
@@ -39,7 +40,7 @@ y = [3,10,2,5,7]
 ax.plot(x,y)
 
 class DataGraph(QWidget):
-    def __init__(self, fptr: callable, mainWindow: QMainWindow):
+    def __init__(self, fptr: callable):
         super(DataGraph, self).__init__()
         self.fptr = fptr
         self.x_values = []
@@ -53,25 +54,30 @@ class DataGraph(QWidget):
         self.canvas = FigureCanvasQTAgg(self.fig)
         self.layout.addWidget(self.canvas)
         self.init_graph()
-        tasks.start(mainWindow, self.update_graph, self)
 
     def init_graph(self):
         self.ax = self.fig.add_subplot()
         self.line, = self.ax.plot([], [])
         self.ax.set_xlim(0, 10)
+        self.ax.set_ylim(0, 100)
     
-    def update_graph(self, self2):
-        new_yvalue = self2.fptr()
-        self2.y_values.append(new_yvalue)
-        self2.x_values.append(self.timer)
-        self2.timer += 1
+    def start_task(self):
+        tasks.start(self.update_graph)
+    
+    def update_graph(self):
+        while not state.mainFinished:
+            new_yvalue = self.fptr()
+            self.y_values.append(new_yvalue)
+            self.x_values.append(self.timer)
+            self.timer += 1
 
-        if (self2.timer > self2.xmax):
-            self2.ax.set_xlim(self2.timer - 10, self2.timer)
-        
-        self2.canvas.draw()
-        self2.line.set_data(self2.x_values, self2.y_values)
-        tasks.wait(1000)
+            if (self.timer > self.xmax):
+                self.ax.set_xlim(self.timer - 10, self.timer)
+            
+            print("Test graph message")
+            self.canvas.draw()
+            self.line.set_data(self.x_values, self.y_values)
+            tasks.wait(1000)
 
 
 def test_fxn():
