@@ -45,10 +45,16 @@ class MainWindow(QMainWindow):
         mainWindow.thread_pool = QThreadPool()
         mainWindow.thread_pool.setMaxThreadCount(10)
 
+        mainWindow.genreList = QComboBox(mainWindow)
+        mainWindow.genreList.addItems(state.genreList)
+        mainWindow.genreList.move(100,100)
+        mainWindow.genreList.setPlaceholderText("iranian")
+
         mainWindow.generateButton = QPushButton("Generate Song")
         mainWindow.taskButton = QPushButton("Start tasks")
         mainWindow.dataButton = QPushButton("Data")
         mainWindow.moodButton = QPushButton("Mood")
+        mainWindow.genreButton = QPushButton("Set Genre")
 
         mainWindow.generateButton.button_is_checked = False
         mainWindow.taskButton.button_is_checked = False
@@ -56,11 +62,6 @@ class MainWindow(QMainWindow):
         mainWindow.moodButton.button_is_checked = False
         
         mainWindow.button_setup()
-
-        mainWindow.genreButton = QComboBox(mainWindow)
-        mainWindow.genreButton.addItems(state.genreList)
-        mainWindow.genreButton.move(100,100)
-        state.currentGenre = mainWindow.genreButton.currentText()
 
         mainWindow.mood_display = QWidget()
         mainWindow.data_display = QWidget()
@@ -135,8 +136,8 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow4.addWidget(Color('yellow'))
         mainWindow.moodRow4.addWidget(Color('purple'))
 
+        mainWindow.moodRow5.addWidget(mainWindow.genreList)
         mainWindow.moodRow5.addWidget(mainWindow.genreButton)
-        mainWindow.moodRow5.addWidget(Color('yellow'))
         mainWindow.moodRow5.addWidget(Color('purple'))
 
         containerBench = QVBoxLayout()
@@ -240,6 +241,11 @@ class MainWindow(QMainWindow):
         #mainWindow.moodButton.released.connect(mainWindow.moodButtonReleased)
         mainWindow.moodButton.setMinimumSize(45, 60)
         mainWindow.moodButton.resize(45, 60)
+
+        mainWindow.genreButton.setCheckable(False)
+        mainWindow.genreButton.clicked.connect(mainWindow.genreButtonPressed)
+        mainWindow.genreButton.setMinimumSize(45, 60)
+        mainWindow.genreButton.resize(60, 60)
         return
     
     def taskButtonPressed(mainWindow):
@@ -276,6 +282,11 @@ class MainWindow(QMainWindow):
         mainWindow.moodButton.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
         return
     
+    def genreButtonPressed(mainWindow):
+        state.currentGenre = mainWindow.genreList.currentText()
+        print(mainWindow.genreList.currentText())
+        return
+
     def generateButtonReleased(mainWindow):
         mainWindow.generateButton.clicked = True
         return
