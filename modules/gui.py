@@ -1,7 +1,7 @@
 import sys
 import random
 from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QComboBox
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar, QScrollArea
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtGui import QPalette, QColor, QIcon, QPalette
@@ -56,6 +56,11 @@ class MainWindow(QMainWindow):
         mainWindow.moodButton.button_is_checked = False
         
         mainWindow.button_setup()
+
+        mainWindow.genreButton = QComboBox(mainWindow)
+        mainWindow.genreButton.addItems(state.genreList)
+        mainWindow.genreButton.move(100,100)
+        state.currentGenre = mainWindow.genreButton.currentText()
 
         mainWindow.mood_display = QWidget()
         mainWindow.data_display = QWidget()
@@ -130,7 +135,7 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow4.addWidget(Color('yellow'))
         mainWindow.moodRow4.addWidget(Color('purple'))
 
-        mainWindow.moodRow5.addWidget(Color('red'))
+        mainWindow.moodRow5.addWidget(mainWindow.genreButton)
         mainWindow.moodRow5.addWidget(Color('yellow'))
         mainWindow.moodRow5.addWidget(Color('purple'))
 
