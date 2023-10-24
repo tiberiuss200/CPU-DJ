@@ -22,7 +22,7 @@ def update_cpu_dict():
             state.cpudict["temps"] = psutil.sensors_temperature()
 
         state.cpudict["battery_info"] = psutil.sensors_battery()
-        
+
         tasks.wait(1000)
     print("Update CPU dictionaries task ended.")
     return True
@@ -38,7 +38,6 @@ def print_dict():
     print("End.")
     return True
     #end
-
 
 def prep_tasks(window):
     #test
