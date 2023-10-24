@@ -150,7 +150,7 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow5 = QHBoxLayout()
         mainWindow.dataRow6 = QHBoxLayout()
 
-        mainWindow.test_graph = graphs.DataGraph(graphs.test_fxn)
+        mainWindow.test_graph = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
         
         
         mainWindow.dataRow2.addWidget(Color('red'))
