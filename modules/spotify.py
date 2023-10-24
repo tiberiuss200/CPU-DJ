@@ -17,14 +17,16 @@ CPU_VAL = state.cpudict["cpu_percent"]
 CPU_FREQ = state.cpudict["cpu_freq"]
 RAM_VAL = state.cpudict["ram_percent"]
 SWAP_VAL = state.cpudict["swap_percent"]
+GENRE = state.currentGenre
 
 def main():
-    token = get_token()                                             #Calls to setup the client ID and Secret
-    songs = get_track_reccomendation(token, "rock", CPU_VAL, RAM_VAL, SWAP_VAL)     #Need to un-hardcode. Gets the track name from the computer mood
-    uri = get_uri(token, "rock", CPU_VAL, RAM_VAL, SWAP_VAL)                        #Need to un-hardcode. Gets the track URI from the computer mood
-    print(songs)                                                    #Prints out the song title
-    print(uri)                                                      #Prints the song URI
-    print("-------------------------------------------")            #Bar to make output more readable
+    GENRE = state.currentGenre
+    token = get_token()                                                             #Calls to setup the client ID and Secret
+    songs = get_track_reccomendation(token, GENRE, CPU_VAL, RAM_VAL, SWAP_VAL)      #Need to un-hardcode. Gets the track name from the computer mood
+    uri = get_uri(token, GENRE, CPU_VAL, RAM_VAL, SWAP_VAL)                         #Need to un-hardcode. Gets the track URI from the computer mood
+    print(songs)                                                                    #Prints out the song title
+    print(uri)                                                                      #Prints the song URI
+    print("-------------------------------------------")                            #Bar to make output more readable
     #from modules.processing import uri_to_embed
     uri_to_embed(uri)                                               #Embeds the URI to show in the program
     return 0                                                        #Exits program
