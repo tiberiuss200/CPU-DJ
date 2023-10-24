@@ -150,9 +150,8 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow5 = QHBoxLayout()
         mainWindow.dataRow6 = QHBoxLayout()
 
-        mainWindow.test_graph = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
         
-        
+        #start of left side coding stuff
         mainWindow.dataRow2.addWidget(Color('red'))
         mainWindow.dataRow2.addWidget(Color('yellow'))
         mainWindow.dataRow2.addWidget(Color('purple'))
@@ -185,16 +184,25 @@ class MainWindow(QMainWindow):
         leftContainer.setMinimumSize(450, 800)
         leftContainer.resize(300, 300)
 
+        #left side of data page scrolling section
         scrollField = QScrollArea()
         scrollField.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         scrollField.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scrollField.setWidget(leftContainer)
         scrollField.setMaximumSize(500, 400)
 
+        #start of right side data page
+        mainWindow.test_graph = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
+
+        dataRight = QStackedLayout()
+        dataRight.addWidget(mainWindow.test_graph)
+        dataRight.addWidget(Color('purple'))
+        dataRight.setCurrentWidget(mainWindow.test_graph)
+
         containerBench = QHBoxLayout()
         containerBench.addWidget(scrollField)
         #containerBench.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
-        containerBench.addWidget(mainWindow.test_graph, 1)
+        containerBench.addLayout(dataRight, 1)
 
         return containerBench
 
