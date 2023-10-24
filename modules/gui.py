@@ -136,8 +136,12 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow4.addWidget(Color('yellow'))
         mainWindow.moodRow4.addWidget(Color('purple'))
 
-        mainWindow.moodRow5.addWidget(mainWindow.genreList)
-        mainWindow.moodRow5.addWidget(mainWindow.genreButton)
+        genreSelector = QVBoxLayout()
+        genreSelector.addWidget(mainWindow.genreList)
+        genreSelector.addWidget(mainWindow.genreButton)
+
+        mainWindow.moodRow5.addLayout(genreSelector)
+        mainWindow.moodRow5.addWidget(Color('yellow'))
         mainWindow.moodRow5.addWidget(Color('purple'))
 
         containerBench = QVBoxLayout()
@@ -358,10 +362,8 @@ class MainWindow(QMainWindow):
 def show_Playlist(songs, mainWindow, QLabel):
     return
         
-    
     # print(str(mainWindow.array3[2])+' '+mainWindow.array3[3])
     
-
 def main():
     # You need one (and only one) QApplication instance per application.
     # Pass in sys.argv to allow command line arguments for your app.
@@ -373,7 +375,6 @@ def main():
 
     state.window = MainWindow()
     state.window.show()  # IMPORTANT!!!!! Windows are hidden by default.
-
 
     # an easy way to run the CPU processing tasks in the background!
     # this assumes they are always tracking stats currently and does not account for starting/stopping at will.
@@ -387,7 +388,6 @@ def main():
     # timer_onStartUp = startupTasksTimer(window)
     # timer_onStartUp.timeout.connect(lambda: prep_tasks(window))
     # timer_onStartUp.start()
-
 
     # Start the event loop.
     app.exec()
