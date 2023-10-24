@@ -1,7 +1,7 @@
 import sys
 import random
 from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QComboBox
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar, QScrollArea
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtGui import QPalette, QColor, QIcon, QPalette
@@ -45,10 +45,16 @@ class MainWindow(QMainWindow):
         mainWindow.thread_pool = QThreadPool()
         mainWindow.thread_pool.setMaxThreadCount(10)
 
+        mainWindow.genreList = QComboBox(mainWindow)
+        mainWindow.genreList.addItems(state.genreList)
+        mainWindow.genreList.move(100,100)
+        mainWindow.genreList.setPlaceholderText("iranian")
+
         mainWindow.generateButton = QPushButton("Generate Song")
         mainWindow.taskButton = QPushButton("Start tasks")
         mainWindow.dataButton = QPushButton("Data")
         mainWindow.moodButton = QPushButton("Mood")
+        mainWindow.genreButton = QPushButton("Set Genre")
 
         mainWindow.generateButton.button_is_checked = False
         mainWindow.taskButton.button_is_checked = False
@@ -130,7 +136,11 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow4.addWidget(Color('yellow'))
         mainWindow.moodRow4.addWidget(Color('purple'))
 
-        mainWindow.moodRow5.addWidget(Color('red'))
+        genreSelector = QVBoxLayout()
+        genreSelector.addWidget(mainWindow.genreList)
+        genreSelector.addWidget(mainWindow.genreButton)
+
+        mainWindow.moodRow5.addLayout(genreSelector)
         mainWindow.moodRow5.addWidget(Color('yellow'))
         mainWindow.moodRow5.addWidget(Color('purple'))
 
@@ -150,9 +160,8 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow5 = QHBoxLayout()
         mainWindow.dataRow6 = QHBoxLayout()
 
-        mainWindow.test_graph = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
         
-        
+        #start of left side coding stuff
         mainWindow.dataRow2.addWidget(Color('red'))
         mainWindow.dataRow2.addWidget(Color('yellow'))
         mainWindow.dataRow2.addWidget(Color('purple'))
@@ -185,16 +194,25 @@ class MainWindow(QMainWindow):
         leftContainer.setMinimumSize(450, 800)
         leftContainer.resize(300, 300)
 
+        #left side of data page scrolling section
         scrollField = QScrollArea()
         scrollField.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         scrollField.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scrollField.setWidget(leftContainer)
         scrollField.setMaximumSize(500, 400)
 
+        #start of right side data page
+        mainWindow.test_graph = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
+
+        dataRight = QStackedLayout()
+        dataRight.addWidget(mainWindow.test_graph)
+        dataRight.addWidget(Color('purple'))
+        dataRight.setCurrentWidget(mainWindow.test_graph)
+
         containerBench = QHBoxLayout()
         containerBench.addWidget(scrollField)
         #containerBench.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
-        containerBench.addWidget(mainWindow.test_graph, 1)
+        containerBench.addLayout(dataRight, 1)
 
         return containerBench
 
@@ -227,6 +245,11 @@ class MainWindow(QMainWindow):
         #mainWindow.moodButton.released.connect(mainWindow.moodButtonReleased)
         mainWindow.moodButton.setMinimumSize(45, 60)
         mainWindow.moodButton.resize(45, 60)
+
+        mainWindow.genreButton.setCheckable(False)
+        mainWindow.genreButton.clicked.connect(mainWindow.genreButtonPressed)
+        mainWindow.genreButton.setMinimumSize(45, 60)
+        mainWindow.genreButton.resize(60, 60)
         return
     
     def taskButtonPressed(mainWindow):
@@ -263,6 +286,11 @@ class MainWindow(QMainWindow):
         mainWindow.moodButton.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
         return
     
+    def genreButtonPressed(mainWindow):
+        state.currentGenre = mainWindow.genreList.currentText()
+        print(mainWindow.genreList.currentText())
+        return
+
     def generateButtonReleased(mainWindow):
         mainWindow.generateButton.clicked = True
         return
@@ -334,10 +362,8 @@ class MainWindow(QMainWindow):
 def show_Playlist(songs, mainWindow, QLabel):
     return
         
-    
     # print(str(mainWindow.array3[2])+' '+mainWindow.array3[3])
     
-
 def main():
     # You need one (and only one) QApplication instance per application.
     # Pass in sys.argv to allow command line arguments for your app.
@@ -349,7 +375,6 @@ def main():
 
     state.window = MainWindow()
     state.window.show()  # IMPORTANT!!!!! Windows are hidden by default.
-
 
     # an easy way to run the CPU processing tasks in the background!
     # this assumes they are always tracking stats currently and does not account for starting/stopping at will.
@@ -363,7 +388,6 @@ def main():
     # timer_onStartUp = startupTasksTimer(window)
     # timer_onStartUp.timeout.connect(lambda: prep_tasks(window))
     # timer_onStartUp.start()
-
 
     # Start the event loop.
     app.exec()
