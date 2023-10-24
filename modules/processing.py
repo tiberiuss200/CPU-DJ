@@ -29,7 +29,7 @@ def update_cpu_dict():
 
 
 def print_dict():
-    print("Starting.")
+    print("[debug] Print task started.")
     tasks.wait(5000)
     while not state.mainFinished:
         prettyPrint = json.dumps(state.cpudict)

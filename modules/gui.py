@@ -288,7 +288,7 @@ class MainWindow(QMainWindow):
     
     def genreButtonPressed(mainWindow):
         state.currentGenre = mainWindow.genreList.currentText()
-        print(mainWindow.genreList.currentText())
+        print(mainWindow.genreList.currentText() + " " + state.currentGenre)
         return
 
     def generateButtonReleased(mainWindow):
