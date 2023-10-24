@@ -10,10 +10,7 @@ import modules.tasks as tasks
 import modules.state as state
 from psutil import cpu_percent
 
-
-
-
-
+###Test Graph Object
 class Window(QWidget):
     def __init__(self):
         super(Window, self).__init__()
@@ -31,14 +28,15 @@ class Window(QWidget):
         #test.axes.plot([0,1,2,3,4], [3,10,2,5,7])
         #layout.addWidget(test)
 
-
 fig = Figure()
 ax = fig.add_subplot()
 
 x = [0,1,2,3,4]                 #Hardcoded test values
 y = [3,10,2,5,7]                #Hardcoded test values
 ax.plot(x,y)                    #Plots a line graph with the test values
+###End Test Graph Object
 
+###Actual Graphing
 class DataGraph(QWidget):
     def __init__(self, fptr: callable):
         super(DataGraph, self).__init__()
@@ -81,19 +79,17 @@ class DataGraph(QWidget):
 
 def test_fxn():
     return cpu_percent()                                        #
+###End Actual Graphing
 
+###Code Graveyard
 #class graph(FigureCanvasQTAgg):
 #    def __init__(self, parent=Window, width=10, height=10, dpi=100):
 #        fig = Figure(figsize=(width, height), dpi=dpi)
 #        self.axes = fig.add_subplot(111)
 #        super(graph, self).__init__(fig)
-
-
-
-
-
 #app = QApplication(sys.argv)
 #window = DataGraph(test_fxn)  #Window()
 #window.show()
 
 #sys.exit(app.exec())
+###End Code Graveyard
