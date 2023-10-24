@@ -12,6 +12,10 @@ def update_cpu_dict():
     print("Tracking.")
     while not state.mainFinished:
         state.cpudict["cpu_percent"] = psutil.cpu_percent()
+        freq = psutil.cpu_freq() #(freq.current - freq.min) * 100 / (freq.max - freq.min)
+        state.cpudict["cpu_freq"] = freq.current
+        state.cpudict["ram_percent"] = psutil.virtual_memory().percent
+        state.cpudict["swap_percent"] = psutil.swap_memory().percent
         tasks.wait(1000)
     print("Update CPU dictionaries task ended.")
     return True
