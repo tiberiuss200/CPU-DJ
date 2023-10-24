@@ -20,6 +20,7 @@ SWAP_VAL = state.cpudict["swap_percent"]
 GENRE = state.currentGenre
 
 def main():
+    GENRE = state.currentGenre
     token = get_token()                                                             #Calls to setup the client ID and Secret
     songs = get_track_reccomendation(token, GENRE, CPU_VAL, RAM_VAL, SWAP_VAL)      #Need to un-hardcode. Gets the track name from the computer mood
     uri = get_uri(token, GENRE, CPU_VAL, RAM_VAL, SWAP_VAL)                         #Need to un-hardcode. Gets the track URI from the computer mood
