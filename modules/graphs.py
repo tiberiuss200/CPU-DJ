@@ -18,11 +18,11 @@ class Window(QWidget):
     def __init__(self):
         super(Window, self).__init__()
 
-        layout = QVBoxLayout()
-        self.setLayout(layout)
+        layout = QVBoxLayout()                  #Initializes a square layout
+        self.setLayout(layout)                  #Sets the window's layout as a box
 
-        test = FigureCanvasQTAgg(fig)
-        layout.addWidget(test)
+        test = FigureCanvasQTAgg(fig)           #Starts a graph object
+        layout.addWidget(test)                  #Adds the graph widget to the layout
 
         self.setWindowIcon(QIcon("logo.png"))           #Sets the window's icon in the top left of the window to our logo
         self.setWindowTitle("Graphs Testing")           #Sets the title of the entire window
@@ -35,52 +35,52 @@ class Window(QWidget):
 fig = Figure()
 ax = fig.add_subplot()
 
-x = [0,1,2,3,4]
-y = [3,10,2,5,7]
-ax.plot(x,y)
+x = [0,1,2,3,4]                 #Hardcoded test values
+y = [3,10,2,5,7]                #Hardcoded test values
+ax.plot(x,y)                    #Plots a line graph with the test values
 
 class DataGraph(QWidget):
     def __init__(self, fptr: callable):
         super(DataGraph, self).__init__()
-        self.fptr = fptr
-        self.x_values = []
-        self.y_values = []
-        self.timer = 0
-        self.xmax = 10
-        self.fig = Figure()
+        self.fptr = fptr                    #
+        self.x_values = []                  #Sets an empty array to hold the time
+        self.y_values = []                  #Sets an empty array to hold the CPU percentages
+        self.timer = 0                      #Sets the initial value of X to 0 seconds
+        self.xmax = 10                      #Sets the initial size of the X-axis
+        self.fig = Figure()                 #Creates a new figure object
 
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
-        self.canvas = FigureCanvasQTAgg(self.fig)
-        self.layout.addWidget(self.canvas)
-        self.init_graph()
+        self.layout = QVBoxLayout()                 #Creates a box style layout
+        self.setLayout(self.layout)                 #Sets itself to the box layout that was made
+        self.canvas = FigureCanvasQTAgg(self.fig)   #Initilizes a blank graph
+        self.layout.addWidget(self.canvas)          #Adds the widget to the box style layout
+        self.init_graph()                           #Function call. Sets the default graph
 
     def init_graph(self):
-        self.ax = self.fig.add_subplot()
-        self.line, = self.ax.plot([], [])
-        self.ax.set_xlim(0, 10)
-        self.ax.set_ylim(0, 100)
+        self.ax = self.fig.add_subplot()            #Adds an axes object to the figure
+        self.line, = self.ax.plot([], [])           #Starts to graph the data on to the graph object
+        self.ax.set_xlim(0, 10)                     #Sets the initial size of the x-axis
+        self.ax.set_ylim(0, 100)                    #Sets the initial size of the y-axis
     
     def start_task(self):
-        tasks.start(self.update_graph)
+        tasks.start(self.update_graph)              #Function call. Updates the graph with new data
     
     def update_graph(self):
-        while not state.mainFinished:
-            new_yvalue = self.fptr()
-            self.y_values.append(new_yvalue)
-            self.x_values.append(self.timer)
-            self.timer += 1
+        while not state.mainFinished:               #Loops while the main window isn't closed
+            new_yvalue = self.fptr()                #
+            self.y_values.append(new_yvalue)        #Adds the new data after one second to the already initialized graph
+            self.x_values.append(self.timer)        #Adds the new data after one second to the already initialized graph
+            self.timer += 1                         #Adds a second to the timer for the x value
 
             if (self.timer > self.xmax):
-                self.ax.set_xlim(self.timer - 10, self.timer)
-                
-            self.canvas.draw()
-            self.line.set_data(self.x_values, self.y_values)
-            tasks.wait(1000)
+                self.ax.set_xlim(self.timer - 10, self.timer)   #Moves the x-axis when the size gets too big
+
+            self.canvas.draw()                                  #Displays the new graph
+            self.line.set_data(self.x_values, self.y_values)    #Sets the line data
+            tasks.wait(1000)                                    #Waits 1000ms (1 second) to then graph the data again
 
 
 def test_fxn():
-    return cpu_percent()
+    return cpu_percent()                                        #
 
 #class graph(FigureCanvasQTAgg):
 #    def __init__(self, parent=Window, width=10, height=10, dpi=100):
