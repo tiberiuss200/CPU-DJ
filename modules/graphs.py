@@ -73,8 +73,7 @@ class DataGraph(QWidget):
 
             if (self.timer > self.xmax):
                 self.ax.set_xlim(self.timer - 10, self.timer)
-            
-            print("Test graph message")
+                
             self.canvas.draw()
             self.line.set_data(self.x_values, self.y_values)
             tasks.wait(1000)

@@ -13,10 +13,12 @@ class X:
 client_id = "016b59b007cf4494869123ecdb2f0687"              #Client ID. Need to un-hardcode
 client_secret = "113ddc7d11f940f990e85be0a186399f"          #Client Secret. Need to un-hardcode
 
+CPU_VAL = state.cpudict["cpu_percent"]
+
 def main():
     token = get_token()                                             #Calls to setup the client ID and Secret
-    songs = get_track_reccomendation(token, "rock", 25, 50, 75)     #Need to un-hardcode. Gets the track name from the computer mood
-    uri = get_uri(token, "rock", 25, 50, 75)                        #Need to un-hardcode. Gets the track URI from the computer mood
+    songs = get_track_reccomendation(token, "rock", CPU_VAL, 50, 75)     #Need to un-hardcode. Gets the track name from the computer mood
+    uri = get_uri(token, "rock", CPU_VAL, 50, 75)                        #Need to un-hardcode. Gets the track URI from the computer mood
     print(songs)                                                    #Prints out the song title
     print(uri)                                                      #Prints the song URI
     print("-------------------------------------------")            #Bar to make output more readable
