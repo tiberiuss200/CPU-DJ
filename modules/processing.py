@@ -16,6 +16,13 @@ def update_cpu_dict():
         state.cpudict["cpu_freq"] = freq.current
         state.cpudict["ram_percent"] = psutil.virtual_memory().percent
         state.cpudict["swap_percent"] = psutil.swap_memory().percent
+
+        if state.current_os == state.CONST_OS.LINUX:
+            state.cpudict["fan_speed"] = psutil.sensors_fans()
+            state.cpudict["temps"] = psutil.sensors_temperature()
+
+        state.cpudict["battery_info"] = psutil.sensors_battery()
+        
         tasks.wait(1000)
     print("Update CPU dictionaries task ended.")
     return True
