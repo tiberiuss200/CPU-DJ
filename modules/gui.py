@@ -55,6 +55,8 @@ class MainWindow(QMainWindow):
         mainWindow.dataButton = QPushButton("Data")
         mainWindow.moodButton = QPushButton("Mood")
         mainWindow.genreButton = QPushButton("Set Genre")
+        mainWindow.oGraphButton = QPushButton("Open Graph")
+        mainWindow.cGraphButton = QPushButton("Close Graph")
 
         mainWindow.generateButton.button_is_checked = False
         mainWindow.taskButton.button_is_checked = False
@@ -250,6 +252,18 @@ class MainWindow(QMainWindow):
         mainWindow.genreButton.clicked.connect(mainWindow.genreButtonPressed)
         mainWindow.genreButton.setMinimumSize(45, 60)
         mainWindow.genreButton.resize(60, 60)
+
+        mainWindow.oGraphButton.setCheckable(True)
+        mainWindow.oGraphButton.setChecked(False)
+        mainWindow.oGraphButton.clicked.connect(mainWindow.oGraphButtonPressed)
+        mainWindow.oGraphButton.setMinimumSize(45, 60)
+        mainWindow.oGraphButton.resize(60, 60)
+
+        mainWindow.cGraphButton.setCheckable(True)
+        mainWindow.cGraphButton.setChecked(True)
+        mainWindow.cGraphButton.clicked.connect(mainWindow.cGraphButtonPressed)
+        mainWindow.cGraphButton.setMinimumSize(45, 60)
+        mainWindow.cGraphButton.resize(60, 60)
         return
     
     def taskButtonPressed(mainWindow):
@@ -290,6 +304,8 @@ class MainWindow(QMainWindow):
         state.currentGenre = mainWindow.genreList.currentText()
         print(mainWindow.genreList.currentText())
         return
+    
+    
 
     def generateButtonReleased(mainWindow):
         mainWindow.generateButton.clicked = True
