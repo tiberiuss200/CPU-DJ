@@ -1,67 +1,66 @@
-from dotenv import *                    #Sets up the Client ID and Secret
-from requests import post, get          #
-import modules.state as state           #
-import os                               #
-import base64                           #
-import json                             #
-import random                           #
+from dotenv import *
+from requests import post, get
+import modules.state as state
+import os
+import base64
+import json
+import random
 
 class X:
     def __getitem__(self, i):
         return f"Value {i}"
 
-client_id = "016b59b007cf4494869123ecdb2f0687"              #Client ID. Need to un-hardcode
-client_secret = "113ddc7d11f940f990e85be0a186399f"          #Client Secret. Need to un-hardcode
+client_id = "016b59b007cf4494869123ecdb2f0687"              #Client ID
+client_secret = "113ddc7d11f940f990e85be0a186399f"          #Client Secret
 
 def main():
     token = get_token()                                                             #Calls to setup the client ID and Secret
-    songs = get_track_reccomendation(token, state.currentGenre, state.cpudict["cpu_percent"], state.cpudict["ram_percent"], state.cpudict["swap_percent"])      #Need to un-hardcode. Gets the track name from the computer mood
-    uri = get_uri(token, state.currentGenre, state.cpudict["cpu_percent"], state.cpudict["ram_percent"], state.cpudict["swap_percent"])                         #Need to un-hardcode. Gets the track URI from the computer mood
+    songs = get_track_reccomendation(token, state.currentGenre, state.cpudict["cpu_percent"], state.cpudict["ram_percent"], state.cpudict["swap_percent"])      #Gets the track name from the computer mood
+    uri = get_uri(token, state.currentGenre, state.cpudict["cpu_percent"], state.cpudict["ram_percent"], state.cpudict["swap_percent"])                         #Gets the track URI from the computer mood
     print(songs)                                                                    #Prints out the song title
     print(uri)                                                                      #Prints the song URI
     print("-------------------------------------------")                            #Bar to make output more readable
-    #from modules.processing import uri_to_embed
-    uri_to_embed(uri)                                               #Embeds the URI to show in the program
-    return 0                                                        #Exits program
+    uri_to_embed(uri)
+    return 0
 
 #Function get_token sets up the client ID and secret in order to communicate with the Spotify API
 def get_token():
-    auth_string = client_id + ":" + client_secret               #Appends the Client ID and Secret together divided by a :
-    auth_bytes = auth_string.encode("utf-8")                    #Encodes the ID and Secret in UTF-8
-    auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")    #
-    url = "https://accounts.spotify.com/api/token"              #Sets the API endpoint
+    auth_string = client_id + ":" + client_secret                                   #Appends the Client ID and Secret together divided by a :
+    auth_bytes = auth_string.encode("utf-8")                                        #Encodes the ID and Secret in UTF-8
+    auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
+    url = "https://accounts.spotify.com/api/token"                                  #Sets the API endpoint
     headers = {
-        "Accept": "application/json",                           #
-        "Authorization": "Basic " + auth_base64,                #
-        "Content-Type": "application/x-www-form-urlencoded"     #
+        "Accept": "application/json",
+        "Authorization": "Basic " + auth_base64,
+        "Content-Type": "application/x-www-form-urlencoded"
     }
-    data = {"grant_type": "client_credentials"}                 #
-    result = post(url, headers=headers, data=data)              #
-    t_result = json.loads(result.content)                       #
-    token = t_result["access_token"]                            #
-    return token                                                #Returning the
+    data = {"grant_type": "client_credentials"}
+    result = post(url, headers=headers, data=data)
+    t_result = json.loads(result.content)
+    token = t_result["access_token"]
+    return token
 
 def get_auth_header(token):
-    return {"Authorization": "Bearer " + token}         #
+    return {"Authorization": "Bearer " + token}
 
 #Function to use the API to get a song that corresponds to the computer's mood.
 #Returns the song's name
-def get_track_reccomendation(token, genre, energy, tempo, valence):                                             #Token
+def get_track_reccomendation(token, genre, energy, tempo, valence):
         url = f"https://api.spotify.com/v1/recommendations"                                                     #Sets the API endpoint
-        headers = get_auth_header(token)                                                                        #
+        headers = get_auth_header(token)
         query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_vaence={valence}"     #Sets up the query with an f string to search for the genre, energy, tempo, and valence provided
-        query_url = url + query                                                                                 #
-        result = get(query_url, headers=headers)                                                                #
-        song_result = json.loads(result.content)["tracks"][0]["name"]                                           #
-        song_url = json.loads(result.content)["tracks"][0]["external_urls"]["spotify"]                          #
-        song_uri = json.loads(result.content)["tracks"][0]["uri"]                                               #
+        query_url = url + query
+        result = get(query_url, headers=headers)
+        song_result = json.loads(result.content)["tracks"][0]["name"]
+        song_url = json.loads(result.content)["tracks"][0]["external_urls"]["spotify"]
+        song_uri = json.loads(result.content)["tracks"][0]["uri"]
         return song_result                                                                                      #Returning the song's name
 
 #Function to use the API to get a song that corresponds to the computer's mood
 #Returns the song's URI to embed
-def get_uri(token, genre, energy, tempo, valence):                                                              #
-        url = f"https://api.spotify.com/v1/recommendations"                                                     #
-        headers = get_auth_header(token)                                                                        #
+def get_uri(token, genre, energy, tempo, valence):
+        url = f"https://api.spotify.com/v1/recommendations"
+        headers = get_auth_header(token)
         query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_vaence={valence}"     #Sets up the query with an f string to search for the genre, energy, tempo, and valence provided
         query_url = url + query
         result = get(query_url, headers=headers)
