@@ -255,18 +255,19 @@ class MainWindow(QMainWindow):
 
         mainWindow.oGraphButton.setCheckable(True)
         mainWindow.oGraphButton.setChecked(False)
-        mainWindow.oGraphButton.clicked.connect(mainWindow.oGraphButtonPressed)
+        #mainWindow.oGraphButton.clicked.connect(mainWindow.oGraphButtonPressed)
         mainWindow.oGraphButton.setMinimumSize(45, 60)
         mainWindow.oGraphButton.resize(60, 60)
 
         mainWindow.cGraphButton.setCheckable(True)
         mainWindow.cGraphButton.setChecked(True)
-        mainWindow.cGraphButton.clicked.connect(mainWindow.cGraphButtonPressed)
+        #mainWindow.cGraphButton.clicked.connect(mainWindow.cGraphButtonPressed)
         mainWindow.cGraphButton.setMinimumSize(45, 60)
         mainWindow.cGraphButton.resize(60, 60)
         return
     
     def taskButtonPressed(mainWindow):
+        mainWindow.taskButton.setChecked(True)
         prep_tasks(mainWindow)
         mainWindow.test_graph.start_task()
         mainWindow.processingUI()
@@ -275,7 +276,6 @@ class MainWindow(QMainWindow):
         return
 
     def taskButtonReleased(mainWindow):
-        mainWindow.taskButton.clicked = True
         #print(mainWindow.button_is_checked)
         return
 
@@ -302,10 +302,8 @@ class MainWindow(QMainWindow):
     
     def genreButtonPressed(mainWindow):
         state.currentGenre = mainWindow.genreList.currentText()
-        print(mainWindow.genreList.currentText())
+        print(state.currentGenre)
         return
-    
-    
 
     def generateButtonReleased(mainWindow):
         mainWindow.generateButton.clicked = True
@@ -340,27 +338,30 @@ class MainWindow(QMainWindow):
     
     def generate_list(mainWindow):
         print("URI generated!")
-        mainWindow.generateButton.setText("URI Generated.")
-        mainWindow.generateButton.setEnabled(False)
+        mainWindow.generateButton.setText("Generate New Song")
 
-        item = mainWindow.moodRow4.itemAt(0)
-        rm = item.widget()
-        rm.deleteLater()
-        item = mainWindow.moodRow4.itemAt(1)
-        rm = item.widget()
-        rm.deleteLater()
-        item = mainWindow.moodRow4.itemAt(2)
-        rm = item.widget()
-        rm.deleteLater()
+        if(state.songsGenerated == 0):
+            item = mainWindow.moodRow4.itemAt(0)
+            rm = item.widget()
+            rm.deleteLater()
+            item = mainWindow.moodRow4.itemAt(1)
+            rm = item.widget()
+            rm.deleteLater()
+            item = mainWindow.moodRow4.itemAt(2)
+            rm = item.widget()
+            rm.deleteLater()
 
         #mainWindow.moodRow4.addWidget(mainWindow.playlistDisplay)
 
         songs = spotify.main()
         mainWindow.songEmbed.setHtml(open("embed.html").read())
-        mainWindow.moodRow4.addWidget(mainWindow.songEmbed)
-        mainWindow.songEmbed.show()
 
-        mainWindow.playlistDisplay.setText(mainWindow.display[0])
+        if(state.songsGenerated == 0):
+            mainWindow.moodRow4.addWidget(mainWindow.songEmbed)
+            mainWindow.songEmbed.show()
+            mainWindow.playlistDisplay.setText(mainWindow.display[0])
+        
+        state.songsGenerated += 1
         return
 
 def show_Playlist(songs, mainWindow, QLabel):
