@@ -42,7 +42,9 @@ def print_dict():
 def prep_tasks(window):
     #test
     tasks.start(update_cpu_dict)
-    tasks.start(print_dict)
+    if (state.debugMode):
+        tasks.start(print_dict)
+    
     state.signalStarted()
 
     
