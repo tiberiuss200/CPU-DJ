@@ -1,6 +1,6 @@
 from dotenv import *
 from requests import post, get
-import state as state
+import modules.state as state
 import os
 import base64
 import json
