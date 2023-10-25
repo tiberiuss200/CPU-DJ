@@ -6,6 +6,15 @@ class CONST_OS(str, Enum):
     MAC = "Darwin"
     LINUX = "Linux"
 
+class CONST_STATS(str, Enum):
+    CPU_VALUE = "cpu_percent"
+    CPU_FREQ = "cpu_freq"
+    RAM_PERC = "ram_percent"
+    SWAP_PERC = "swap_percent"
+    FAN_SPEED = "fan_speed"
+    TEMPS = "temp_sensor"
+    BATTERY = "battery_info"
+
 class CONST_EMOTE(str, Enum):
     HAPPY = "happy"
     SAD = "sad"
@@ -23,7 +32,8 @@ class CONST_EMOTE_TEXT(str, Enum):
 
 mainFinished = False
 tasksStarted = False
-cpudict = {"cpu_percent": 0.0, "cpu_freq": 0.0, "ram_percent": 0.0, "swap_percent": 0.0, "fan_speed": None, "temps": None, "battery_info": None, "filler": 0.0}
+debugMode = True
+cpudict = {"cpu_percent": 0.0, "cpu_freq": 0.0, "ram_percent": 0.0, "swap_percent": 0.0, "fan_speed": None, "temp_sensor": None, "battery_info": None, "filler": 0.0}
 gpudict = {"filler": 0.0}
 current_emotion = "emotion_default"
 emotion_dict = {'happy': 0.0, "sad": 0.0, "anger": 0.0, "surprise": 0.0}
