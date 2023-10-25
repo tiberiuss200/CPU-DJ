@@ -49,7 +49,7 @@ def get_auth_header(token):
 def get_track_reccomendation(token, genre, energy, tempo, valence):
         url = f"https://api.spotify.com/v1/recommendations"                                                     #Sets the API endpoint
         headers = get_auth_header(token)
-        query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_vaence={valence}"     #Sets up the query with an f string to search for the genre, energy, tempo, and valence provided
+        query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_valence={valence}"     #Sets up the query with an f string to search for the genre, energy, tempo, and valence provided
         query_url = url + query
         result = get(query_url, headers=headers)
         song_result = json.loads(result.content)["tracks"][0]["name"]
