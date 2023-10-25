@@ -19,7 +19,7 @@ def update_cpu_dict():
 
         if state.current_os == state.CONST_OS.LINUX:
             state.cpudict["fan_speed"] = psutil.sensors_fans()
-            state.cpudict["temps"] = psutil.sensors_temperature()
+            state.cpudict["temps"] = psutil.sensors_temperatures()
 
         state.cpudict["battery_info"] = psutil.sensors_battery()
 
