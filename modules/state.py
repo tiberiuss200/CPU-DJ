@@ -45,8 +45,6 @@ songsGenerated = 0
 current_os = platform.system()
 
 def determine_emotion():
-    if (cpudict["cpu_percent"] > 80.0):
-        current_emotion = CONST_EMOTE_TEXT.STRESSED
     
     #defaults
     if emotion_dict[CONST_EMOTE.HAPPY] > (emotion_dict[CONST_EMOTE.SAD] + emotion_dict[CONST_EMOTE.ANGER] + emotion_dict[CONST_EMOTE.SURPRISE]):
@@ -59,6 +57,9 @@ def determine_emotion():
         current_emotion = CONST_EMOTE_TEXT.SURPRISED
     else:
         current_emotion = CONST_EMOTE_TEXT.NEUTRAL
+
+    if (cpudict["cpu_percent"] > 80.0):
+        current_emotion = CONST_EMOTE_TEXT.STRESSED
     
     return current_emotion
 
