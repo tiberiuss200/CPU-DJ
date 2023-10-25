@@ -1,6 +1,6 @@
-from dotenv import *          #Sets up the Client ID and Secret
+from dotenv import *                    #Sets up the Client ID and Secret
 from requests import post, get          #
-import modules.state as state                   #
+import modules.state as state           #
 import os                               #
 import base64                           #
 import json                             #
@@ -13,14 +13,16 @@ class X:
 client_id = "016b59b007cf4494869123ecdb2f0687"              #Client ID. Need to un-hardcode
 client_secret = "113ddc7d11f940f990e85be0a186399f"          #Client Secret. Need to un-hardcode
 
-CPU_VAL = state.cpudict["cpu_percent"]
-CPU_FREQ = state.cpudict["cpu_freq"]
-RAM_VAL = state.cpudict["ram_percent"]
-SWAP_VAL = state.cpudict["swap_percent"]
-GENRE = state.currentGenre
+def callemup():
+    CPU_VAL = state.cpudict["cpu_percent"]
+    CPU_FREQ = state.cpudict["cpu_freq"]
+    RAM_VAL = state.cpudict["ram_percent"]
+    SWAP_VAL = state.cpudict["swap_percent"]
+    GENRE = state.currentGenre
+    return CPU_VAL, CPU_FREQ, RAM_VAL, SWAP_VAL, GENRE
 
 def main():
-    GENRE = state.currentGenre
+    callemup()
     token = get_token()                                                             #Calls to setup the client ID and Secret
     songs = get_track_reccomendation(token, GENRE, CPU_VAL, RAM_VAL, SWAP_VAL)      #Need to un-hardcode. Gets the track name from the computer mood
     uri = get_uri(token, GENRE, CPU_VAL, RAM_VAL, SWAP_VAL)                         #Need to un-hardcode. Gets the track URI from the computer mood
