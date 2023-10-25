@@ -32,6 +32,7 @@ class CONST_EMOTE_TEXT(str, Enum):
 
 mainFinished = False
 tasksStarted = False
+debugMode = True
 cpudict = {"cpu_percent": 0.0, "cpu_freq": 0.0, "ram_percent": 0.0, "swap_percent": 0.0, "fan_speed": None, "temp_sensor": None, "battery_info": None, "filler": 0.0}
 gpudict = {"filler": 0.0}
 current_emotion = "emotion_default"
