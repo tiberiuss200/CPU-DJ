@@ -13,13 +13,18 @@ class X:
 client_id = "016b59b007cf4494869123ecdb2f0687"              #Client ID. Need to un-hardcode
 client_secret = "113ddc7d11f940f990e85be0a186399f"          #Client Secret. Need to un-hardcode
 
+CPU_VAL = None
+CPU_FREQ = None
+RAM_VAL = None
+SWAP_VAL = None
+GENRE = None
+
 def callemup():
     CPU_VAL = state.cpudict["cpu_percent"]
     CPU_FREQ = state.cpudict["cpu_freq"]
     RAM_VAL = state.cpudict["ram_percent"]
     SWAP_VAL = state.cpudict["swap_percent"]
     GENRE = state.currentGenre
-    return CPU_VAL, CPU_FREQ, RAM_VAL, SWAP_VAL, GENRE
 
 def main():
     callemup()
