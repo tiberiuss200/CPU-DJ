@@ -52,7 +52,8 @@ def get_track_reccomendation(token, genre, energy, tempo, valence):
         query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_valence={valence}"     #Sets up the query with an f string to search for the genre, energy, tempo, and valence provided
         query_url = url + query
         result = get(query_url, headers=headers)
-        print("Retry After: " + result.headers['retry-after'] + "s") #check for a 429
+        print(result.headers)
+        #print("Retry After: " +  + "s") #check for a 429
         song_result = json.loads(result.content)["tracks"][0]["name"]
         song_url = json.loads(result.content)["tracks"][0]["external_urls"]["spotify"]
         song_uri = json.loads(result.content)["tracks"][0]["uri"]
