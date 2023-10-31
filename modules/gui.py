@@ -67,6 +67,23 @@ class MainWindow(QMainWindow):
         
         mainWindow.button_setup()
 
+        #initializing labels
+        mainWindow.name            = "Test"
+        mainWindow.playlistDisplay = QLabel()
+        mainWindow.songEmbed       = QWebEngineView()
+        mainWindow.emotionReading  = QLabel()
+        mainWindow.genDescription  = QLabel()
+        mainWindow.genDescription.setWordWrap(True)
+        mainWindow.cpuInfo         = QLabel()
+        mainWindow.cpuFreq         = QLabel()
+        mainWindow.ramInfo         = QLabel()
+        mainWindow.fanInfo         = QLabel()
+        mainWindow.tempInfo        = QLabel()
+        mainWindow.batteryInfo     = QLabel()
+
+        mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
+        mainWindow.playlistDisplay.setText(mainWindow.display[0])
+
         mainWindow.mood_display = QWidget()
         mainWindow.data_display = QWidget()
         mainWindow.mood_display.setLayout(mainWindow.moodPage())
@@ -92,15 +109,6 @@ class MainWindow(QMainWindow):
 
         # testing displays
         mainWindow.display[0]= "URI Generated. Check console."
-
-        mainWindow.name            = "Test"
-        mainWindow.playlistDisplay = QLabel()
-        mainWindow.songEmbed       = QWebEngineView()
-        mainWindow.emotionReading  = QLabel()
-        mainWindow.cpuInfo         = QLabel()
-
-        mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
-        mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
         frameCounter+=1
         print(frameCounter)
@@ -165,23 +173,23 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow6 = QHBoxLayout()
         
         #start of left side coding stuff
-        mainWindow.dataRow2.addWidget(Color('red'))
+        mainWindow.dataRow2.addWidget(mainWindow.cpuInfo)
         mainWindow.dataRow2.addWidget(mainWindow.oGraphButton)
         mainWindow.dataRow2.addWidget(mainWindow.cGraphButton)
-
-        mainWindow.dataRow3.addWidget(Color('red'))
+        
+        mainWindow.dataRow3.addWidget(mainWindow.cpuFreq)
         mainWindow.dataRow3.addWidget(Color('yellow'))
         mainWindow.dataRow3.addWidget(Color('purple'))
 
-        mainWindow.dataRow4.addWidget(Color('red'))
+        mainWindow.dataRow4.addWidget(mainWindow.ramInfo)
         mainWindow.dataRow4.addWidget(Color('yellow'))
         mainWindow.dataRow4.addWidget(Color('purple'))
 
-        mainWindow.dataRow5.addWidget(Color('red'))
+        mainWindow.dataRow5.addWidget(mainWindow.fanInfo)
         mainWindow.dataRow5.addWidget(Color('yellow'))
         mainWindow.dataRow5.addWidget(Color('purple'))
 
-        mainWindow.dataRow6.addWidget(Color('red'))
+        mainWindow.dataRow6.addWidget(mainWindow.tempInfo)
         mainWindow.dataRow6.addWidget(Color('yellow'))
         mainWindow.dataRow6.addWidget(Color('purple'))
 
@@ -346,10 +354,11 @@ class MainWindow(QMainWindow):
         item = mainWindow.moodRow3.itemAt(2)
         rm = item.widget()
         rm.deleteLater()
+
         mainWindow.emotionReading.setText("...")
         mainWindow.cpuInfo.setText("...")
+        mainWindow.moodRow3.addWidget(mainWindow.genDescription)
         mainWindow.moodRow3.addWidget(mainWindow.emotionReading)
-        mainWindow.moodRow3.addWidget(mainWindow.cpuInfo)
         tasks.start(mainWindow.setDictToUI)
 
     def setDictToUI(mainWindow):
@@ -360,6 +369,30 @@ class MainWindow(QMainWindow):
 
             infoText = "CPU Percent: " + str(state.cpudict["cpu_percent"]) + "%"
             mainWindow.cpuInfo.setText(infoText)
+            totalText = infoText
+
+            infoText = "CPU Speed: " + str(state.cpudict["cpu_freq"])
+            mainWindow.cpuFreq.setText(infoText)
+            totalText = totalText + "\n" + infoText
+
+            infoText = "RAM Usage: " + str(state.cpudict["ram_percent"]) + "%"
+            mainWindow.ramInfo.setText(infoText)
+            totalText = totalText + "\n" + infoText
+
+            infoText = "Fan Speed: " + str(state.cpudict["fan_speed"])
+            mainWindow.fanInfo.setText(infoText)
+            totalText = totalText + "\n" + infoText
+
+            infoText = "Internal Temperature: " + str(state.cpudict["temp_sensor"])
+            mainWindow.tempInfo.setText(infoText)
+            totalText = totalText + "\n" + infoText
+
+            infoText = "Battery Information: " + str(state.cpudict["battery_info"])
+            mainWindow.batteryInfo.setText(infoText)
+            totalText = totalText + "\n" + infoText
+            mainWindow.genDescription.setText(totalText)
+            #print(totalText)
+            
             tasks.wait(1000)
         return True
     
