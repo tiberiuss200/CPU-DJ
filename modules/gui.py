@@ -50,11 +50,13 @@ class MainWindow(QMainWindow):
         mainWindow.genreList.move(100,100)
         mainWindow.genreList.setPlaceholderText("iranian")
 
-        mainWindow.generateButton = QPushButton("Generate Song")
-        mainWindow.taskButton = QPushButton("Start tasks")
         mainWindow.dataButton = QPushButton("Data")
         mainWindow.moodButton = QPushButton("Mood")
+
+        mainWindow.generateButton = QPushButton("Generate Song")
+        mainWindow.taskButton = QPushButton("Start tasks")
         mainWindow.genreButton = QPushButton("Set Genre")
+
         mainWindow.oGraphButton = QPushButton("Open Graph")
         mainWindow.cGraphButton = QPushButton("Close Graph")
 
@@ -161,12 +163,11 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow4 = QHBoxLayout()
         mainWindow.dataRow5 = QHBoxLayout()
         mainWindow.dataRow6 = QHBoxLayout()
-
         
         #start of left side coding stuff
         mainWindow.dataRow2.addWidget(Color('red'))
-        mainWindow.dataRow2.addWidget(Color('yellow'))
-        mainWindow.dataRow2.addWidget(Color('purple'))
+        mainWindow.dataRow2.addWidget(mainWindow.oGraphButton)
+        mainWindow.dataRow2.addWidget(mainWindow.cGraphButton)
 
         mainWindow.dataRow3.addWidget(Color('red'))
         mainWindow.dataRow3.addWidget(Color('yellow'))
@@ -191,30 +192,37 @@ class MainWindow(QMainWindow):
         leftSide.addLayout(mainWindow.dataRow5, 1)
         leftSide.addLayout(mainWindow.dataRow6, 1)
 
-        leftContainer = QWidget()
-        leftContainer.setLayout(leftSide)
-        leftContainer.setMinimumSize(450, 800)
-        leftContainer.resize(300, 300)
-
         #left side of data page scrolling section
         scrollField = QScrollArea()
         scrollField.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         scrollField.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        scrollField.setWidget(leftContainer)
-        scrollField.setMaximumSize(500, 400)
+        scrollField.setLayout(leftSide)
+        #scrollField.setMaximumSize(500, 400)
+        scrollField.resize(500,1000)
+
+        mainWindow.leftContainer = QWidget()
+        mainWindow.leftContainer = scrollField
+        mainWindow.leftContainer.setMinimumSize(500, 400)
+        mainWindow.leftContainer.resize(500, 400)
 
         #start of right side data page
         mainWindow.test_graph = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
+        mainWindow.closedGraph = QWidget()
+        mainWindow.closedGraph = Color('purple')
 
-        dataRight = QStackedLayout()
-        dataRight.addWidget(mainWindow.test_graph)
-        dataRight.addWidget(Color('purple'))
-        dataRight.setCurrentWidget(mainWindow.test_graph)
+        mainWindow.rightSide = QStackedLayout()
+        mainWindow.rightSide.addWidget(mainWindow.test_graph)
+        mainWindow.rightSide.addWidget(mainWindow.closedGraph)
+        mainWindow.rightSide.setCurrentWidget(mainWindow.closedGraph)
+
+        mainWindow.rightContainer = QWidget()
+        mainWindow.rightContainer.setLayout(mainWindow.rightSide)
+        mainWindow.rightContainer.resize(500, 400)
 
         containerBench = QHBoxLayout()
-        containerBench.addWidget(scrollField)
+        containerBench.addWidget(mainWindow.leftContainer)
         #containerBench.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
-        containerBench.addLayout(dataRight, 1)
+        containerBench.addWidget(mainWindow.rightContainer, 1)
 
         return containerBench
 
@@ -255,13 +263,13 @@ class MainWindow(QMainWindow):
 
         mainWindow.oGraphButton.setCheckable(True)
         mainWindow.oGraphButton.setChecked(False)
-        #mainWindow.oGraphButton.clicked.connect(mainWindow.oGraphButtonPressed)
+        mainWindow.oGraphButton.clicked.connect(mainWindow.oGraphButtonPressed)
         mainWindow.oGraphButton.setMinimumSize(45, 60)
         mainWindow.oGraphButton.resize(60, 60)
 
         mainWindow.cGraphButton.setCheckable(True)
         mainWindow.cGraphButton.setChecked(True)
-        #mainWindow.cGraphButton.clicked.connect(mainWindow.cGraphButtonPressed)
+        mainWindow.cGraphButton.clicked.connect(mainWindow.cGraphButtonPressed)
         mainWindow.cGraphButton.setMinimumSize(45, 60)
         mainWindow.cGraphButton.resize(60, 60)
         return
@@ -303,6 +311,25 @@ class MainWindow(QMainWindow):
     def genreButtonPressed(mainWindow):
         state.currentGenre = mainWindow.genreList.currentText()
         print(state.currentGenre)
+        return
+
+    def oGraphButtonPressed(mainWindow):
+        mainWindow.rightSide.setCurrentWidget(mainWindow.test_graph)
+        mainWindow.cGraphButton.setChecked(False)
+        mainWindow.oGraphButton.setChecked(True)
+        #mainWindow.resize(1100,600)
+        #mainWindow.rightContainer.resize(500, 400)
+        #mainWindow.leftContainer.resize(300,300)
+        #mainWindow.rightContainer.resize(400, 600)
+        return
+    
+    def cGraphButtonPressed(mainWindow):
+        mainWindow.rightSide.setCurrentWidget(mainWindow.closedGraph)
+        mainWindow.oGraphButton.setChecked(False)
+        mainWindow.cGraphButton.setChecked(True)
+        #mainWindow.resize(600,600)
+        #mainWindow.rightContainer.resize(1, 400)
+        #mainWindow.rightContainer.resize(20, 60)
         return
 
     def generateButtonReleased(mainWindow):
