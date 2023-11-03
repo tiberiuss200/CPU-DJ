@@ -372,8 +372,6 @@ class MainWindow(QMainWindow):
         return
 
     def moodButtonPressed(mainWindow):
-        state.currentGenre = mainWindow.genreList.currentText()
-        print(state.currentGenre)
 
         mainWindow.bottom.setCurrentWidget(mainWindow.mood_display)
 
@@ -505,6 +503,9 @@ class MainWindow(QMainWindow):
         return True
     
     def generate_list(mainWindow):
+        state.currentGenre = mainWindow.genreList.currentText()
+        print(state.currentGenre)
+
         print("URI generated!")
         mainWindow.generateButton.setText("Generate New Song")
 
