@@ -211,14 +211,14 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow6.addWidget(mainWindow.oGraphButton4)
         mainWindow.dataRow6.addWidget(mainWindow.cpu_swap_graph_s)
 
+        mainWindow.dataRow7.addWidget(mainWindow.fanInfo)
+        mainWindow.dataRow7.addWidget(mainWindow.oGraphButton5)
+        mainWindow.dataRow7.addWidget(Color('purple'))
+
         mainWindow.cpu_percent_graph_s.set_size(60, 60)
         mainWindow.cpu_speed_graph_s.set_size(60, 60)
         mainWindow.cpu_ram_graph_s.set_size(60, 60)
         mainWindow.cpu_swap_graph_s.set_size(60, 60)
-
-        mainWindow.dataRow7.addWidget(mainWindow.fanInfo)
-        mainWindow.dataRow7.addWidget(mainWindow.oGraphButton5)
-        mainWindow.dataRow7.addWidget(Color('purple'))
 
         leftSide = QVBoxLayout()
         leftSide.addLayout(mainWindow.dataRow2, 1)
