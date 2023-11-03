@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
 
         # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
         mainWindow.thread_pool = QThreadPool()
-        mainWindow.thread_pool.setMaxThreadCount(10)
+        mainWindow.thread_pool.setMaxThreadCount(50)
 
         mainWindow.genreList = QComboBox(mainWindow)
         mainWindow.genreList.addItems(state.genreList)
