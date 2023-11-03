@@ -563,11 +563,12 @@ def main():
     # edit: moving it below `window.show`
     app.lastWindowClosed.connect(state.signalTasks)
 
-    # from modules.processing import prep_tasks
-    # from modules.tasks import startupTasksTimer
-    # timer_onStartUp = startupTasksTimer(window)
-    # timer_onStartUp.timeout.connect(lambda: prep_tasks(window))
-    # timer_onStartUp.start()
+    # ok so this just WORKS so we don't need to adjust this in how it works
+    # the only change that needs to be made is what it calls 
+    from modules.tasks import startupTasksTimer
+    timer_onStartUp = startupTasksTimer(state.window)
+    timer_onStartUp.timeout.connect(lambda: state.window.taskButtonPressed())
+    timer_onStartUp.start()
 
     # Start the event loop.
     app.exec()
