@@ -4,7 +4,7 @@ from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QComboBox
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar, QScrollArea
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtGui import QPalette, QColor, QIcon, QPalette
+from PyQt6.QtGui import QPalette, QColor, QIcon, QPalette, QIcon, QPixmap, QImage
 from array import *
 
 import modules.spotify as spotify
@@ -36,14 +36,14 @@ class MainWindow(QMainWindow):
         super().__init__()
         frameCounter = 0
         mainWindow.setWindowTitle("CPU-DJ")
-        mainWindow.setWindowIcon(QIcon("logo.png"))
+        mainWindow.setWindowIcon(QIcon('../logo.png'))
         mainWindow.setMinimumSize(200, 200)
         mainWindow.resize(1000, 600)
         mainWindow.display = ["empty"]
 
         # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
         mainWindow.thread_pool = QThreadPool()
-        mainWindow.thread_pool.setMaxThreadCount(10)
+        mainWindow.thread_pool.setMaxThreadCount(50)
 
         mainWindow.genreList = QComboBox(mainWindow)
         mainWindow.genreList.addItems(state.genreList)
@@ -62,6 +62,7 @@ class MainWindow(QMainWindow):
         mainWindow.oGraphButton3 = QPushButton("Open Graph")
         mainWindow.oGraphButton4 = QPushButton("Open Graph")
         mainWindow.oGraphButton5 = QPushButton("Open Graph")
+        mainWindow.oGraphButton6 = QPushButton("Open Graph")
         mainWindow.cGraphButton = QPushButton("Close Graph")
 
         mainWindow.generateButton.button_is_checked = False
@@ -81,6 +82,7 @@ class MainWindow(QMainWindow):
         mainWindow.cpuInfo         = QLabel()
         mainWindow.cpuFreq         = QLabel()
         mainWindow.ramInfo         = QLabel()
+        mainWindow.swapInfo        = QLabel()
         mainWindow.fanInfo         = QLabel()
         mainWindow.tempInfo        = QLabel()
         mainWindow.batteryInfo     = QLabel()
@@ -128,10 +130,16 @@ class MainWindow(QMainWindow):
         titleBox.setFont(font)
         titleBox.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
 
+        label = QPixmap('logo.png')
+        label = label.scaled(100, 100)
+
+        container = QLabel()
+        container.setPixmap(label)
+
         row1.addWidget(titleBox)
         row1.addWidget(mainWindow.moodButton)
         row1.addWidget(mainWindow.dataButton)
-        row1.addWidget(Color('blue'))
+        row1.addWidget(container)
 
         return row1
 
@@ -175,12 +183,13 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow4 = QHBoxLayout()
         mainWindow.dataRow5 = QHBoxLayout()
         mainWindow.dataRow6 = QHBoxLayout()
+        mainWindow.dataRow7 = QHBoxLayout()
         
         #start of left side coding stuff
         mainWindow.dataRow2.addWidget(mainWindow.cpuInfo)
         mainWindow.dataRow2.addWidget(mainWindow.oGraphButton1)
-        mainWindow.dataRow2.addWidget(mainWindow.cGraphButton)
-        
+        mainWindow.dataRow2.addWidget(Color('purple'))
+
         mainWindow.dataRow3.addWidget(mainWindow.cpuFreq)
         mainWindow.dataRow3.addWidget(mainWindow.oGraphButton2)
         mainWindow.dataRow3.addWidget(Color('purple'))
@@ -189,13 +198,17 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow4.addWidget(mainWindow.oGraphButton3)
         mainWindow.dataRow4.addWidget(Color('purple'))
 
-        mainWindow.dataRow5.addWidget(mainWindow.fanInfo)
-        mainWindow.dataRow5.addWidget(mainWindow.oGraphButton4)
+        mainWindow.dataRow5.addWidget(mainWindow.swapInfo)
+        mainWindow.dataRow5.addWidget(mainWindow.oGraphButton6)
         mainWindow.dataRow5.addWidget(Color('purple'))
 
         mainWindow.dataRow6.addWidget(mainWindow.tempInfo)
-        mainWindow.dataRow6.addWidget(mainWindow.oGraphButton5)
+        mainWindow.dataRow6.addWidget(mainWindow.oGraphButton4)
         mainWindow.dataRow6.addWidget(Color('purple'))
+
+        mainWindow.dataRow7.addWidget(mainWindow.fanInfo)
+        mainWindow.dataRow7.addWidget(mainWindow.oGraphButton5)
+        mainWindow.dataRow7.addWidget(Color('purple'))
 
         leftSide = QVBoxLayout()
         leftSide.addLayout(mainWindow.dataRow2, 1)
@@ -203,6 +216,7 @@ class MainWindow(QMainWindow):
         leftSide.addLayout(mainWindow.dataRow4, 1)
         leftSide.addLayout(mainWindow.dataRow5, 1)
         leftSide.addLayout(mainWindow.dataRow6, 1)
+        leftSide.addLayout(mainWindow.dataRow7, 1)
 
         #left side of data page scrolling section
         scrollField = QScrollArea()
@@ -221,20 +235,18 @@ class MainWindow(QMainWindow):
         mainWindow.cpu_percent_graph = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
         mainWindow.cpu_speed_graph = graphs.DataGraph(lambda: state.cpudict["cpu_freq"])
         mainWindow.cpu_ram_graph = graphs.DataGraph(lambda: state.cpudict["ram_percent"])
+        mainWindow.cpu_swap_graph = graphs.DataGraph(lambda: state.cpudict["swap_percent"])
         mainWindow.cpu_fan_graph = graphs.DataGraph(lambda: state.cpudict["fan_speed"])
         mainWindow.cpu_temp_graph = graphs.DataGraph(lambda: state.cpudict["temp_sensor"])
-
-        mainWindow.closedGraph = QWidget()
-        mainWindow.closedGraph = Color('purple')
 
         mainWindow.rightSide = QStackedLayout()
         mainWindow.rightSide.addWidget(mainWindow.cpu_percent_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_speed_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_ram_graph)
+        mainWindow.rightSide.addWidget(mainWindow.cpu_swap_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_fan_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_temp_graph)
-        mainWindow.rightSide.addWidget(mainWindow.closedGraph)
-        mainWindow.rightSide.setCurrentWidget(mainWindow.closedGraph)
+        mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_percent_graph)
 
         mainWindow.rightContainer = QWidget()
         mainWindow.rightContainer.setLayout(mainWindow.rightSide)
@@ -312,11 +324,11 @@ class MainWindow(QMainWindow):
         mainWindow.oGraphButton5.setMinimumSize(45, 60)
         mainWindow.oGraphButton5.resize(60, 60)
 
-        mainWindow.cGraphButton.setCheckable(True)
-        mainWindow.cGraphButton.setChecked(True)
-        mainWindow.cGraphButton.clicked.connect(mainWindow.cGraphButtonPressed)
-        mainWindow.cGraphButton.setMinimumSize(45, 60)
-        mainWindow.cGraphButton.resize(60, 60)
+        mainWindow.oGraphButton6.setCheckable(True)
+        mainWindow.oGraphButton6.setChecked(False)
+        mainWindow.oGraphButton6.clicked.connect(mainWindow.oGraphButtonPressed6)
+        mainWindow.oGraphButton6.setMinimumSize(45, 60)
+        mainWindow.oGraphButton6.resize(60, 60)
         return
     
     def taskButtonPressed(mainWindow):
@@ -325,6 +337,7 @@ class MainWindow(QMainWindow):
         mainWindow.cpu_percent_graph.start_task()
         mainWindow.cpu_speed_graph.start_task()
         mainWindow.cpu_ram_graph.start_task()
+        mainWindow.cpu_swap_graph.start_task()
         mainWindow.cpu_fan_graph.start_task()
         mainWindow.cpu_temp_graph.start_task()
         
@@ -365,85 +378,62 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed1(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_percent_graph)
-        mainWindow.cGraphButton.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
         mainWindow.oGraphButton5.setChecked(False)
+        mainWindow.oGraphButton6.setChecked(False)
         mainWindow.oGraphButton1.setChecked(True)
-        #mainWindow.resize(1100,600)
-        #mainWindow.rightContainer.resize(500, 400)
-        #mainWindow.leftContainer.resize(300,300)
-        #mainWindow.rightContainer.resize(400, 600)
         return
 
     def oGraphButtonPressed2(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_speed_graph)
-        mainWindow.cGraphButton.setChecked(False)
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
         mainWindow.oGraphButton5.setChecked(False)
+        mainWindow.oGraphButton6.setChecked(False)
         mainWindow.oGraphButton2.setChecked(True)
-        #mainWindow.resize(1100,600)
-        #mainWindow.rightContainer.resize(500, 400)
-        #mainWindow.leftContainer.resize(300,300)
-        #mainWindow.rightContainer.resize(400, 600)
         return
 
     def oGraphButtonPressed3(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_ram_graph)
-        mainWindow.cGraphButton.setChecked(False)
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
         mainWindow.oGraphButton5.setChecked(False)
+        mainWindow.oGraphButton6.setChecked(False)
         mainWindow.oGraphButton3.setChecked(True)
-        #mainWindow.resize(1100,600)
-        #mainWindow.rightContainer.resize(500, 400)
-        #mainWindow.leftContainer.resize(300,300)
-        #mainWindow.rightContainer.resize(400, 600)
         return
 
     def oGraphButtonPressed4(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_fan_graph)
-        mainWindow.cGraphButton.setChecked(False)
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton5.setChecked(False)
+        mainWindow.oGraphButton6.setChecked(False)
         mainWindow.oGraphButton4.setChecked(True)
-        #mainWindow.resize(1100,600)
-        #mainWindow.rightContainer.resize(500, 400)
-        #mainWindow.leftContainer.resize(300,300)
-        #mainWindow.rightContainer.resize(400, 600)
         return
 
     def oGraphButtonPressed5(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_temp_graph)
-        mainWindow.cGraphButton.setChecked(False)
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
+        mainWindow.oGraphButton6.setChecked(False)
         mainWindow.oGraphButton5.setChecked(True)
-        #mainWindow.resize(1100,600)
-        #mainWindow.rightContainer.resize(500, 400)
-        #mainWindow.leftContainer.resize(300,300)
-        #mainWindow.rightContainer.resize(400, 600)
         return
     
-    def cGraphButtonPressed(mainWindow):
-        mainWindow.rightSide.setCurrentWidget(mainWindow.closedGraph)
+    def oGraphButtonPressed6(mainWindow):
+        mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_swap_graph)
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
         mainWindow.oGraphButton5.setChecked(False)
-        mainWindow.cGraphButton.setChecked(True)
-        #mainWindow.resize(600,600)
-        #mainWindow.rightContainer.resize(1, 400)
-        #mainWindow.rightContainer.resize(20, 60)
+        mainWindow.oGraphButton6.setChecked(True)
         return
 
     def generateButtonReleased(mainWindow):
@@ -483,6 +473,10 @@ class MainWindow(QMainWindow):
 
             infoText = "RAM Usage: " + str(state.cpudict["ram_percent"]) + "%"
             mainWindow.ramInfo.setText(infoText)
+            totalText = totalText + "\n" + infoText
+
+            infoText = "RAM Swap: " + str(state.cpudict["swap_percent"]) + "%"
+            mainWindow.swapInfo.setText(infoText)
             totalText = totalText + "\n" + infoText
 
             infoText = "Fan Speed: " + str(state.cpudict["fan_speed"])
