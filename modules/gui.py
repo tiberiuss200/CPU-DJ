@@ -184,6 +184,11 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow5 = QHBoxLayout()
         mainWindow.dataRow6 = QHBoxLayout()
         mainWindow.dataRow7 = QHBoxLayout()
+
+        mainWindow.cpu_percent_graph_s = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
+        mainWindow.cpu_speed_graph_s = graphs.DataGraph(lambda: state.cpudict["cpu_freq"])
+        mainWindow.cpu_ram_graph_s = graphs.DataGraph(lambda: state.cpudict["ram_percent"])
+        mainWindow.cpu_swap_graph_s = graphs.DataGraph(lambda: state.cpudict["swap_percent"])
         
         #start of left side coding stuff
         mainWindow.dataRow2.addWidget(mainWindow.cpuInfo)
@@ -192,23 +197,28 @@ class MainWindow(QMainWindow):
 
         mainWindow.dataRow3.addWidget(mainWindow.cpuFreq)
         mainWindow.dataRow3.addWidget(mainWindow.oGraphButton2)
-        mainWindow.dataRow3.addWidget(Color('purple'))
+        mainWindow.dataRow3.addWidget(mainWindow.cpu_percent_graph_s)
 
         mainWindow.dataRow4.addWidget(mainWindow.ramInfo)
         mainWindow.dataRow4.addWidget(mainWindow.oGraphButton3)
-        mainWindow.dataRow4.addWidget(Color('purple'))
+        mainWindow.dataRow4.addWidget(mainWindow.cpu_speed_graph_s)
 
         mainWindow.dataRow5.addWidget(mainWindow.swapInfo)
         mainWindow.dataRow5.addWidget(mainWindow.oGraphButton6)
-        mainWindow.dataRow5.addWidget(Color('purple'))
+        mainWindow.dataRow5.addWidget(mainWindow.cpu_ram_graph_s)
 
         mainWindow.dataRow6.addWidget(mainWindow.tempInfo)
         mainWindow.dataRow6.addWidget(mainWindow.oGraphButton4)
-        mainWindow.dataRow6.addWidget(Color('purple'))
+        mainWindow.dataRow6.addWidget(mainWindow.cpu_swap_graph_s)
 
         mainWindow.dataRow7.addWidget(mainWindow.fanInfo)
         mainWindow.dataRow7.addWidget(mainWindow.oGraphButton5)
         mainWindow.dataRow7.addWidget(Color('purple'))
+
+        mainWindow.cpu_percent_graph_s.set_size(60, 60)
+        mainWindow.cpu_speed_graph_s.set_size(60, 60)
+        mainWindow.cpu_ram_graph_s.set_size(60, 60)
+        mainWindow.cpu_swap_graph_s.set_size(60, 60)
 
         leftSide = QVBoxLayout()
         leftSide.addLayout(mainWindow.dataRow2, 1)
@@ -253,7 +263,7 @@ class MainWindow(QMainWindow):
         mainWindow.rightContainer.resize(500, 400)
 
         containerBench = QHBoxLayout()
-        containerBench.addWidget(mainWindow.leftContainer)
+        containerBench.addWidget(mainWindow.leftContainer, 1)
         #containerBench.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
         containerBench.addWidget(mainWindow.rightContainer, 1)
 
@@ -335,6 +345,11 @@ class MainWindow(QMainWindow):
         mainWindow.cpu_swap_graph.start_task()
         mainWindow.cpu_fan_graph.start_task()
         mainWindow.cpu_temp_graph.start_task()
+
+        mainWindow.cpu_percent_graph_s.start_task()
+        mainWindow.cpu_speed_graph_s.start_task()
+        mainWindow.cpu_ram_graph_s.start_task()
+        mainWindow.cpu_swap_graph_s.start_task()
         
         mainWindow.processingUI()
         mainWindow.taskButton.setEnabled(False)
