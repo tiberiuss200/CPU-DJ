@@ -148,8 +148,12 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow3 = QHBoxLayout()
         mainWindow.moodRow4 = QHBoxLayout()
         mainWindow.moodRow5 = QHBoxLayout()
+
+        genreSelector = QVBoxLayout()
+        genreSelector.addWidget(mainWindow.genreList)
+        genreSelector.addWidget(mainWindow.generateButton)
         
-        mainWindow.moodRow2.addWidget(mainWindow.generateButton)
+        mainWindow.moodRow2.addLayout(genreSelector)
         mainWindow.moodRow2.addWidget(mainWindow.taskButton)
 
         mainWindow.moodRow3.addWidget(Color('red'))
@@ -160,11 +164,7 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow4.addWidget(Color('yellow'))
         mainWindow.moodRow4.addWidget(Color('purple'))
 
-        genreSelector = QVBoxLayout()
-        genreSelector.addWidget(mainWindow.genreList)
-        genreSelector.addWidget(mainWindow.genreButton)
-
-        mainWindow.moodRow5.addLayout(genreSelector)
+        mainWindow.moodRow5.addWidget(Color('red'))
         mainWindow.moodRow5.addWidget(Color('yellow'))
         mainWindow.moodRow5.addWidget(Color('purple'))
 
@@ -289,11 +289,6 @@ class MainWindow(QMainWindow):
         mainWindow.moodButton.setMinimumSize(45, 60)
         mainWindow.moodButton.resize(45, 60)
 
-        mainWindow.genreButton.setCheckable(False)
-        mainWindow.genreButton.clicked.connect(mainWindow.genreButtonPressed)
-        mainWindow.genreButton.setMinimumSize(45, 60)
-        mainWindow.genreButton.resize(60, 60)
-
         mainWindow.oGraphButton1.setCheckable(True)
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton1.clicked.connect(mainWindow.oGraphButtonPressed1)
@@ -362,6 +357,9 @@ class MainWindow(QMainWindow):
         return
 
     def moodButtonPressed(mainWindow):
+        state.currentGenre = mainWindow.genreList.currentText()
+        print(state.currentGenre)
+
         mainWindow.bottom.setCurrentWidget(mainWindow.mood_display)
 
         mainWindow.dataButton.setChecked(False)
@@ -369,11 +367,6 @@ class MainWindow(QMainWindow):
 
         mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
         mainWindow.moodButton.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
-        return
-    
-    def genreButtonPressed(mainWindow):
-        state.currentGenre = mainWindow.genreList.currentText()
-        print(state.currentGenre)
         return
 
     def oGraphButtonPressed1(mainWindow):
