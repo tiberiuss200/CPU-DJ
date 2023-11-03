@@ -59,6 +59,13 @@ class DataGraph(QWidget):
         self.ax.set_xlim(0, 10)                     #Sets the initial size of the x-axis
         self.ax.set_ylim(0, 100)                    #Sets the initial size of the y-axis
     
+    def set_size(self, width : int, height : int):
+        self.canvas.setMaximumSize(width, height)
+        self.resize(width, height)
+
+    def set_ylim(self, ymin : float, ymax : float):
+        self.ax.set_ylim(ymin, ymax)
+    
     def start_task(self):
         tasks.start(self.update_graph)              #Function call. Updates the graph with new data
     
