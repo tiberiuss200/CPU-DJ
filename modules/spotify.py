@@ -1,5 +1,5 @@
 from dotenv import *
-from requests import post, get
+from requests import post, get, Response
 import modules.state as state
 import os
 import base64
@@ -52,12 +52,21 @@ def get_track_reccomendation(token, genre, energy, tempo, valence):
         query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_valence={valence}"     #Sets up the query with an f string to search for the genre, energy, tempo, and valence provided
         query_url = url + query
         result = get(query_url, headers=headers)
-        print(result.headers)
+        print_headers(result)
         #print("Retry After: " +  + "s") #check for a 429
         song_result = json.loads(result.content)["tracks"][0]["name"]
         song_url = json.loads(result.content)["tracks"][0]["external_urls"]["spotify"]
         song_uri = json.loads(result.content)["tracks"][0]["uri"]
         return song_result                                                                                      #Returning the song's name
+
+def print_headers(result : Response):
+    try:
+       print("Retry After: " + result.headers["retry-after"] + "s") #429 handler
+    except: 
+       print("No retry-after field.")
+    finally:
+        if state.debugMode:
+            print(result.headers)
 
 #Function to use the API to get a song that corresponds to the computer's mood
 #Returns the song's URI to embed
