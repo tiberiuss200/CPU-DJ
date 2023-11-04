@@ -51,6 +51,7 @@ class MainWindow(QMainWindow):
         mainWindow.genreList.setPlaceholderText("iranian")
 
         mainWindow.dataButton = QPushButton("Data")
+        mainWindow.scanButton = QPushButton("Scan")
         mainWindow.moodButton = QPushButton("Mood")
 
         mainWindow.generateButton = QPushButton("Generate Song")
@@ -67,8 +68,10 @@ class MainWindow(QMainWindow):
 
         mainWindow.generateButton.button_is_checked = False
         mainWindow.taskButton.button_is_checked = False
+
         mainWindow.dataButton.button_is_checked = False
-        mainWindow.moodButton.button_is_checked = False
+        mainWindow.scanButton.button_is_checked = False
+        mainWindow.moodButton.button_is_checked = True
         
         mainWindow.button_setup()
 
@@ -92,12 +95,15 @@ class MainWindow(QMainWindow):
 
         mainWindow.mood_display = QWidget()
         mainWindow.data_display = QWidget()
+        mainWindow.scan_display = QWidget()
         mainWindow.mood_display.setLayout(mainWindow.moodPage())
         mainWindow.data_display.setLayout(mainWindow.dataPage())
+        mainWindow.scan_display.setLayout(mainWindow.scanPage())
 
         mainWindow.bottom = QStackedLayout()
         mainWindow.bottom.addWidget(mainWindow.mood_display)
         mainWindow.bottom.addWidget(mainWindow.data_display)
+        mainWindow.bottom.addWidget(mainWindow.scan_display)
         mainWindow.bottom.setCurrentWidget(mainWindow.mood_display)
 
         mainWindow.top = QWidget()
@@ -138,6 +144,7 @@ class MainWindow(QMainWindow):
 
         row1.addWidget(titleBox)
         row1.addWidget(mainWindow.moodButton)
+        row1.addWidget(mainWindow.scanButton)
         row1.addWidget(mainWindow.dataButton)
         row1.addWidget(container)
 
@@ -149,11 +156,8 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow4 = QHBoxLayout()
         mainWindow.moodRow5 = QHBoxLayout()
 
-        genreSelector = QVBoxLayout()
-        genreSelector.addWidget(mainWindow.genreList)
-        genreSelector.addWidget(mainWindow.generateButton)
-        
-        mainWindow.moodRow2.addLayout(genreSelector)
+        mainWindow.moodRow2.addWidget(mainWindow.genreList)
+        mainWindow.moodRow2.addWidget(mainWindow.generateButton)
         mainWindow.moodRow2.addWidget(mainWindow.taskButton)
 
         mainWindow.moodRow3.addWidget(Color('red'))
@@ -176,6 +180,37 @@ class MainWindow(QMainWindow):
         containerBench.addLayout(mainWindow.moodRow5)
 
         return containerBench
+    
+    def scanPage(mainWindow):
+        containerBench = QVBoxLayout()
+
+        mainWindow.scanRow2 = QHBoxLayout()
+        mainWindow.scanRow3 = QHBoxLayout()
+        mainWindow.scanRow4 = QHBoxLayout()
+        mainWindow.scanRow5 = QHBoxLayout()
+
+        mainWindow.scanRow2.addWidget(Color('red'))
+        mainWindow.scanRow2.addWidget(Color('yellow'))
+        mainWindow.scanRow2.addWidget(Color('purple'))
+
+        mainWindow.scanRow3.addWidget(Color('red'))
+        mainWindow.scanRow3.addWidget(Color('yellow'))
+        mainWindow.scanRow3.addWidget(Color('purple'))
+
+        mainWindow.scanRow4.addWidget(Color('red'))
+        mainWindow.scanRow4.addWidget(Color('yellow'))
+        mainWindow.scanRow4.addWidget(Color('purple'))
+
+        mainWindow.scanRow5.addWidget(Color('red'))
+        mainWindow.scanRow5.addWidget(Color('yellow'))
+        mainWindow.scanRow5.addWidget(Color('purple'))
+
+        containerBench.addLayout(mainWindow.scanRow2)
+        containerBench.addLayout(mainWindow.scanRow3)
+        containerBench.addLayout(mainWindow.scanRow4)
+        containerBench.addLayout(mainWindow.scanRow5)
+
+        return containerBench
 
     def dataPage(mainWindow):
         mainWindow.dataRow2 = QHBoxLayout()
@@ -193,32 +228,32 @@ class MainWindow(QMainWindow):
         #start of left side coding stuff
         mainWindow.dataRow2.addWidget(mainWindow.cpuInfo)
         mainWindow.dataRow2.addWidget(mainWindow.oGraphButton1)
-        mainWindow.dataRow2.addWidget(Color('purple'))
+        mainWindow.dataRow2.addWidget(mainWindow.cpu_percent_graph_s)
 
         mainWindow.dataRow3.addWidget(mainWindow.cpuFreq)
         mainWindow.dataRow3.addWidget(mainWindow.oGraphButton2)
-        mainWindow.dataRow3.addWidget(mainWindow.cpu_percent_graph_s)
+        mainWindow.dataRow3.addWidget(mainWindow.cpu_speed_graph_s)
 
         mainWindow.dataRow4.addWidget(mainWindow.ramInfo)
         mainWindow.dataRow4.addWidget(mainWindow.oGraphButton3)
-        mainWindow.dataRow4.addWidget(mainWindow.cpu_speed_graph_s)
+        mainWindow.dataRow4.addWidget(mainWindow.cpu_ram_graph_s)
 
         mainWindow.dataRow5.addWidget(mainWindow.swapInfo)
         mainWindow.dataRow5.addWidget(mainWindow.oGraphButton6)
-        mainWindow.dataRow5.addWidget(mainWindow.cpu_ram_graph_s)
+        mainWindow.dataRow5.addWidget(mainWindow.cpu_swap_graph_s)
 
         mainWindow.dataRow6.addWidget(mainWindow.tempInfo)
         mainWindow.dataRow6.addWidget(mainWindow.oGraphButton4)
-        mainWindow.dataRow6.addWidget(mainWindow.cpu_swap_graph_s)
+        mainWindow.dataRow6.addWidget(Color('purple'))
 
         mainWindow.dataRow7.addWidget(mainWindow.fanInfo)
         mainWindow.dataRow7.addWidget(mainWindow.oGraphButton5)
         mainWindow.dataRow7.addWidget(Color('purple'))
 
-        mainWindow.cpu_percent_graph_s.set_size(60, 60)
-        mainWindow.cpu_speed_graph_s.set_size(60, 60)
-        mainWindow.cpu_ram_graph_s.set_size(60, 60)
-        mainWindow.cpu_swap_graph_s.set_size(60, 60)
+        mainWindow.cpu_percent_graph_s.set_size(100, 100)
+        mainWindow.cpu_speed_graph_s.set_size(100, 1000)
+        mainWindow.cpu_ram_graph_s.set_size(100, 100)
+        mainWindow.cpu_swap_graph_s.set_size(100, 100)
 
         leftSide = QVBoxLayout()
         leftSide.addLayout(mainWindow.dataRow2, 1)
@@ -299,6 +334,14 @@ class MainWindow(QMainWindow):
         mainWindow.moodButton.setMinimumSize(45, 60)
         mainWindow.moodButton.resize(45, 60)
 
+        mainWindow.scanButton.setCheckable(True)
+        mainWindow.scanButton.setChecked(False)
+        mainWindow.scanButton.clicked.connect(mainWindow.scanButtonPressed)
+        #mainWindow.scanButton.released.connect(mainWindow.scanButtonReleased)
+        mainWindow.scanButton.setMinimumSize(45, 60)
+        mainWindow.scanButton.resize(45, 60)
+        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
+
         mainWindow.oGraphButton1.setCheckable(True)
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton1.clicked.connect(mainWindow.oGraphButtonPressed1)
@@ -364,20 +407,36 @@ class MainWindow(QMainWindow):
         # Set the central widget of the Window.
         mainWindow.bottom.setCurrentWidget(mainWindow.data_display)
 
+        mainWindow.scanButton.setChecked(False)
         mainWindow.moodButton.setChecked(False)
         mainWindow.dataButton.setChecked(True)
 
         mainWindow.moodButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
         mainWindow.dataButton.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
         return
 
-    def moodButtonPressed(mainWindow):
+    def scanButtonPressed(mainWindow):
+        # Set the central widget of the Window.
+        mainWindow.bottom.setCurrentWidget(mainWindow.scan_display)
 
+        mainWindow.scanButton.setChecked(True)
+        mainWindow.moodButton.setChecked(False)
+        mainWindow.dataButton.setChecked(False)
+
+        mainWindow.moodButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.scanButton.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
+        return
+
+    def moodButtonPressed(mainWindow):
         mainWindow.bottom.setCurrentWidget(mainWindow.mood_display)
 
+        mainWindow.scanButton.setChecked(False)
         mainWindow.dataButton.setChecked(False)
         mainWindow.moodButton.setChecked(True)
 
+        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
         mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
         mainWindow.moodButton.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
         return
