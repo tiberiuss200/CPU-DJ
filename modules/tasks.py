@@ -36,9 +36,13 @@ class Task(QRunnable):
         except:
             self.signals.error.emit(traceback.format_exc())
         else:
-            self.signals.result.emit(result)
+            #self.signals.result.emit(result)
+            #vestigial?
+            temp = True
         finally:
-            self.signals.finish.emit()
+            #self.signals.finish.emit()
+            #vestigial
+            temp = True
 
     def stop(self):
         with QMutexLocker(self.mutex):
