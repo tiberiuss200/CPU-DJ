@@ -328,7 +328,7 @@ class MainWindow(QMainWindow):
         mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
 
         mainWindow.moodButton.setCheckable(True)
-        mainWindow.moodButton.setChecked(False)
+        mainWindow.moodButton.setChecked(True)
         mainWindow.moodButton.clicked.connect(mainWindow.moodButtonPressed)
         #mainWindow.moodButton.released.connect(mainWindow.moodButtonReleased)
         mainWindow.moodButton.setMinimumSize(45, 60)
@@ -443,6 +443,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed1(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_percent_graph)
+        state.stat = "CPU Percent"
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
@@ -453,6 +454,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed2(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_speed_graph)
+        state.stat = "CPU Speed"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)

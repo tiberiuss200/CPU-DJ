@@ -58,6 +58,14 @@ class DataGraph(QWidget):
         self.line, = self.ax.plot([], [])           #Starts to graph the data on to the graph object
         self.ax.set_xlim(0, 10)                     #Sets the initial size of the x-axis
         self.ax.set_ylim(0, 100)                    #Sets the initial size of the y-axis
+        if (state.stat == "CPU Percent"):
+            self.ax.set_xlabel("Time")
+            self.ax.set_ylabel("CPU Usage")
+        elif (state.stat == "CPU Speed"):
+            self.ax.set_xlabel("Time")
+            self.ax.set_ylabel("CPU Speed")
+
+
     
     def set_size(self, width : int, height : int):
         self.canvas.setMaximumSize(width, height)
