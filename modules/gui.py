@@ -255,7 +255,7 @@ class MainWindow(QMainWindow):
         mainWindow.cpu_ram_graph_s.set_size(100, 100)
         mainWindow.cpu_swap_graph_s.set_size(100, 100)
 
-        mainWindow.cpu_speed_graph_s.set_ylim(0, 5000)
+        mainWindow.cpu_speed_graph_s.set_ylim(0, 4000)
 
         leftSide = QVBoxLayout()
         leftSide.addLayout(mainWindow.dataRow2, 1)
@@ -304,7 +304,7 @@ class MainWindow(QMainWindow):
         #containerBench.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
         containerBench.addWidget(mainWindow.rightContainer, 1)
 
-        mainWindow.cpu_speed_graph.set_ylim(0, 5000)
+        mainWindow.cpu_speed_graph.set_ylim(0, 4000)
 
         return containerBench
 
