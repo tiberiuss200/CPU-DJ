@@ -16,7 +16,7 @@ client_secret = "113ddc7d11f940f990e85be0a186399f"          #Client Secret
 def main():
     state.update_spotify_values()
     token = get_token()                                                             #Calls to setup the client ID and Secret
-    songs = get_track_reccomendation(token, state.currentGenre, state.spotify_dict["energy"] / 100, state.spotify_dict["tempo"] / 10, state.spotify_dict["valence"] / 100)      #Gets the track name from the computer mood
+    songs = get_track_reccomendation(token, state.currentGenre, state.spotify_dict["energy"] / 10, state.spotify_dict["tempo"] / 10, state.spotify_dict["valence"] / 100)      #Gets the track name from the computer mood
     #uri = get_uri(token, state.currentGenre, state.spotify_dict["energy"], state.spotify_dict["valence"], state.spotify_dict["tempo"])                         #Gets the track URI from the computer mood
     print(songs)                                                                    #Prints out the song title
     #print(uri)                                                                      #Prints the song URI
