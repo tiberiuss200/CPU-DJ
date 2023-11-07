@@ -52,8 +52,8 @@ current_os = platform.system()
 
 def update_spotify_values():
     spotify_dict["energy"] = cpudict[CONST_STATS.CPU_VALUE]
-    spotify_dict["tempo"] = cpudict[CONST_STATS.RAM_PERC]
-    spotify_dict["valence"] = cpudict[CONST_STATS.SWAP_PERC]
+    spotify_dict["tempo"] = cpudict[CONST_STATS.CPU_FREQ]
+    spotify_dict["valence"] = cpudict[CONST_STATS.RAM_PERC]
 
 def avg_stat_value(key : CONST_STATS):
     ret = 0
