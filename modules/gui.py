@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         frameCounter = 0
         mainWindow.setWindowTitle("CPU-DJ")
-        mainWindow.setWindowIcon(QIcon('../logo.png'))
+        mainWindow.setWindowIcon(QIcon('logo.png'))
         mainWindow.setMinimumSize(200, 200)
         mainWindow.resize(1000, 600)
         mainWindow.display = ["empty"]
@@ -261,6 +261,8 @@ class MainWindow(QMainWindow):
         mainWindow.cpu_ram_graph_s.resize(40, 100)
         mainWindow.cpu_swap_graph_s.resize(40, 100)
 
+        mainWindow.cpu_speed_graph_s.set_ylim(0, 4000) #CPU Speed graph y-axis bounds
+
         leftSide = QVBoxLayout()
         leftSide.addLayout(mainWindow.dataRow2, 1)
         leftSide.addLayout(mainWindow.dataRow3, 1)
@@ -312,6 +314,8 @@ class MainWindow(QMainWindow):
         #containerBench.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
         containerBench.addWidget(mainWindow.rightContainer, 1)
 
+        mainWindow.cpu_speed_graph.set_ylim(0, 4000) #CPU Speed graph y-axis bounds
+
         return containerBench
 
     def button_setup(mainWindow):
@@ -338,7 +342,7 @@ class MainWindow(QMainWindow):
         mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
 
         mainWindow.moodButton.setCheckable(True)
-        mainWindow.moodButton.setChecked(False)
+        mainWindow.moodButton.setChecked(True)
         mainWindow.moodButton.clicked.connect(mainWindow.moodButtonPressed)
         #mainWindow.moodButton.released.connect(mainWindow.moodButtonReleased)
         mainWindow.moodButton.setMinimumSize(45, 60)
@@ -453,6 +457,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed1(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_percent_graph)
+        state.stat = "CPU Percent"
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
@@ -463,6 +468,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed2(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_speed_graph)
+        state.stat = "CPU Speed"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
@@ -473,6 +479,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed3(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_ram_graph)
+        state.stat = "RAM"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
@@ -483,6 +490,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed4(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_fan_graph)
+        state.stat = "CPU Fan"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
@@ -493,6 +501,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed5(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_temp_graph)
+        state.stat = "CPU Temp"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
@@ -503,6 +512,7 @@ class MainWindow(QMainWindow):
     
     def oGraphButtonPressed6(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_swap_graph)
+        state.stat = "RAM Swap"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
