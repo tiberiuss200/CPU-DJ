@@ -36,6 +36,7 @@ y = [3,10,2,5,7]                #Hardcoded test values
 ax.plot(x,y)                    #Plots a line graph with the test values
 ###End Test Graph Object
 
+
 ###Actual Graphing
 class DataGraph(QWidget):
     def __init__(self, fptr: callable):
@@ -55,12 +56,12 @@ class DataGraph(QWidget):
 
     def init_graph(self):
         self.ax = self.fig.add_subplot()            #Adds an axes object to the figure
-        self.line, = self.ax.plot([], [])           #Starts to graph the data on to the graph object
+        self.line, = self.ax.plot([], [], color='#55e8ff')           #Starts to graph the data on to the graph object
         self.ax.set_xlim(0, 10)                     #Sets the initial size of the x-axis
         self.ax.set_ylim(0, 100)                    #Sets the initial size of the y-axis
-
-
-
+        #self.ax.tick_params(labelcolor=('#f0f0f0'))
+        self.ax.set_facecolor('#201148')
+        
     
     def set_size(self, width : int, height : int):
         self.canvas.setMaximumSize(width, height)
