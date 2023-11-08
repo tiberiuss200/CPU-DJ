@@ -75,6 +75,9 @@ class MainWindow(QMainWindow):
         
         mainWindow.button_setup()
 
+        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
+
         #initializing labels
         mainWindow.name            = "Test"
         mainWindow.playlistDisplay = QLabel()
@@ -128,34 +131,45 @@ class MainWindow(QMainWindow):
         #mainWindow.setStyleSheet("background-color: rgb(255,0,0); margin:2px; border:1px solid rgb(0, 255, 0); ")
 
     def top_bar(mainWindow):
+        #create layouts
         row1 = QHBoxLayout()
 
+        #create widgets
+        container = QLabel()
         titleBox = QLabel("CPU-DJ")
         font = titleBox.font()
-        font.setPointSize(30)
-        titleBox.setFont(font)
-        titleBox.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
-
         label = QPixmap('logo.png')
-        label = label.scaled(100, 100)
 
-        container = QLabel()
+        #setting up variables
+        label = label.scaled(100, 100)
+        font.setPointSize(30)
+
+        #applying variables
         container.setPixmap(label)
 
+        titleBox.setFont(font)
+        titleBox.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        container.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+
+        #add widgets
+        row1.addWidget(container)
         row1.addWidget(titleBox)
         row1.addWidget(mainWindow.moodButton)
         row1.addWidget(mainWindow.scanButton)
         row1.addWidget(mainWindow.dataButton)
-        row1.addWidget(container)
 
         return row1
 
     def moodPage(mainWindow):
+        #create layouts
+        containerBench = QVBoxLayout()
+
         mainWindow.moodRow2 = QHBoxLayout()
         mainWindow.moodRow3 = QHBoxLayout()
         mainWindow.moodRow4 = QHBoxLayout()
         mainWindow.moodRow5 = QHBoxLayout()
 
+        #add widgets
         mainWindow.moodRow2.addWidget(mainWindow.genreList)
         mainWindow.moodRow2.addWidget(mainWindow.generateButton)
         mainWindow.moodRow2.addWidget(mainWindow.taskButton)
@@ -172,8 +186,7 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow5.addWidget(Color('yellow'))
         mainWindow.moodRow5.addWidget(Color('purple'))
 
-        containerBench = QVBoxLayout()
-
+        #add layouts
         containerBench.addLayout(mainWindow.moodRow2)
         containerBench.addLayout(mainWindow.moodRow3)
         containerBench.addLayout(mainWindow.moodRow4)
@@ -182,6 +195,7 @@ class MainWindow(QMainWindow):
         return containerBench
     
     def scanPage(mainWindow):
+        #create layouts
         containerBench = QVBoxLayout()
 
         mainWindow.scanRow2 = QHBoxLayout()
@@ -189,6 +203,7 @@ class MainWindow(QMainWindow):
         mainWindow.scanRow4 = QHBoxLayout()
         mainWindow.scanRow5 = QHBoxLayout()
 
+        #add widgets
         mainWindow.scanRow2.addWidget(Color('red'))
         mainWindow.scanRow2.addWidget(Color('yellow'))
         mainWindow.scanRow2.addWidget(Color('purple'))
@@ -205,6 +220,7 @@ class MainWindow(QMainWindow):
         mainWindow.scanRow5.addWidget(Color('yellow'))
         mainWindow.scanRow5.addWidget(Color('purple'))
 
+        #add layouts
         containerBench.addLayout(mainWindow.scanRow2)
         containerBench.addLayout(mainWindow.scanRow3)
         containerBench.addLayout(mainWindow.scanRow4)
@@ -213,183 +229,198 @@ class MainWindow(QMainWindow):
         return containerBench
 
     def dataPage(mainWindow):
-        mainWindow.dataRow2 = QHBoxLayout()
+        #create layouts
+        containerBench      = QHBoxLayout()
+        mainWindow.rightSide = QStackedLayout()
+        leftSide            = QVBoxLayout()    
+
+        mainWindow.dataRow2 = QHBoxLayout()     #creating leftside layout rows
         mainWindow.dataRow3 = QHBoxLayout()
         mainWindow.dataRow4 = QHBoxLayout()
         mainWindow.dataRow5 = QHBoxLayout()
         mainWindow.dataRow6 = QHBoxLayout()
         mainWindow.dataRow7 = QHBoxLayout()
 
-        mainWindow.cpu_percent_graph_s = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
-        mainWindow.cpu_speed_graph_s = graphs.DataGraph(lambda: state.cpudict["cpu_freq"])
-        mainWindow.cpu_ram_graph_s = graphs.DataGraph(lambda: state.cpudict["ram_percent"])
-        mainWindow.cpu_swap_graph_s = graphs.DataGraph(lambda: state.cpudict["swap_percent"])
-        
-        #start of left side coding stuff
-        mainWindow.dataRow2.addWidget(mainWindow.cpuInfo)
-        mainWindow.dataRow2.addWidget(mainWindow.oGraphButton1)
-        mainWindow.dataRow2.addWidget(mainWindow.cpu_percent_graph_s)
-        mainWindow.dataRow2.setContentsMargins(1, 1, 1, 1);
-
-        mainWindow.dataRow3.addWidget(mainWindow.cpuFreq)
-        mainWindow.dataRow3.addWidget(mainWindow.oGraphButton2)
-        mainWindow.dataRow3.addWidget(mainWindow.cpu_speed_graph_s)
-        mainWindow.dataRow3.setContentsMargins(1, 1, 1, 1);
-
-        mainWindow.dataRow4.addWidget(mainWindow.ramInfo)
-        mainWindow.dataRow4.addWidget(mainWindow.oGraphButton3)
-        mainWindow.dataRow4.addWidget(mainWindow.cpu_ram_graph_s)
-        mainWindow.dataRow4.setContentsMargins(1, 1, 1, 1);
-
-        mainWindow.dataRow5.addWidget(mainWindow.swapInfo)
-        mainWindow.dataRow5.addWidget(mainWindow.oGraphButton6)
-        mainWindow.dataRow5.addWidget(mainWindow.cpu_swap_graph_s)
-        mainWindow.dataRow5.setContentsMargins(1, 1, 1, 1);
-
-        mainWindow.dataRow6.addWidget(mainWindow.tempInfo)
-        mainWindow.dataRow6.addWidget(mainWindow.oGraphButton4)
-        mainWindow.dataRow6.addWidget(Color('purple'))
-        mainWindow.dataRow6.setContentsMargins(1, 1, 1, 1);
-
-        mainWindow.dataRow7.addWidget(mainWindow.fanInfo)
-        mainWindow.dataRow7.addWidget(mainWindow.oGraphButton5)
-        mainWindow.dataRow7.addWidget(Color('purple'))
-        mainWindow.dataRow7.setContentsMargins(1, 1, 1, 1);
-
-        mainWindow.cpu_percent_graph_s.resize(40, 100)
-        mainWindow.cpu_speed_graph_s.resize(40, 100)
-        mainWindow.cpu_ram_graph_s.resize(40, 100)
-        mainWindow.cpu_swap_graph_s.resize(40, 100)
-
-        mainWindow.cpu_speed_graph_s.set_ylim(0, 4000) #CPU Speed graph y-axis bounds
-
-        leftSide = QVBoxLayout()
-        leftSide.addLayout(mainWindow.dataRow2, 1)
-        leftSide.addLayout(mainWindow.dataRow3, 1)
-        leftSide.addLayout(mainWindow.dataRow4, 1)
-        leftSide.addLayout(mainWindow.dataRow5, 1)
-        leftSide.addLayout(mainWindow.dataRow6, 1)
-        leftSide.addLayout(mainWindow.dataRow7, 1)
-        leftSide.setContentsMargins(1, 1, 1, 1);
-
-        #left side of data page scrolling section
-        scrollField = QScrollArea()
-        scrollField.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        scrollField.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        scrollField.setLayout(leftSide)
-        #scrollField.setMaximumSize(500, 400)
-        scrollField.resize(500,1000)
-
+        #create widgets
         mainWindow.leftContainer = QWidget()
+        mainWindow.rightContainer = QWidget() #creating rightside widgets
+
+        scrollField = QScrollArea() #used for left side scrolling
         mainWindow.leftContainer = scrollField
-        mainWindow.leftContainer.setMinimumSize(500, 400)
-        mainWindow.leftContainer.resize(500, 400)
 
-        mainWindow.leftContainer.setStyleSheet("background-color: rgb(200,50,122); margin:1px; border:1px solid rgb(0, 255, 122); ")
-
-        #start of right side data page
-        mainWindow.cpu_percent_graph = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
+        mainWindow.cpu_percent_graph = graphs.DataGraph(lambda: state.cpudict["cpu_percent"]) #creating large graph widgets
         mainWindow.cpu_speed_graph = graphs.DataGraph(lambda: state.cpudict["cpu_freq"])
         mainWindow.cpu_ram_graph = graphs.DataGraph(lambda: state.cpudict["ram_percent"])
         mainWindow.cpu_swap_graph = graphs.DataGraph(lambda: state.cpudict["swap_percent"])
         mainWindow.cpu_fan_graph = graphs.DataGraph(lambda: state.cpudict["fan_speed"])
         mainWindow.cpu_temp_graph = graphs.DataGraph(lambda: state.cpudict["temp_sensor"])
 
-        mainWindow.rightSide = QStackedLayout()
+        mainWindow.cpu_percent_graph_s = graphs.DataGraph(lambda: state.cpudict["cpu_percent"]) #creating small graph widgets
+        mainWindow.cpu_speed_graph_s = graphs.DataGraph(lambda: state.cpudict["cpu_freq"])
+        mainWindow.cpu_ram_graph_s = graphs.DataGraph(lambda: state.cpudict["ram_percent"])
+        mainWindow.cpu_swap_graph_s = graphs.DataGraph(lambda: state.cpudict["swap_percent"])
+        
+        #swap settings
+        mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_percent_graph)
+        mainWindow.rightContainer.setLayout(mainWindow.rightSide)
+
+        #graphs boundaries
+        mainWindow.cpu_speed_graph_s.set_ylim(0, 4000) #CPU Speed graph y-axis bounds
+        mainWindow.cpu_speed_graph.set_ylim(0, 4000) #CPU Speed graph y-axis bounds
+
+        #graphs styling
+        mainWindow.cpu_percent_graph_s.set_size(150, 100) #setting sizes of small graphs
+        mainWindow.cpu_speed_graph_s.set_size(150, 100)
+        mainWindow.cpu_ram_graph_s.set_size(150, 100)
+        mainWindow.cpu_swap_graph_s.set_size(150, 100)
+
+        #style work for data page
+        leftSide.setContentsMargins(1, 1, 1, 1);
+        mainWindow.dataRow2.setContentsMargins(1, 1, 1, 1); #setting row content margins
+        mainWindow.dataRow3.setContentsMargins(1, 1, 1, 1);
+        mainWindow.dataRow4.setContentsMargins(1, 1, 1, 1);
+        mainWindow.dataRow5.setContentsMargins(1, 1, 1, 1);
+        mainWindow.dataRow6.setContentsMargins(1, 1, 1, 1);
+        mainWindow.dataRow7.setContentsMargins(1, 1, 1, 1);
+        
+        #leftside stylesheets
+        mainWindow.cpuInfo.setStyleSheet("background-color: rgb(100,150,122); margin:1px; border:1px solid rgb(0, 255, 122); ")
+        mainWindow.oGraphButton1.setStyleSheet("background-color: rgb(100,150,122); margin:1px; border:1px solid rgb(0, 255, 122); ")
+        mainWindow.cpu_percent_graph_s.setStyleSheet("background-color: rgb(100,150,122); margin:1px; border:1px solid rgb(0, 255, 122); ")
+        mainWindow.leftContainer.setStyleSheet("background-color: rgb(200,50,122); margin:1px; border:1px solid rgb(0, 255, 122); ")
+        mainWindow.rightContainer.setStyleSheet("background-color: rgb(255,0,0); margin:0px; border:10px solid rgb(0, 255, 0); ")
+
+        #widget resizing
+        scrollField.resize(500,1000)
+        mainWindow.leftContainer.setMinimumSize(500, 400)
+        mainWindow.leftContainer.resize(500, 400)
+        mainWindow.rightContainer.resize(500, 400)
+
+        #add widgets
+        containerBench.addWidget(mainWindow.leftContainer, 1) #adding widgets to container bench
+        #containerBench.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
+        containerBench.addWidget(mainWindow.rightContainer, 1)
+
+        #adding widgets to leftside layouts
+        mainWindow.dataRow2.addWidget(mainWindow.cpuInfo)   #adding widgets to rows
+        mainWindow.dataRow2.addWidget(mainWindow.oGraphButton1)
+        mainWindow.dataRow2.addWidget(mainWindow.cpu_percent_graph_s)
+
+        mainWindow.dataRow3.addWidget(mainWindow.cpuFreq)       
+        mainWindow.dataRow3.addWidget(mainWindow.oGraphButton2)
+        mainWindow.dataRow3.addWidget(mainWindow.cpu_speed_graph_s)
+
+        mainWindow.dataRow4.addWidget(mainWindow.ramInfo)
+        mainWindow.dataRow4.addWidget(mainWindow.oGraphButton3)
+        mainWindow.dataRow4.addWidget(mainWindow.cpu_ram_graph_s)
+
+        mainWindow.dataRow5.addWidget(mainWindow.swapInfo)
+        mainWindow.dataRow5.addWidget(mainWindow.oGraphButton6)
+        mainWindow.dataRow5.addWidget(mainWindow.cpu_swap_graph_s)
+
+        mainWindow.dataRow6.addWidget(mainWindow.tempInfo)
+        mainWindow.dataRow6.addWidget(mainWindow.oGraphButton4)
+        mainWindow.dataRow6.addWidget(Color('purple'))
+
+        mainWindow.dataRow7.addWidget(mainWindow.fanInfo)
+        mainWindow.dataRow7.addWidget(mainWindow.oGraphButton5)
+        mainWindow.dataRow7.addWidget(Color('purple'))
+
+        #adding widgets to rightside layout
         mainWindow.rightSide.addWidget(mainWindow.cpu_percent_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_speed_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_ram_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_swap_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_fan_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_temp_graph)
-        mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_percent_graph)
 
-        mainWindow.rightContainer = QWidget()
-        mainWindow.rightContainer.setLayout(mainWindow.rightSide)
-        mainWindow.rightContainer.resize(500, 400)
-        mainWindow.rightContainer.setStyleSheet("background-color: rgb(255,0,0); margin:0px; border:10px solid rgb(0, 255, 0); ")
+        #add layouts
+        leftSide.addLayout(mainWindow.dataRow2, 1)  #Adding rows to leftside display
+        leftSide.addLayout(mainWindow.dataRow3, 1)
+        leftSide.addLayout(mainWindow.dataRow4, 1)
+        leftSide.addLayout(mainWindow.dataRow5, 1)
+        #leftSide.addLayout(mainWindow.dataRow6, 1) 
+        #leftSide.addLayout(mainWindow.dataRow7, 1)
 
-        containerBench = QHBoxLayout()
-        containerBench.addWidget(mainWindow.leftContainer, 1)
-        #containerBench.addWidget(graphs.DataGraph(graphs.test_fxn, mainWindow))
-        containerBench.addWidget(mainWindow.rightContainer, 1)
-
-        mainWindow.cpu_speed_graph.set_ylim(0, 4000) #CPU Speed graph y-axis bounds
+        #left side of data page scrolling section
+        scrollField.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        scrollField.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        scrollField.setLayout(leftSide)
+        #scrollField.setMaximumSize(500, 400)
 
         return containerBench
 
     def button_setup(mainWindow):
+
+        #button checkability
         mainWindow.generateButton.setCheckable(True)
-        mainWindow.generateButton.clicked.connect(mainWindow.generate_list)
-        #mainWindow.generateButton.released.connect(mainWindow.generateButtonPressed)
-        mainWindow.generateButton.setChecked(False)
-        mainWindow.generateButton.setMinimumSize(45, 60)
-        mainWindow.generateButton.resize(45, 60)
-
         mainWindow.taskButton.setCheckable(True)
-        mainWindow.taskButton.clicked.connect(mainWindow.taskButtonPressed)
-        mainWindow.taskButton.setChecked(False)
-        mainWindow.taskButton.released.connect(mainWindow.taskButtonReleased)
-        mainWindow.taskButton.setMinimumSize(45, 60)
-        mainWindow.taskButton.resize(45, 60)
-
         mainWindow.dataButton.setCheckable(True)
-        mainWindow.dataButton.setChecked(False)
-        mainWindow.dataButton.clicked.connect(mainWindow.dataButtonPressed)
-        #mainWindow.dataButton.released.connect(mainWindow.dataButtonReleased)
-        mainWindow.dataButton.setMinimumSize(45, 60)
-        mainWindow.dataButton.resize(45, 60)
-        mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
-
         mainWindow.moodButton.setCheckable(True)
-        mainWindow.moodButton.setChecked(True)
-        mainWindow.moodButton.clicked.connect(mainWindow.moodButtonPressed)
-        #mainWindow.moodButton.released.connect(mainWindow.moodButtonReleased)
-        mainWindow.moodButton.setMinimumSize(45, 60)
-        mainWindow.moodButton.resize(45, 60)
-
         mainWindow.scanButton.setCheckable(True)
-        mainWindow.scanButton.setChecked(False)
-        mainWindow.scanButton.clicked.connect(mainWindow.scanButtonPressed)
-        #mainWindow.scanButton.released.connect(mainWindow.scanButtonReleased)
-        mainWindow.scanButton.setMinimumSize(45, 60)
-        mainWindow.scanButton.resize(45, 60)
-        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
 
         mainWindow.oGraphButton1.setCheckable(True)
-        mainWindow.oGraphButton1.setChecked(False)
-        mainWindow.oGraphButton1.clicked.connect(mainWindow.oGraphButtonPressed1)
-        mainWindow.oGraphButton1.setMinimumSize(45, 60)
-        mainWindow.oGraphButton1.resize(60, 60)
-
         mainWindow.oGraphButton2.setCheckable(True)
-        mainWindow.oGraphButton2.setChecked(False)
-        mainWindow.oGraphButton2.clicked.connect(mainWindow.oGraphButtonPressed2)
-        mainWindow.oGraphButton2.setMinimumSize(45, 60)
-        mainWindow.oGraphButton2.resize(60, 60)
-
         mainWindow.oGraphButton3.setCheckable(True)
-        mainWindow.oGraphButton3.setChecked(False)
-        mainWindow.oGraphButton3.clicked.connect(mainWindow.oGraphButtonPressed3)
-        mainWindow.oGraphButton3.setMinimumSize(45, 60)
-        mainWindow.oGraphButton3.resize(60, 60)
-
         mainWindow.oGraphButton4.setCheckable(True)
-        mainWindow.oGraphButton4.setChecked(False)
-        mainWindow.oGraphButton4.clicked.connect(mainWindow.oGraphButtonPressed4)
-        mainWindow.oGraphButton4.setMinimumSize(45, 60)
-        mainWindow.oGraphButton4.resize(60, 60)
-
         mainWindow.oGraphButton5.setCheckable(True)
-        mainWindow.oGraphButton5.setChecked(False)
-        mainWindow.oGraphButton5.clicked.connect(mainWindow.oGraphButtonPressed5)
-        mainWindow.oGraphButton5.setMinimumSize(45, 60)
-        mainWindow.oGraphButton5.resize(60, 60)
-
         mainWindow.oGraphButton6.setCheckable(True)
+
+        #button checked status
+        mainWindow.generateButton.setChecked(False)
+        mainWindow.taskButton.setChecked(False)
+        mainWindow.dataButton.setChecked(False)
+        mainWindow.moodButton.setChecked(True)
+        mainWindow.scanButton.setChecked(False)
+
+        mainWindow.oGraphButton1.setChecked(False)
+        mainWindow.oGraphButton2.setChecked(False)
+        mainWindow.oGraphButton3.setChecked(False)
+        mainWindow.oGraphButton4.setChecked(False)
+        mainWindow.oGraphButton5.setChecked(False)
         mainWindow.oGraphButton6.setChecked(False)
+
+        #button connections
+        mainWindow.generateButton.clicked.connect(mainWindow.generate_list)
+        mainWindow.taskButton.clicked.connect(mainWindow.taskButtonPressed)
+        mainWindow.taskButton.released.connect(mainWindow.taskButtonReleased)
+        mainWindow.dataButton.clicked.connect(mainWindow.dataButtonPressed)
+        mainWindow.moodButton.clicked.connect(mainWindow.moodButtonPressed)
+        mainWindow.scanButton.clicked.connect(mainWindow.scanButtonPressed)
+
+        mainWindow.oGraphButton1.clicked.connect(mainWindow.oGraphButtonPressed1)
+        mainWindow.oGraphButton2.clicked.connect(mainWindow.oGraphButtonPressed2)
+        mainWindow.oGraphButton3.clicked.connect(mainWindow.oGraphButtonPressed3)
+        mainWindow.oGraphButton4.clicked.connect(mainWindow.oGraphButtonPressed4)
+        mainWindow.oGraphButton5.clicked.connect(mainWindow.oGraphButtonPressed5)
         mainWindow.oGraphButton6.clicked.connect(mainWindow.oGraphButtonPressed6)
+
+        #button minimum sizes
+        mainWindow.generateButton.setMinimumSize(45, 60)
+        mainWindow.taskButton.setMinimumSize(45, 60)
+        mainWindow.dataButton.setMinimumSize(45, 60)
+        mainWindow.moodButton.setMinimumSize(45, 60)
+        mainWindow.scanButton.setMinimumSize(45, 60)
+
+        mainWindow.oGraphButton1.setMinimumSize(45, 60)
+        mainWindow.oGraphButton2.setMinimumSize(45, 60)
+        mainWindow.oGraphButton3.setMinimumSize(45, 60)
+        mainWindow.oGraphButton4.setMinimumSize(45, 60)
+        mainWindow.oGraphButton5.setMinimumSize(45, 60)
         mainWindow.oGraphButton6.setMinimumSize(45, 60)
+
+        #button resizing
+        mainWindow.generateButton.resize(45, 60)
+        mainWindow.taskButton.resize(45, 60)
+        mainWindow.dataButton.resize(45, 60)
+        mainWindow.moodButton.resize(45, 60)
+        mainWindow.scanButton.resize(45, 60)
+
+        mainWindow.oGraphButton1.resize(60, 60)
+        mainWindow.oGraphButton2.resize(60, 60)
+        mainWindow.oGraphButton3.resize(60, 60)
+        mainWindow.oGraphButton4.resize(60, 60)
+        mainWindow.oGraphButton5.resize(60, 60)
         mainWindow.oGraphButton6.resize(60, 60)
         return
     
