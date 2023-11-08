@@ -4,7 +4,7 @@ from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QComboBox
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar, QScrollArea
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtGui import QPalette, QColor, QIcon, QPalette, QIcon, QPixmap, QImage
+from PyQt6.QtGui import QPalette, QColor, QIcon, QPixmap, QImage
 from array import *
 
 import modules.spotify as spotify
@@ -125,7 +125,7 @@ class MainWindow(QMainWindow):
         frameCounter+=1
         print(frameCounter)
 
-        #mainWindow.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
+        #mainWindow.setStyleSheet("background-color: rgb(255,0,0); margin:2px; border:1px solid rgb(0, 255, 0); ")
 
     def top_bar(mainWindow):
         row1 = QHBoxLayout()
@@ -229,31 +229,37 @@ class MainWindow(QMainWindow):
         mainWindow.dataRow2.addWidget(mainWindow.cpuInfo)
         mainWindow.dataRow2.addWidget(mainWindow.oGraphButton1)
         mainWindow.dataRow2.addWidget(mainWindow.cpu_percent_graph_s)
+        mainWindow.dataRow2.setContentsMargins(1, 1, 1, 1);
 
         mainWindow.dataRow3.addWidget(mainWindow.cpuFreq)
         mainWindow.dataRow3.addWidget(mainWindow.oGraphButton2)
         mainWindow.dataRow3.addWidget(mainWindow.cpu_speed_graph_s)
+        mainWindow.dataRow3.setContentsMargins(1, 1, 1, 1);
 
         mainWindow.dataRow4.addWidget(mainWindow.ramInfo)
         mainWindow.dataRow4.addWidget(mainWindow.oGraphButton3)
         mainWindow.dataRow4.addWidget(mainWindow.cpu_ram_graph_s)
+        mainWindow.dataRow4.setContentsMargins(1, 1, 1, 1);
 
         mainWindow.dataRow5.addWidget(mainWindow.swapInfo)
         mainWindow.dataRow5.addWidget(mainWindow.oGraphButton6)
         mainWindow.dataRow5.addWidget(mainWindow.cpu_swap_graph_s)
+        mainWindow.dataRow5.setContentsMargins(1, 1, 1, 1);
 
         mainWindow.dataRow6.addWidget(mainWindow.tempInfo)
         mainWindow.dataRow6.addWidget(mainWindow.oGraphButton4)
         mainWindow.dataRow6.addWidget(Color('purple'))
+        mainWindow.dataRow6.setContentsMargins(1, 1, 1, 1);
 
         mainWindow.dataRow7.addWidget(mainWindow.fanInfo)
         mainWindow.dataRow7.addWidget(mainWindow.oGraphButton5)
         mainWindow.dataRow7.addWidget(Color('purple'))
+        mainWindow.dataRow7.setContentsMargins(1, 1, 1, 1);
 
-        mainWindow.cpu_percent_graph_s.set_size(100, 100)
-        mainWindow.cpu_speed_graph_s.set_size(100, 1000)
-        mainWindow.cpu_ram_graph_s.set_size(100, 100)
-        mainWindow.cpu_swap_graph_s.set_size(100, 100)
+        mainWindow.cpu_percent_graph_s.resize(40, 100)
+        mainWindow.cpu_speed_graph_s.resize(40, 100)
+        mainWindow.cpu_ram_graph_s.resize(40, 100)
+        mainWindow.cpu_swap_graph_s.resize(40, 100)
 
         leftSide = QVBoxLayout()
         leftSide.addLayout(mainWindow.dataRow2, 1)
@@ -262,6 +268,7 @@ class MainWindow(QMainWindow):
         leftSide.addLayout(mainWindow.dataRow5, 1)
         leftSide.addLayout(mainWindow.dataRow6, 1)
         leftSide.addLayout(mainWindow.dataRow7, 1)
+        leftSide.setContentsMargins(1, 1, 1, 1);
 
         #left side of data page scrolling section
         scrollField = QScrollArea()
@@ -275,6 +282,8 @@ class MainWindow(QMainWindow):
         mainWindow.leftContainer = scrollField
         mainWindow.leftContainer.setMinimumSize(500, 400)
         mainWindow.leftContainer.resize(500, 400)
+
+        mainWindow.leftContainer.setStyleSheet("background-color: rgb(200,50,122); margin:1px; border:1px solid rgb(0, 255, 122); ")
 
         #start of right side data page
         mainWindow.cpu_percent_graph = graphs.DataGraph(lambda: state.cpudict["cpu_percent"])
@@ -296,6 +305,7 @@ class MainWindow(QMainWindow):
         mainWindow.rightContainer = QWidget()
         mainWindow.rightContainer.setLayout(mainWindow.rightSide)
         mainWindow.rightContainer.resize(500, 400)
+        mainWindow.rightContainer.setStyleSheet("background-color: rgb(255,0,0); margin:0px; border:10px solid rgb(0, 255, 0); ")
 
         containerBench = QHBoxLayout()
         containerBench.addWidget(mainWindow.leftContainer, 1)
@@ -325,7 +335,7 @@ class MainWindow(QMainWindow):
         #mainWindow.dataButton.released.connect(mainWindow.dataButtonReleased)
         mainWindow.dataButton.setMinimumSize(45, 60)
         mainWindow.dataButton.resize(45, 60)
-        mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
 
         mainWindow.moodButton.setCheckable(True)
         mainWindow.moodButton.setChecked(False)
@@ -340,7 +350,7 @@ class MainWindow(QMainWindow):
         #mainWindow.scanButton.released.connect(mainWindow.scanButtonReleased)
         mainWindow.scanButton.setMinimumSize(45, 60)
         mainWindow.scanButton.resize(45, 60)
-        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
 
         mainWindow.oGraphButton1.setCheckable(True)
         mainWindow.oGraphButton1.setChecked(False)
@@ -411,9 +421,9 @@ class MainWindow(QMainWindow):
         mainWindow.moodButton.setChecked(False)
         mainWindow.dataButton.setChecked(True)
 
-        mainWindow.moodButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
-        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
-        mainWindow.dataButton.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
+        mainWindow.moodButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.dataButton.setStyleSheet("background-color: rgb(255,0,0); margin:2px; border:1px solid rgb(0, 255, 0); ")
         return
 
     def scanButtonPressed(mainWindow):
@@ -424,9 +434,9 @@ class MainWindow(QMainWindow):
         mainWindow.moodButton.setChecked(False)
         mainWindow.dataButton.setChecked(False)
 
-        mainWindow.moodButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
-        mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
-        mainWindow.scanButton.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
+        mainWindow.moodButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.scanButton.setStyleSheet("background-color: rgb(255,0,0); margin:2px; border:1px solid rgb(0, 255, 0); ")
         return
 
     def moodButtonPressed(mainWindow):
@@ -436,9 +446,9 @@ class MainWindow(QMainWindow):
         mainWindow.dataButton.setChecked(False)
         mainWindow.moodButton.setChecked(True)
 
-        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
-        mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:5px; border:1px solid rgb(0, 0, 255); ")
-        mainWindow.moodButton.setStyleSheet("background-color: rgb(255,0,0); margin:5px; border:1px solid rgb(0, 255, 0); ")
+        mainWindow.scanButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.dataButton.setStyleSheet("background-color: rgb(0,255,0); margin:2px; border:1px solid rgb(0, 0, 255); ")
+        mainWindow.moodButton.setStyleSheet("background-color: rgb(255,0,0); margin:2px; border:1px solid rgb(0, 255, 0); ")
         return
 
     def oGraphButtonPressed1(mainWindow):

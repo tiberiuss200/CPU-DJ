@@ -50,6 +50,9 @@ class DataGraph(QWidget):
         self.layout = QVBoxLayout()                 #Creates a box style layout
         self.setLayout(self.layout)                 #Sets itself to the box layout that was made
         self.canvas = FigureCanvasQTAgg(self.fig)   #Initilizes a blank graph
+
+        self.layout.setContentsMargins(0, 0, 0, 0); #For removing margins
+
         self.layout.addWidget(self.canvas)          #Adds the widget to the box style layout
         self.init_graph()                           #Function call. Sets the default graph
 
