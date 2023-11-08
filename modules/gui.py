@@ -89,6 +89,7 @@ class MainWindow(QMainWindow):
         mainWindow.fanInfo         = QLabel()
         mainWindow.tempInfo        = QLabel()
         mainWindow.batteryInfo     = QLabel()
+        mainWindow.graphDesc       = QLabel()
 
         mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
@@ -297,6 +298,8 @@ class MainWindow(QMainWindow):
 
         mainWindow.rightContainer = QWidget()
         mainWindow.rightContainer.setLayout(mainWindow.rightSide)
+        mainWindow.rightSide.addWidget(mainWindow.graphDesc)
+
         mainWindow.rightContainer.resize(500, 400)
 
         containerBench = QHBoxLayout()
@@ -567,6 +570,9 @@ class MainWindow(QMainWindow):
             totalText = totalText + "\n" + infoText
             mainWindow.genDescription.setText(totalText)
             #print(totalText)
+
+            descText = "CPU Percentage out of 100%"
+            mainWindow.graphDesc.setText(descText)
             
             tasks.wait(1000)
         return True
