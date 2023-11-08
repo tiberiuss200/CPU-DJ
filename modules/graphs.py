@@ -81,24 +81,25 @@ class DataGraph(QWidget):
 
             if (self.timer > self.xmax):
                 self.ax.set_xlim(self.timer - 10, self.timer)   #Moves the x-axis when the size gets too big
-            if (state.stat == "CPU Percent"):
-                self.ax.set_xlabel("Time in seconds")
-                self.ax.set_ylabel("CPU Usage by percentage")
-            elif (state.stat == "CPU Speed"):
-                self.ax.set_xlabel("Time in seconds")
-                self.ax.set_ylabel("CPU Speed")
-            elif (state.stat == "RAM"):
-                self.ax.set_xlabel("Time in seconds")
-                self.ax.set_ylabel("RAM Usage by percentage")
-            elif (state.stat == "CPU Fan"):
-                self.ax.set_xlabel("Time in seconds")
-                self.ax.set_ylabel("Fan Speed")
-            elif (state.stat == "RAM Swap"):
-                self.ax.set_xlabel("Time in seconds")
-                self.ax.set_ylabel("Ram Swap")
-            elif (state.stat == "CPU Temp"):
-                self.ax.set_xlabel("Time in seconds")
-                self.ax.set_ylabel("CPU Temperature")
+            
+            #if (state.stat == "CPU Percent"):
+                #self.ax.set_xlabel("Time in seconds")
+                #self.ax.set_ylabel("CPU Usage by percentage")
+            #elif (state.stat == "CPU Speed"):
+                #self.ax.set_xlabel("Time in seconds")
+                #self.ax.set_ylabel("CPU Speed")
+            #elif (state.stat == "RAM"):
+                #self.ax.set_xlabel("Time in seconds")
+                #self.ax.set_ylabel("RAM Usage by percentage")
+            #elif (state.stat == "CPU Fan"):
+                #self.ax.set_xlabel("Time in seconds")
+                #self.ax.set_ylabel("Fan Speed")
+            #elif (state.stat == "RAM Swap"):
+                #self.ax.set_xlabel("Time in seconds")
+                #self.ax.set_ylabel("Ram Swap")
+            #elif (state.stat == "CPU Temp"):
+                #self.ax.set_xlabel("Time in seconds")
+                #self.ax.set_ylabel("CPU Temperature")
 
 
             self.canvas.draw()                                  #Displays the new graph
