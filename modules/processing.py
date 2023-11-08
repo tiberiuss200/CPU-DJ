@@ -84,11 +84,11 @@ def mood_vals_determine():
 
 
 def print_dict():
-    print("[debug] Print task started.")
+    print("[debug] Print task started.\n\n")
     tasks.wait(5000)
     while not state.mainFinished:
-        prettyPrint = json.dumps(state.cpudict)
-        print(prettyPrint)
+        #prettyPrint = json.dumps(state.cpudict)
+        #print(prettyPrint)
         prettyPrint = json.dumps(state.emotion_dict)
         print(prettyPrint)
         tasks.wait(1000)

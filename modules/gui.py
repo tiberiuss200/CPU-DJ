@@ -97,6 +97,9 @@ class MainWindow(QMainWindow):
         mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
+        mainWindow.songEmbed.setUrl(QUrl("about:blank"))
+        mainWindow.songEmbed.show()
+
         mainWindow.mood_display = QWidget()
         mainWindow.data_display = QWidget()
         mainWindow.scan_display = QWidget()
@@ -179,9 +182,7 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow3.addWidget(Color('yellow'))
         mainWindow.moodRow3.addWidget(Color('purple'))
 
-        mainWindow.moodRow4.addWidget(Color('red'))
-        mainWindow.moodRow4.addWidget(Color('yellow'))
-        mainWindow.moodRow4.addWidget(Color('purple'))
+        mainWindow.moodRow4.addWidget(mainWindow.songEmbed)
 
         mainWindow.moodRow5.addWidget(Color('red'))
         mainWindow.moodRow5.addWidget(Color('yellow'))
@@ -623,24 +624,12 @@ class MainWindow(QMainWindow):
         print("URI generated!")
         mainWindow.generateButton.setText("Generate New Song")
 
-        if(state.songsGenerated == 0):
-            item = mainWindow.moodRow4.itemAt(0)
-            rm = item.widget()
-            rm.deleteLater()
-            item = mainWindow.moodRow4.itemAt(1)
-            rm = item.widget()
-            rm.deleteLater()
-            item = mainWindow.moodRow4.itemAt(2)
-            rm = item.widget()
-            rm.deleteLater()
-
         #mainWindow.moodRow4.addWidget(mainWindow.playlistDisplay)
 
         songs = spotify.main()
-        mainWindow.songEmbed.setHtml(open("embed.html").read())
-
+        
         if(state.songsGenerated == 0):
-            mainWindow.moodRow4.addWidget(mainWindow.songEmbed)
+            mainWindow.songEmbed.setHtml(open("embed.html").read())
             mainWindow.songEmbed.show()
             mainWindow.playlistDisplay.setText(mainWindow.display[0])
         
