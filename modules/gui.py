@@ -488,7 +488,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed1(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_percent_graph)
-        state.stat = "CPU Percent"
+        #state.stat = "CPU Percent"
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
@@ -499,7 +499,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed2(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_speed_graph)
-        state.stat = "CPU Speed"
+        #state.stat = "CPU Speed"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
@@ -510,7 +510,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed3(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_ram_graph)
-        state.stat = "RAM"
+        #state.stat = "RAM"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton4.setChecked(False)
@@ -521,7 +521,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed4(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_fan_graph)
-        state.stat = "CPU Fan"
+        #state.stat = "CPU Fan"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
@@ -532,7 +532,7 @@ class MainWindow(QMainWindow):
 
     def oGraphButtonPressed5(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_temp_graph)
-        state.stat = "CPU Temp"
+        #state.stat = "CPU Temp"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
@@ -543,7 +543,7 @@ class MainWindow(QMainWindow):
     
     def oGraphButtonPressed6(mainWindow):
         mainWindow.rightSide.setCurrentWidget(mainWindow.cpu_swap_graph)
-        state.stat = "RAM Swap"
+        #state.stat = "RAM Swap"
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
         mainWindow.oGraphButton3.setChecked(False)
