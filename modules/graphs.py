@@ -46,7 +46,7 @@ class DataGraph(QWidget):
         self.y_values = []                  #Sets an empty array to hold the CPU percentages
         self.timer = 0                      #Sets the initial value of X to 0 seconds
         self.xmax = 10                      #Sets the initial size of the X-axis
-        self.fig = Figure()                 #Creates a new figure object
+        self.fig = Figure(facecolor='#201148')                 #Creates a new figure object
 
         self.layout = QVBoxLayout()                 #Creates a box style layout
         self.setLayout(self.layout)                 #Sets itself to the box layout that was made
@@ -59,9 +59,8 @@ class DataGraph(QWidget):
         self.line, = self.ax.plot([], [], color='#55e8ff')           #Starts to graph the data on to the graph object
         self.ax.set_xlim(0, 10)                     #Sets the initial size of the x-axis
         self.ax.set_ylim(0, 100)                    #Sets the initial size of the y-axis
-        #self.ax.tick_params(labelcolor=('#f0f0f0'))
-        self.ax.set_facecolor('#201148')
-        
+        self.ax.tick_params(labelcolor=('#f0f0f0'))
+        self.ax.set_facecolor('#2b11ac')
     
     def set_size(self, width : int, height : int):
         self.canvas.setMaximumSize(width, height)
