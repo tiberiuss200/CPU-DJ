@@ -37,6 +37,7 @@ def get_token():
     }
     data = {"grant_type": "client_credentials"}
     result = post(url, headers=headers, data=data)
+
     t_result = json.loads(result.content)
     token = t_result["access_token"]
     return token
@@ -76,7 +77,7 @@ def print_headers(result : Response):
 def get_uri(token, genre, energy, tempo, valence):
         url = f"https://api.spotify.com/v1/recommendations"
         headers = get_auth_header(token)
-        query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_vaence={valence}"     #Sets up the query with an f string to search for the genre, energy, tempo, and valence provided
+        query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_valence={valence}"     #Sets up the query with an f string to search for the genre, energy, tempo, and valence provided
         query_url = url + query
         result = get(query_url, headers=headers)
         song_uri = json.loads(result.content)["tracks"][0]["uri"]
