@@ -200,6 +200,7 @@ class MainWindow(QMainWindow):
         #create layouts
         containerBench = QVBoxLayout()
 
+        mainWindow.scanRowBasic = QHBoxLayout()
         mainWindow.scanRow2 = QHBoxLayout()
         mainWindow.scanRow3 = QHBoxLayout()
         mainWindow.scanRow4 = QHBoxLayout()
