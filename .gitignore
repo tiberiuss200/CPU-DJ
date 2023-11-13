@@ -166,3 +166,5 @@ __pycache__/*.*
 __pycache__/
 *.pyc 
 modules/test.py
+requirements.txt
+
