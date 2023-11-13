@@ -1,0 +1,1 @@
+pyinstaller -F --icon=.\logo.ico --noconsole .\CPU-DJ.py
