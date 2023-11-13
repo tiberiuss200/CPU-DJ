@@ -44,5 +44,5 @@ if (not exists(VENV_START_BIN)):
     create_venv(VENV_DIR, with_pip=True)
     subprocess.run(["{VENV_BIN}/pip", "install", "-r", join(getcwd(), REQ_TXT)], cwd=getcwd())
 
-process = subprocess.Popen([PYTHON_BIN, SCRIPT_PATH])
+process = subprocess.Popen([PYTHON_BIN, SCRIPT_PATH], shell=True)
 process.wait()
