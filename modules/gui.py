@@ -21,6 +21,8 @@ class Color(QWidget):
         super(Color, self).__init__()
         self.setAutoFillBackground(True)
 
+
+        
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor(color))
         self.setPalette(palette)
@@ -36,10 +38,46 @@ class MainWindow(QMainWindow):
         super().__init__()
         frameCounter = 0
         mainWindow.setWindowTitle("CPU-DJ")
-        mainWindow.setWindowIcon(QIcon('logo.png'))
+        mainWindow.setWindowIcon(QIcon('logo.ico'))
         mainWindow.setMinimumSize(200, 200)
         mainWindow.resize(1000, 600)
         mainWindow.display = ["empty"]
+        mainWindow.setStyleSheet("""
+            QMainWindow {
+                background-color: #33475b; /* Light gray background */
+                color: white; /* Dark gray text */
+            }
+            QPushButton {
+                background-color: #4CAF50; /* Green buttons */
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
+                margin: 5px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+            QLabel {
+                color: white; /* Dark gray text */
+            }
+            QComboBox {
+                border: 1px solid #4CAF50; /* Green border */
+                border-radius: 3px;
+                padding: 5px;
+                min-width: 6em;
+            }
+            QComboBox::drop-down {
+                subcontrol-origin: padding;
+                subcontrol-position: top right;
+                width: 15px;
+                border-left-width: 1px;
+                border-left-color: #4CAF50; /* Green border */
+                border-left-style: solid;
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
+            }
+        """)
+
 
         # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
         mainWindow.thread_pool = QThreadPool()
@@ -138,26 +176,25 @@ class MainWindow(QMainWindow):
         #create layouts
         row1 = QHBoxLayout()
 
-        #create widgets
-        container = QLabel()
-        titleBox = QLabel("CPU-DJ")
-        font = titleBox.font()
-        label = QPixmap('logo.png')
+        iconBox = QLabel()
+        logoBox = QLabel()
+        icon = QPixmap('icon.png')
+        logo = QPixmap('logo.png')
 
         #setting up variables
-        label = label.scaled(100, 100)
-        font.setPointSize(30)
+        icon = icon.scaled(100, 100)
+        logo = logo.scaled(290, 80)
 
         #applying variables
-        container.setPixmap(label)
+        iconBox.setPixmap(icon)
+        logoBox.setPixmap(logo)
 
-        titleBox.setFont(font)
-        titleBox.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
-        container.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        iconBox.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        logoBox.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
 
         #add widgets
-        row1.addWidget(container)
-        row1.addWidget(titleBox)
+        row1.addWidget(iconBox)
+        row1.addWidget(logoBox)
         row1.addWidget(mainWindow.moodButton)
         row1.addWidget(mainWindow.scanButton)
         row1.addWidget(mainWindow.dataButton)
