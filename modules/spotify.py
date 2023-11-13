@@ -1,5 +1,5 @@
-from dotenv import load_dotenv
-from requests import post, get
+from dotenv import *
+from requests import post, get, Response
 import modules.state as state
 import os
 import base64
@@ -10,42 +10,26 @@ class X:
     def __getitem__(self, i):
         return f"Value {i}"
 
-load_dotenv()
-
-client_id = os.getenv("CLIENT_ID")
-client_secret = os.getenv("CLIENT_SECRET")
+client_id = "016b59b007cf4494869123ecdb2f0687"              #Client ID
+client_secret = "113ddc7d11f940f990e85be0a186399f"          #Client Secret
 
 def main():
-    token = get_token()
-    emotion = state.emotion
-    result = search_for_playlist(token, emotion)
-    playlist_id = get_playlist_id(token, emotion)
-    songs = get_song(token, playlist_id)
+    state.update_spotify_values()
+    token = get_token()                                                             #Calls to setup the client ID and Secret
+    songs = get_track_reccomendation(token, state.currentGenre, state.spotify_dict["energy"] / 10, state.spotify_dict["tempo"] / 10, state.spotify_dict["valence"] / 100)      #Gets the track name from the computer mood
+    #uri = get_uri(token, state.currentGenre, state.spotify_dict["energy"], state.spotify_dict["valence"], state.spotify_dict["tempo"])                         #Gets the track URI from the computer mood
+    print(songs)                                                                    #Prints out the song title
+    #print(uri)                                                                      #Prints the song URI
+    print("-------------------------------------------")                            #Bar to make output more readable
+    uri_to_embed(songs)
+    return 0
 
-    uris = []
-
-    for index, item in enumerate(songs, start=0):
-        try:
-            uri = item["track"]["uri"]
-
-            uris.append(uri)
-
-        except TypeError or uri == "":
-            pass
-
-    print("-------------------------------------------")
-    print("Emotion: " + emotion)
-    #from modules.processing import uri_to_embed
-    final_uri = random.choice(uris)
-    uri_to_embed(final_uri)
-    print(final_uri)
-    return final_uri
-
+#Function get_token sets up the client ID and secret in order to communicate with the Spotify API
 def get_token():
-    auth_string = client_id + ":" + client_secret
-    auth_bytes = auth_string.encode("utf-8")
+    auth_string = client_id + ":" + client_secret                                   #Appends the Client ID and Secret together divided by a :
+    auth_bytes = auth_string.encode("utf-8")                                        #Encodes the ID and Secret in UTF-8
     auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
-    url = "https://accounts.spotify.com/api/token"
+    url = "https://accounts.spotify.com/api/token"                                  #Sets the API endpoint
     headers = {
         "Accept": "application/json",
         "Authorization": "Basic " + auth_base64,
@@ -60,39 +44,43 @@ def get_token():
 def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
 
-def search_for_playlist(token, mood):
-    url = "https://api.spotify.com/v1/search"
-    headers = get_auth_header(token)
-    query = f"?q={mood}&type=playlist&limit=1"
-    query_url = url + query
-    result = get(query_url, headers=headers)
-    playlist_result = json.loads(result.content)["playlists"]["items"]
-    if len(playlist_result) == 0:
-        print("No Playlist Found")
-        return None
-    else:
-        return playlist_result
-
-def get_playlist_id(token, mood):
-    url = "https://api.spotify.com/v1/search"
-    headers = get_auth_header(token)
-    query = f"?q={mood}&type=playlist&limit=1&offset=100"
-    query_url = url + query
-    result = get(query_url, headers=headers)
-    id_result = json.loads(result.content)["playlists"]["items"][0]['id']
-    if len(id_result) == 0:
-        print("No Playlist Found")
-        return None
-    else:
-        return id_result
-
-def get_song(token, playlist_id):
-        url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100"
+#Function to use the API to get a song that corresponds to the computer's mood.
+#Returns the song's name
+def get_track_reccomendation(token, genre, energy, tempo, valence):
+        url = f"https://api.spotify.com/v1/recommendations"                                                     #Sets the API endpoint
         headers = get_auth_header(token)
-        result = get(url, headers=headers)
-        song_result = json.loads(result.content)["items"]
-        return song_result
+        print("Energy: " + str(energy) + ", Tempo: " + str(tempo) + ", Valence: " + str(valence))
+        query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_valence={valence}"     #Sets up the query with an f string to search for the genre, energy, tempo, and valence provided
+        query_url = url + query
+        result = get(query_url, headers=headers)
+        print_headers(result)
+        #print("Retry After: " +  + "s") #check for a 429
+        song_result = json.loads(result.content)["tracks"][0]["name"]
+        if (state.debugMode):
+            print(song_result)
+        song_url = json.loads(result.content)["tracks"][0]["external_urls"]["spotify"]
+        song_uri = json.loads(result.content)["tracks"][0]["uri"]
+        return song_uri                                                                                      #Returning the song's name
 
+def print_headers(result : Response):
+    try:
+       print("Retry After: " + result.headers["retry-after"] + "s") #429 handler
+    except: 
+       print("No retry-after field.")
+    finally:
+        if state.debugMode:
+            print(result.headers)
+
+#Function to use the API to get a song that corresponds to the computer's mood
+#Returns the song's URI to embed
+def get_uri(token, genre, energy, tempo, valence):
+        url = f"https://api.spotify.com/v1/recommendations"
+        headers = get_auth_header(token)
+        query = f"?seed_genres={genre}&target_energy={energy}&target_tempo={tempo}&target_vaence={valence}"     #Sets up the query with an f string to search for the genre, energy, tempo, and valence provided
+        query_url = url + query
+        result = get(query_url, headers=headers)
+        song_uri = json.loads(result.content)["tracks"][0]["uri"]
+        return song_uri
 # moved from processing because of the tasks I created bitching about this function -D
 def uri_to_embed(uri): 
     """
@@ -121,3 +109,5 @@ def uri_to_embed(uri):
     
     return path
 
+if __name__ == "__main__":
+    main()
