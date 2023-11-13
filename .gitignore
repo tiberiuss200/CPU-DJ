@@ -167,4 +167,5 @@ __pycache__/
 *.pyc 
 modules/test.py
 requirements.txt
+*.kate-swp
 CPU-DJ.exe
