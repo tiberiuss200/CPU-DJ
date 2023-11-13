@@ -96,7 +96,7 @@ def uri_to_embed(uri):
                 IFrameAPI.createController(element, options, callback);
             };
         </script>
-        <body> 
+        <body style="background-color:#33475b">
             <div id="embed-iframe"></div>
         </body> 
     </html>

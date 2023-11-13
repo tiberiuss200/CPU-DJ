@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
         mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
-        mainWindow.songEmbed.setUrl(QUrl("about:blank"))
+        mainWindow.songEmbed.setHtml("<html><body style='background-color:#33475b'</body></html>")
         mainWindow.songEmbed.show()
 
         mainWindow.mood_display = QWidget()
@@ -184,15 +184,15 @@ class MainWindow(QMainWindow):
 
         mainWindow.moodRow4.addWidget(mainWindow.songEmbed)
 
-        mainWindow.moodRow5.addWidget(Color('red'))
-        mainWindow.moodRow5.addWidget(Color('yellow'))
-        mainWindow.moodRow5.addWidget(Color('purple'))
+        #mainWindow.moodRow5.addWidget(Color('red'))
+        #mainWindow.moodRow5.addWidget(Color('yellow'))
+        #mainWindow.moodRow5.addWidget(Color('purple'))
 
         #add layouts
         containerBench.addLayout(mainWindow.moodRow2)
         containerBench.addLayout(mainWindow.moodRow3)
         containerBench.addLayout(mainWindow.moodRow4)
-        containerBench.addLayout(mainWindow.moodRow5)
+        #containerBench.addLayout(mainWindow.moodRow5)
 
         return containerBench
     
