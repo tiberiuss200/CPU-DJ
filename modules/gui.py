@@ -42,8 +42,7 @@ class MainWindow(QMainWindow):
         mainWindow.setMinimumSize(200, 200)
         mainWindow.resize(1000, 600)
         mainWindow.display = ["empty"]
-
-    mainWindow.setStyleSheet("""
+        mainWindow.setStyleSheet("""
             QMainWindow {
                 background-color: #33475b; /* Light gray background */
                 color: white; /* Dark gray text */
