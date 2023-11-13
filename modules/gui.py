@@ -43,6 +43,43 @@ class MainWindow(QMainWindow):
         mainWindow.resize(1000, 600)
         mainWindow.display = ["empty"]
 
+    mainWindow.setStyleSheet("""
+            QMainWindow {
+                background-color: #33475b; /* Light gray background */
+                color: white; /* Dark gray text */
+            }
+            QPushButton {
+                background-color: #4CAF50; /* Green buttons */
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
+                margin: 5px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+            QLabel {
+                color: white; /* Dark gray text */
+            }
+            QComboBox {
+                border: 1px solid #4CAF50; /* Green border */
+                border-radius: 3px;
+                padding: 5px;
+                min-width: 6em;
+            }
+            QComboBox::drop-down {
+                subcontrol-origin: padding;
+                subcontrol-position: top right;
+                width: 15px;
+                border-left-width: 1px;
+                border-left-color: #4CAF50; /* Green border */
+                border-left-style: solid;
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
+            }
+        """)
+
+
         # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
         mainWindow.thread_pool = QThreadPool()
         mainWindow.thread_pool.setMaxThreadCount(50)
