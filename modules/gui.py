@@ -216,13 +216,13 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow2.addWidget(mainWindow.taskButton)
 
         mainWindow.moodRow3.addWidget(Color('#8B0000'))
-        mainWindow.moodRow3.addWidget(Color('yellow'))
-        mainWindow.moodRow3.addWidget(Color('purple'))
+        mainWindow.moodRow3.addWidget(Color('#006400'))
+        mainWindow.moodRow3.addWidget(Color('#453200'))
 
         mainWindow.moodRow4.addWidget(mainWindow.songEmbed)
         #mainWindow.moodRow5.addWidget(Color('red'))
-        #mainWindow.moodRow5.addWidget(Color('yellow'))
-        #mainWindow.moodRow5.addWidget(Color('purple'))
+        #mainWindow.moodRow5.addWidget(Color('#006400'))
+        #mainWindow.moodRow5.addWidget(Color('#453200'))
         #add layouts
         containerBench.addLayout(mainWindow.moodRow2)
         containerBench.addLayout(mainWindow.moodRow3)
@@ -245,20 +245,20 @@ class MainWindow(QMainWindow):
 
         #add widgets
         mainWindow.scanRow2.addWidget(Color('#8B0000'))
-        mainWindow.scanRow2.addWidget(Color('yellow'))
-        mainWindow.scanRow2.addWidget(Color('purple'))
+        mainWindow.scanRow2.addWidget(Color('#006400'))
+        mainWindow.scanRow2.addWidget(Color('#453200'))
 
         mainWindow.scanRow3.addWidget(Color('#8B0000'))
-        mainWindow.scanRow3.addWidget(Color('yellow'))
-        mainWindow.scanRow3.addWidget(Color('purple'))
+        mainWindow.scanRow3.addWidget(Color('#006400'))
+        mainWindow.scanRow3.addWidget(Color('#453200'))
 
         mainWindow.scanRow4.addWidget(Color('#8B0000'))
-        mainWindow.scanRow4.addWidget(Color('yellow'))
-        mainWindow.scanRow4.addWidget(Color('purple'))
+        mainWindow.scanRow4.addWidget(Color('#006400'))
+        mainWindow.scanRow4.addWidget(Color('#453200'))
 
-        mainWindow.scanRow5.addWidget(Color('red'))
-        mainWindow.scanRow5.addWidget(Color('yellow'))
-        mainWindow.scanRow5.addWidget(Color('purple'))
+        mainWindow.scanRow5.addWidget(Color('#8B0000'))
+        mainWindow.scanRow5.addWidget(Color('#006400'))
+        mainWindow.scanRow5.addWidget(Color('#453200'))
 
         #add layouts
         containerBench.addLayout(mainWindow.scanRow2)
@@ -360,11 +360,11 @@ class MainWindow(QMainWindow):
 
         mainWindow.dataRow6.addWidget(mainWindow.tempInfo)
         mainWindow.dataRow6.addWidget(mainWindow.oGraphButton4)
-        mainWindow.dataRow6.addWidget(Color('purple'))
+        mainWindow.dataRow6.addWidget(Color('#453200'))
 
         mainWindow.dataRow7.addWidget(mainWindow.fanInfo)
         mainWindow.dataRow7.addWidget(mainWindow.oGraphButton5)
-        mainWindow.dataRow7.addWidget(Color('purple'))
+        mainWindow.dataRow7.addWidget(Color('#453200'))
 
         #adding widgets to rightside layout
         mainWindow.rightSide.addWidget(mainWindow.cpu_percent_graph)
