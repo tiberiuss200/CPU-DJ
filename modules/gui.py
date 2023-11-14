@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
                 color: white; /* Dark gray text */
             }
             QPushButton {
-                background-color: #4CAF50; /* Green buttons */
+                background-color: #68369B; /* Purple buttons */
                 color: white;
                 border-radius: 5px;
                 padding: 10px;
@@ -58,10 +58,10 @@ class MainWindow(QMainWindow):
                 background-color: #45a049;
             }
             QLabel {
-                color: white; /* Dark gray text */
+                color: white; /*White text */
             }
             QComboBox {
-                border: 1px solid #4CAF50; /* Green border */
+                border: 1px solid #68369B; /* Purple border */
                 border-radius: 3px;
                 padding: 5px;
                 min-width: 6em;
@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
                 subcontrol-position: top right;
                 width: 15px;
                 border-left-width: 1px;
-                border-left-color: #4CAF50; /* Green border */
+                border-left-color: ##68369B; /* Purple border */
                 border-left-style: solid;
                 border-top-right-radius: 3px;
                 border-bottom-right-radius: 3px;
