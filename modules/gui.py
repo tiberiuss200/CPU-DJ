@@ -662,14 +662,12 @@ class MainWindow(QMainWindow):
         print("URI generated!")
         mainWindow.generateButton.setText("Generate New Song")
 
-        #mainWindow.moodRow4.addWidget(mainWindow.playlistDisplay)
-
         songs = spotify.main()
-        
-        if(state.songsGenerated == 0):
-            mainWindow.songEmbed.setHtml(open("embed.html").read())
-            mainWindow.songEmbed.show()
-            mainWindow.playlistDisplay.setText(mainWindow.display[0])
+
+        # Refresh the songEmbed with the contents of "embed.html" every time
+        mainWindow.songEmbed.setHtml(open("embed.html").read())
+        mainWindow.songEmbed.show()
+        mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
         state.songsGenerated += 1
         return
