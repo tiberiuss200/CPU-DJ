@@ -624,9 +624,10 @@ class MainWindow(QMainWindow):
             mainWindow.cpuInfo.setText(infoText)
             totalText = infoText
 
-            infoText = "CPU Speed: " + str(state.cpudict["cpu_freq"])
+            infoText = "CPU Speed: " + str(round(state.cpudict["cpu_freq"], 4))
             mainWindow.cpuFreq.setText(infoText)
             totalText = totalText + "\n" + infoText
+
 
             infoText = "RAM Usage: " + str(state.cpudict["ram_percent"]) + "%"
             mainWindow.ramInfo.setText(infoText)
