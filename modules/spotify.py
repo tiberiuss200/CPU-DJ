@@ -1,6 +1,12 @@
 from dotenv import *
 from requests import post, get, Response
-import modules.state as state
+
+#for testing
+if __name__ == "modules.spotify":
+    import modules.state as state
+else:
+    import state as state
+
 import os
 import base64
 import json
@@ -22,6 +28,7 @@ def main():
     #print(uri)                                                                      #Prints the song URI
     print("-------------------------------------------")                            #Bar to make output more readable
     uri_to_embed(songs)
+
     return 0
 
 #Function get_token sets up the client ID and secret in order to communicate with the Spotify API
@@ -39,6 +46,7 @@ def get_token():
     result = post(url, headers=headers, data=data)
     t_result = json.loads(result.content)
     token = t_result["access_token"]
+    print(__name__)
     return token
 
 def get_auth_header(token):
