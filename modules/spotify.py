@@ -23,13 +23,13 @@ def main():
     state.update_spotify_values()
     token = get_token()                                                             #Calls to setup the client ID and Secret
     songs = get_track_reccomendation(token, state.currentGenre, state.spotify_dict["energy"] / 10, state.spotify_dict["tempo"] / 10, state.spotify_dict["valence"] / 100)      #Gets the track name from the computer mood
-    #uri = get_uri(token, state.currentGenre, state.spotify_dict["energy"], state.spotify_dict["valence"], state.spotify_dict["tempo"])                         #Gets the track URI from the computer mood
+    uri = get_uri(token, state.currentGenre, state.spotify_dict["energy"], state.spotify_dict["valence"], state.spotify_dict["tempo"])                         #Gets the track URI from the computer mood
     #print(songs)                                                                    #Prints out the song title
     #print(uri)                                                                      #Prints the song URI
     #print("-------------------------------------------")                            #Bar to make output more readable
     uri_to_embed(songs)
 
-    return 0
+    return songs
 
 #Function get_token sets up the client ID and secret in order to communicate with the Spotify API
 def get_token():
@@ -68,7 +68,7 @@ def get_track_reccomendation(token, genre, energy, tempo, valence):
             print(song_result)
         song_url = json.loads(result.content)["tracks"][0]["external_urls"]["spotify"]
         song_uri = json.loads(result.content)["tracks"][0]["uri"]
-        return song_uri                                                                                      #Returning the song's name
+        return song_uri                                                                                      #Returning the song's uri
 
 def print_headers(result : Response):
     try:
