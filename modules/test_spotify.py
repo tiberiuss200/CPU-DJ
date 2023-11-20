@@ -1,3 +1,8 @@
+# run this code:
+# .venv/bin/activate
+# cd ./modules
+# python3 -m unittest test_spotify.py
+
 import unittest
 from unittest.mock import Mock, patch
 from spotify import main, get_token, get_track_reccomendation, get_uri, uri_to_embed
