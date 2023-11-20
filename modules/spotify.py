@@ -1,4 +1,4 @@
-from dotenv import *
+
 from requests import post, get, Response
 
 #for testing

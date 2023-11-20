@@ -6,10 +6,23 @@ CPU-DJ written by Daniel Oravetz, R-E Miller, Tiberius Shaub, and Nathaniel Harr
 """
 
 from venv import create as create_venv
+#from virtualenv import cli_run as create_venv
+#import ensurepip
 from os.path import join, exists
-from os import getcwd
+import sys
+import os
 import subprocess
+from subprocess import PIPE
 import platform
+from multiprocessing import freeze_support
+
+def getcwd():
+    ret = ""
+    if getattr(sys, 'frozen', False):
+        ret = os.path.dirname(sys.executable)
+    elif __file__:
+        ret = os.getcwd()
+    return ret
 
 def get_venv_bin_folder():
     # I hate platform specific code.......
@@ -41,8 +54,10 @@ print(VENV_START_BIN)
 
 if (not exists(VENV_START_BIN)):
     # start venv setup process
-    create_venv(VENV_DIR, with_pip=True)
-    subprocess.run(["{VENV_BIN}/pip", "install", "-r", join(getcwd(), REQ_TXT)], cwd=getcwd())
+    freeze_support()
+    create_venv(".venv")
+    print("Populating .venv...\n")
+    subprocess.run([join('.venv', VENV_BIN, 'pip'), "install", "-r", join(getcwd(), REQ_TXT)], cwd=getcwd(), stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
 
 process = subprocess.Popen([PYTHON_BIN, SCRIPT_PATH], shell=True)
 process.wait()
