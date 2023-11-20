@@ -1,5 +1,14 @@
 # run this code:
-# .venv/bin/activate
+# on linux:
+# venv/bin/activate
+
+# on windows:
+# venv/Scripts/activate
+
+# on mac:
+# source .venv/bin/activate
+
+
 # cd ./modules
 # python3 -m unittest test_spotify.py
 
