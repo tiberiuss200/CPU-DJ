@@ -169,3 +169,4 @@ modules/test.py
 requirements.txt
 *.kate-swp
 CPU-DJ.exe
+launcher/*
