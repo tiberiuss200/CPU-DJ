@@ -170,3 +170,6 @@ requirements.txt
 *.kate-swp
 CPU-DJ.exe
 colors.txt
+
+launcher/*
+

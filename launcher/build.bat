@@ -1,1 +1,1 @@
-pyinstaller --onefile --clean --icon=./icon.ico ./CPU-DJ.py
+pyinstaller --onefile --noconsole --clean --icon=./icon.ico ./CPU-DJ.py
