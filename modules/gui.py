@@ -4,7 +4,7 @@ from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QComboBox
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar, QScrollArea
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtGui import QPalette, QColor, QIcon, QPixmap, QImage
+from PyQt6.QtGui import QPalette, QColor, QIcon, QPixmap, QImage, QFont
 from array import *
 
 import modules.spotify as spotify
@@ -42,14 +42,15 @@ class MainWindow(QMainWindow):
         mainWindow.setMinimumSize(200, 200)
         mainWindow.resize(1000, 600)
         mainWindow.display = ["empty"]
+
         # stuff for modules.tasks - ask dan if help needed.  this should always be in __init__ -D
         mainWindow.thread_pool = QThreadPool()
         mainWindow.thread_pool.setMaxThreadCount(50)
 
+        mainWindow.emotionFont = QFont() 
+        mainWindow.emotionFont.setPointSize(30)
+
         mainWindow.genreList = QComboBox(mainWindow)
-        mainWindow.genreList.addItems(state.genreList)
-        mainWindow.genreList.move(100,100)
-        mainWindow.genreList.setPlaceholderText("iranian")
 
         mainWindow.dataButton = QPushButton("Data")
         mainWindow.scanButton = QPushButton("Scan")
@@ -85,7 +86,6 @@ class MainWindow(QMainWindow):
         mainWindow.songEmbed       = QWebEngineView()
         mainWindow.emotionReading  = QLabel()
         mainWindow.genDescription  = QLabel()
-        mainWindow.genDescription.setWordWrap(True)
         mainWindow.cpuInfo         = QLabel()
         mainWindow.cpuFreq         = QLabel()
         mainWindow.ramInfo         = QLabel()
@@ -94,6 +94,12 @@ class MainWindow(QMainWindow):
         mainWindow.tempInfo        = QLabel()
         mainWindow.batteryInfo     = QLabel()
         mainWindow.graphDesc       = QLabel()
+
+        mainWindow.genreList.addItems(state.genreList)
+        mainWindow.genreList.move(100,100)
+        mainWindow.genreList.setPlaceholderText("iranian")
+
+        mainWindow.genDescription.setWordWrap(True)
 
         mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
@@ -138,6 +144,8 @@ class MainWindow(QMainWindow):
             QPushButton {
                 background-color: #68369B; /* Purple buttons */
                 color: white;
+                font-size: 17px; /* Set the font size */
+                font-family: Arial, sans-serif; /* Set the font family */
                 border-radius: 5px;
                 padding: 10px;
                 margin: 5px;
@@ -147,6 +155,8 @@ class MainWindow(QMainWindow):
             }
             QLabel {
                 color: white; /*White text */
+                font-size: 14px; /* Set the font size */
+                font-family: Arial, sans-serif; /* Set the font family */
             }
             QComboBox {
                 border: 1px solid #68369B; /* Purple border */
@@ -165,6 +175,15 @@ class MainWindow(QMainWindow):
                 border-bottom-right-radius: 3px;
             }
         """)
+
+        mainWindow.happySheet = "QLabel { color: yellow; font-size: 28px; font-family:    Arial, sans-serif; }"
+        mainWindow.sadSheet = "QLabel { color: light-blue; font-size: 28px; font-family:        Courier-New, monospace; }"
+        mainWindow.angrySheet = "QLabel { color: red; font-size: 28px; font-family:       Phosphate, sans-serif; }"
+        mainWindow.surprisedSheet = "QLabel { color: pink; font-size: 28px; font-family:  Impact, sans-serif; }"
+        mainWindow.stressedSheet = "QLabel { color: orange; font-size: 28px; font-family: Cooper, serif; }"
+        mainWindow.neutralSheet = "QLabel { color: white; font-size: 28px; font-family:   Arial, sans-serif; }"
+
+        mainWindow.emotionReading.setStyleSheet("font-size: 28px;")
 
         frameCounter+=1
         print(frameCounter)
@@ -216,10 +235,9 @@ class MainWindow(QMainWindow):
         mainWindow.moodRow2.addWidget(mainWindow.taskButton)
 
         mainWindow.moodRow3.addWidget(Color('#8B0000'))
-        mainWindow.moodRow3.addWidget(Color('#006400'))
-        mainWindow.moodRow3.addWidget(Color('#453200'))
 
         mainWindow.moodRow4.addWidget(mainWindow.songEmbed)
+        mainWindow.moodRow4.setAlignment(mainWindow.songEmbed, Qt.AlignmentFlag.AlignCenter)  # Center horizontally
         #mainWindow.moodRow5.addWidget(Color('red'))
         #mainWindow.moodRow5.addWidget(Color('#006400'))
         #mainWindow.moodRow5.addWidget(Color('#453200'))
@@ -601,24 +619,23 @@ class MainWindow(QMainWindow):
         item = mainWindow.moodRow3.itemAt(0)
         rm = item.widget()
         rm.deleteLater()
-        item = mainWindow.moodRow3.itemAt(1)
-        rm = item.widget()
-        rm.deleteLater()
-        item = mainWindow.moodRow3.itemAt(2)
-        rm = item.widget()
-        rm.deleteLater()
 
         mainWindow.emotionReading.setText("...")
         mainWindow.cpuInfo.setText("...")
         mainWindow.moodRow3.addWidget(mainWindow.genDescription)
         mainWindow.moodRow3.addWidget(mainWindow.emotionReading)
+
+        mainWindow.moodRow3.setAlignment(mainWindow.emotionReading, Qt.AlignmentFlag.AlignCenter)
         tasks.start(mainWindow.setDictToUI)
 
     def setDictToUI(mainWindow):
         while not state.mainFinished:
-            emotionText = "Your computer is feeling "
-            emotionText = emotionText + state.determine_emotion()
-            mainWindow.emotionReading.setText(emotionText)
+            emotionInt = "Your computer is feeling "
+            emotionText = state.determine_emotion()
+            emotionFull = emotionInt + emotionText
+
+            mainWindow.emotionReading.setText(emotionFull)
+            mainWindow.emotionReading.setStyleSheet(mainWindow.fontPick(emotionText))
 
             infoText = "CPU Percent: " + str(state.cpudict["cpu_percent"]) + "%"
             mainWindow.cpuInfo.setText(infoText)
@@ -641,6 +658,7 @@ class MainWindow(QMainWindow):
             mainWindow.fanInfo.setText(infoText)
             totalText = totalText + "\n" + infoText
 
+            '''
             infoText = "Internal Temperature: " + str(state.cpudict["temp_sensor"])
             mainWindow.tempInfo.setText(infoText)
             totalText = totalText + "\n" + infoText
@@ -648,9 +666,10 @@ class MainWindow(QMainWindow):
             infoText = "Battery Information: " + str(state.cpudict["battery_info"])
             mainWindow.batteryInfo.setText(infoText)
             totalText = totalText + "\n" + infoText
+            '''
+
             mainWindow.genDescription.setText(totalText)
             #print(totalText)
-
             descText = "CPU Percentage out of 100%"
             mainWindow.graphDesc.setText(descText)
             tasks.wait(1000)
@@ -667,15 +686,28 @@ class MainWindow(QMainWindow):
 
         # Refresh the songEmbed with the contents of "embed.html" every time
         mainWindow.songEmbed.setHtml(open("embed.html").read())
+        #mainWindow.songEmbed.page().runJavaScript('document.getElementById("embed-iframe").style.height = "150px";')
         mainWindow.songEmbed.show()
+        #mainWindow.songEmbed.frameSize()
+        mainWindow.songEmbed.setFixedSize(1000, 250)
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
         state.songsGenerated += 1
         return
 
+    def fontPick(mainWindow, case):
+        switch_dict = {
+            'Happy.': mainWindow.happySheet,
+            'Sad.': mainWindow.sadSheet,
+            'Angry.': mainWindow.angrySheet,
+            'Surprised.': mainWindow.surprisedSheet,
+            'Stressed.': mainWindow.stressedSheet,
+            'Neutral.': mainWindow.neutralSheet,
+        }
+        return switch_dict.get(case, 'This is the default case')
+
 def show_Playlist(songs, mainWindow, QLabel):
     return
-        
     # print(str(mainWindow.array3[2])+' '+mainWindow.array3[3])
     
 def main():

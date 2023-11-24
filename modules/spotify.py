@@ -99,14 +99,16 @@ def uri_to_embed(uri):
             window.onSpotifyIframeApiReady = (IFrameAPI) => {
                 const element = document.getElementById('embed-iframe');
                 const options = {
-                    uri: '[[URI]]'
+                    uri: '[[URI]]',
+                    width: 950, // Set your desired width
+                    height: 240 // Set your desired height
                 };
                 const callback = (EmbedController) => {};
                 IFrameAPI.createController(element, options, callback);
             };
         </script>
         <body style="background-color:#33475b">
-            <div id="embed-iframe"></div>
+            <div id="embed-iframe" scrolling="no"></div>
         </body> 
     </html>
     """
