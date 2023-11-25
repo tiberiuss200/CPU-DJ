@@ -46,9 +46,45 @@ window = None
 genreList = ["acoustic", "afrobeat", "alt-rock", "alternative", "ambient", "anime", "black-metal", "bluegrass", "blues", "bossanova", "brazil", "breakbeat", "british", "cantopop", "chicago-house", "children", "chill", "classical", "club", "comedy", "country", "dance", "dancehall", "death-metal", "deep-house", "detroit-techno", "disco", "disney", "drum-and-bass", "dub", "dubstep", "edm", "electro", "electronic", "emo", "folk", "forro", "french", "funk", "garage", "german", "gospel", "goth", "grindcore", "groove", "grunge", "guitar", "happy", "hard-rock", "hardcore", "hardstyle", "heavy-metal", "hip-hop", "holidays", "honky-tonk", "house", "idm", "indian", "indie", "indie-pop", "industrial", "iranian", "j-dance", "j-idol", "j-pop", "j-rock", "jazz", "k-pop", "kids", "latin", "latino", "malay", "mandopop", "metal", "metal-misc", "metalcore", "minimal-techno", "movies", "mpb", "new-age", "new-release", "opera", "pagode", "party", "philippines-opm", "piano", "pop", "pop-film", "post-dubstep", "power-pop", "progressive-house", "psych-rock", "punk", "punk-rock", "r-n-b", "rainy-day", "reggae", "reggaeton", "road-trip", "rock", "rock-n-roll", "rockabilly", "romance", "sad", "salsa", "samba", "sertanejo", "show-tunes", "singer-songwriter", "ska", "sleep", "songwriter", "soul", "soundtracks", "spanish", "study", "summer", "swedish", "synth-pop", "tango", "techno", "trance", "trip-hop", "turkish", "work-out", "world-music"]
 currentGenre = "pop"
 songsGenerated = 0
+SCAN_LENGTH = 5
 #stat = "CPU Percent"
 
 current_os = platform.system()
+
+def reset_dicts():
+    cpudict["cpu_percent"] = 0.0
+    cpudict["cpu_freq"] = 0.0
+    cpudict["ram_percent"] = 0.0
+    cpudict["swap_percent"] = 0.0
+    cpudict["fan_speed"] = 0.0
+    cpudict["temp_sensor"] = 0.0
+    cpudict["battery_info"] = 0.0
+
+    sumdict["cpu_percent"] = 0.0
+    sumdict["cpu_freq"] = 0.0
+    sumdict["ram_percent"] = 0.0
+    sumdict["swap_percent"] = 0.0
+    sumdict["fan_speed"] = 0.0
+    sumdict["temp_sensor"] = 0.0
+    sumdict["battery_info"] = 0.0
+    sumdict["timer"] = 0.0
+
+    mindict["cpu_percent"] = 0.0
+    mindict["cpu_freq"] = 0.0
+    mindict["ram_percent"] = 0.0
+    mindict["swap_percent"] = 0.0
+    mindict["fan_speed"] = 0.0
+    mindict["temp_sensor"] = 0.0
+    mindict["battery_info"] = 0.0
+
+    maxdict["cpu_percent"] = 0.0
+    maxdict["cpu_freq"] = 0.0
+    maxdict["ram_percent"] = 0.0
+    maxdict["swap_percent"] = 0.0
+    maxdict["fan_speed"] = 0.0
+    maxdict["temp_sensor"] = 0.0
+    maxdict["battery_info"] = 0.0
+
 
 def update_spotify_values():
     spotify_dict["energy"] = cpudict[CONST_STATS.CPU_VALUE]

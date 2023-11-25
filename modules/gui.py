@@ -2,7 +2,7 @@ import sys
 import random
 from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QComboBox
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar, QScrollArea
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar, QScrollArea, QMessageBox
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtGui import QPalette, QColor, QIcon, QPixmap, QImage, QFont
 from array import *
@@ -59,6 +59,7 @@ class MainWindow(QMainWindow):
         mainWindow.generateButton = QPushButton("Generate Song")
         mainWindow.taskButton = QPushButton("Start tasks")
         mainWindow.genreButton = QPushButton("Set Genre")
+        mainWindow.startScanButton = QPushButton("Start Scan")
 
         mainWindow.oGraphButton1 = QPushButton("Open Graph")
         mainWindow.oGraphButton2 = QPushButton("Open Graph")
@@ -70,6 +71,7 @@ class MainWindow(QMainWindow):
 
         mainWindow.generateButton.button_is_checked = False
         mainWindow.taskButton.button_is_checked = False
+        mainWindow.startScanButton.button_is_checked = False
 
         mainWindow.dataButton.button_is_checked = False
         mainWindow.scanButton.button_is_checked = False
@@ -95,9 +97,19 @@ class MainWindow(QMainWindow):
         mainWindow.batteryInfo     = QLabel()
         mainWindow.graphDesc       = QLabel()
 
+        mainWindow.genreList_sc      = QComboBox(mainWindow)
+        mainWindow.songEmbed_sc      = QWebEngineView()
+        mainWindow.emotionReading_sc = QLabel()
+        mainWindow.scanInfo          = QLabel()
+        mainWindow.scanTimer         = QLabel()
+
         mainWindow.genreList.addItems(state.genreList)
         mainWindow.genreList.move(100,100)
         mainWindow.genreList.setPlaceholderText("iranian")
+
+        mainWindow.genreList_sc.addItems(state.genreList)
+        mainWindow.genreList_sc.move(100,100)
+        mainWindow.genreList_sc.setPlaceholderText("iranian")
 
         mainWindow.genDescription.setWordWrap(True)
 
@@ -105,7 +117,10 @@ class MainWindow(QMainWindow):
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
         mainWindow.songEmbed.setHtml("<html><body style='background-color:#33475b'</body></html>")
-        mainWindow.songEmbed.show()
+        #mainWindow.songEmbed.show()
+
+        mainWindow.songEmbed_sc.setHtml("<html><body style='background-color:#33475b'</body></html>")
+        mainWindow.songEmbed_sc.show()
 
         mainWindow.mood_display = QWidget()
         mainWindow.data_display = QWidget()
@@ -253,36 +268,29 @@ class MainWindow(QMainWindow):
         #create layouts
         containerBench = QVBoxLayout()
 
-
-
-        mainWindow.scanRowBasic = QHBoxLayout()
+        #mainWindow.scanRowBasic = QHBoxLayout()
         mainWindow.scanRow2 = QHBoxLayout()
         mainWindow.scanRow3 = QHBoxLayout()
         mainWindow.scanRow4 = QHBoxLayout()
         mainWindow.scanRow5 = QHBoxLayout()
 
         #add widgets
-        mainWindow.scanRow2.addWidget(Color('#8B0000'))
-        mainWindow.scanRow2.addWidget(Color('#006400'))
-        mainWindow.scanRow2.addWidget(Color('#453200'))
-
-        mainWindow.scanRow3.addWidget(Color('#8B0000'))
-        mainWindow.scanRow3.addWidget(Color('#006400'))
-        mainWindow.scanRow3.addWidget(Color('#453200'))
-
-        mainWindow.scanRow4.addWidget(Color('#8B0000'))
-        mainWindow.scanRow4.addWidget(Color('#006400'))
-        mainWindow.scanRow4.addWidget(Color('#453200'))
-
-        mainWindow.scanRow5.addWidget(Color('#8B0000'))
-        mainWindow.scanRow5.addWidget(Color('#006400'))
-        mainWindow.scanRow5.addWidget(Color('#453200'))
+        #mainWindow.scanRow2.addWidget(Color('#8B0000'))
+        #mainWindow.scanRow2.addWidget(Color('#006400'))
+        #mainWindow.scanRow2.addWidget(Color('#453200'))
+        mainWindow.scanRow2.addWidget(mainWindow.genreList_sc)
+        mainWindow.scanRow2.addWidget(mainWindow.scanTimer)
+        mainWindow.scanRow2.addWidget(mainWindow.startScanButton)
+        mainWindow.scanRow3.addWidget(mainWindow.scanInfo)
+        mainWindow.scanRow3.addWidget(mainWindow.emotionReading_sc)
+        mainWindow.scanRow4.addWidget(mainWindow.songEmbed_sc)
 
         #add layouts
         containerBench.addLayout(mainWindow.scanRow2)
         containerBench.addLayout(mainWindow.scanRow3)
         containerBench.addLayout(mainWindow.scanRow4)
         containerBench.addLayout(mainWindow.scanRow5)
+        #containerBench.addLayout(mainWindow.scanRowBasic)
 
         return containerBench
 
@@ -430,6 +438,7 @@ class MainWindow(QMainWindow):
         mainWindow.dataButton.setChecked(False)
         mainWindow.moodButton.setChecked(True)
         mainWindow.scanButton.setChecked(False)
+        mainWindow.startScanButton.setChecked(False)
 
         mainWindow.oGraphButton1.setChecked(False)
         mainWindow.oGraphButton2.setChecked(False)
@@ -445,6 +454,7 @@ class MainWindow(QMainWindow):
         mainWindow.dataButton.clicked.connect(mainWindow.dataButtonPressed)
         mainWindow.moodButton.clicked.connect(mainWindow.moodButtonPressed)
         mainWindow.scanButton.clicked.connect(mainWindow.scanButtonPressed)
+        mainWindow.startScanButton.clicked.connect(mainWindow.startScan)
 
         mainWindow.oGraphButton1.clicked.connect(mainWindow.oGraphButtonPressed1)
         mainWindow.oGraphButton2.clicked.connect(mainWindow.oGraphButtonPressed2)
@@ -615,6 +625,85 @@ class MainWindow(QMainWindow):
         mainWindow.generateButton.clicked = True
         return
     
+    def startScan(mainWindow):
+        state.reset_dicts()
+        mainWindow.scanPage_phase1()
+        mainWindow.moodButton.setChecked(True)
+        mainWindow.dataButton.setChecked(True)
+        tasks.start(mainWindow.scanTask)
+    
+    def finishScan(mainWindow):
+        mainWindow.moodButton.setChecked(False)
+        mainWindow.dataButton.setChecked(False)
+    
+    def scanTask(mainWindow):
+        clocks = ["◴", "◵", "◶", "◷"]
+        time = 0
+        mainWindow.scanTimer.setText(mainWindow.timerString(clocks, time))
+        while time < state.SCAN_LENGTH:
+            tasks.wait(1000)
+            time += 1
+            mainWindow.scanTimer.setText(mainWindow.timerString(clocks, time))
+        tasks.wait(1000)
+        print("Scan finished.")
+        mainWindow.scanPage_phase2()
+        tasks.wait(1000)
+        print("Starting capture moment.")
+        mainWindow.scan_screenshot()
+        finish_msg = QMessageBox()
+        finish_msg.setText("Scan has been finished! \nA screenshot of your scan is in your clipboard.")
+        mainWindow.finishScan()
+        tasks.wait(1000)
+        finish_msg.exec()
+    
+    def timerString(mainWindow, clocks, time):
+        ret = clocks[time % 4]
+        down_time = (state.SCAN_LENGTH - time)
+        ret = ret + str(down_time // 60) + ":" + str(down_time % 60)
+        return ret
+    
+    def scanPage_phase2(mainWindow):
+        mainWindow.emotionReading_sc.setText("sample text")
+        mainWindow.scanInfo.setText("sample text")
+        #mainWindow.scanRow3.setAlignment(mainWindow.emotionReading_sc, Qt.AlignmentFlag.AlignCenter)
+
+        clocks = ["◴", "◵", "◶", "◷"]
+        mainWindow.scanTimer.setText(mainWindow.timerString(clocks, 60))
+
+        mainWindow.startScanButton.setText("Scan Again")
+
+        state.currentGenre = mainWindow.genreList_sc.currentText()
+        print(state.currentGenre)
+        songs = spotify.main()
+        print("URI generated!")
+
+        #mainWindow.songEmbed_sc.setHtml(open("embed.html").read())
+        #mainWindow.songEmbed_sc.show()
+        #mainWindow.songEmbed_sc.setFixedSize(1000, 250)
+
+        state.songsGenerated += 1
+    
+    def scanPage_phase1(mainWindow):
+        mainWindow.emotionReading_sc.setText("")
+        mainWindow.scanInfo.setText("")
+
+        clocks = ["◴", "◵", "◶", "◷"]
+        mainWindow.scanTimer.setText(mainWindow.timerString(clocks, 0))
+
+        mainWindow.songEmbed_sc.setHtml("<html><body style='background-color:#33475b'</body></html>")
+        mainWindow.songEmbed_sc.show()
+
+    def scan_screenshot(mainWindow):
+        screen = QApplication.primaryScreen()
+        screenshot = screen.grabWindow(mainWindow.winId())
+        screenshot.save('scan_results.png', 'png')
+        print("Screenshot saved.")
+        clipboard = QApplication.clipboard()
+        img = QImage()
+        img.load('scan_results.png', 'png')
+        clipboard.setImage(img)
+        print("Screenshot in clipboard!")
+    
     def processingUI(mainWindow):
         item = mainWindow.moodRow3.itemAt(0)
         rm = item.widget()
@@ -654,11 +743,11 @@ class MainWindow(QMainWindow):
             mainWindow.swapInfo.setText(infoText)
             totalText = totalText + "\n" + infoText
 
+            '''
             infoText = "Fan Speed: " + str(state.cpudict["fan_speed"])
             mainWindow.fanInfo.setText(infoText)
             totalText = totalText + "\n" + infoText
 
-            '''
             infoText = "Internal Temperature: " + str(state.cpudict["temp_sensor"])
             mainWindow.tempInfo.setText(infoText)
             totalText = totalText + "\n" + infoText
