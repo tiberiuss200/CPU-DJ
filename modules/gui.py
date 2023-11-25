@@ -684,14 +684,14 @@ class MainWindow(QMainWindow):
         # trying to use a second widget has proven annoying, so... we might want to find a way to move this
         # maybe have only two pages, where one is mood/scan and one is data, idk
          # ???? why is SETHTML causing problems
-        #mainWindow.songEmbed.setHtml(open("embed.html").read())
-        mainWindow.songEmbed_sc.show()
-        mainWindow.songEmbed_sc.setFixedSize(1000, 250)
+        #mainWindow.songEmbed_sc.setHtml(open("embed.html").read())
+        #mainWindow.songEmbed_sc.show()
+        #mainWindow.songEmbed_sc.setFixedSize(1000, 250)
 
-        item = mainWindow.moodRow4.itemAt(0)
-        rm = item.widget()
-        rm.deleteLater()
-        mainWindow.moodRow4.addWidget(mainWindow.songEmbed)
+        #item = mainWindow.scanRow4.itemAt(0)
+        #rm = item.widget()
+        #rm.deleteLater()
+        #mainWindow.scanRow4.addWidget(mainWindow.songEmbed_sc)
 
         state.songsGenerated += 1
     
@@ -701,8 +701,8 @@ class MainWindow(QMainWindow):
 
         mainWindow.scanTimer.setText(mainWindow.timerString(0))
 
-        mainWindow.songEmbed_sc.setHtml("<html><body style='background-color:#33475b'</body></html>")
-        mainWindow.songEmbed_sc.show()
+        #mainWindow.songEmbed_sc.setHtml("<html><body style='background-color:#33475b'</body></html>")
+        #mainWindow.songEmbed_sc.show()
 
     def scan_screenshot(mainWindow):
         screen = QApplication.primaryScreen()
