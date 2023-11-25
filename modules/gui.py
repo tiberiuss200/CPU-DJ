@@ -4,7 +4,7 @@ from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QComboBox
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar, QScrollArea, QMessageBox
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtGui import QPalette, QColor, QIcon, QPixmap, QImage, QFont
+from PyQt6.QtGui import QPalette, QColor, QIcon, QPixmap, QImage, QFont, QClipboard
 from array import *
 
 import modules.spotify as spotify
@@ -12,6 +12,8 @@ from modules.processing import prep_tasks
 import modules.state as state
 import modules.tasks as tasks
 import modules.graphs as graphs
+
+from modules.tasks import startupTasksTimer, finishScanTimer
 
 app_path = ""
 
@@ -631,10 +633,20 @@ class MainWindow(QMainWindow):
         mainWindow.moodButton.setChecked(True)
         mainWindow.dataButton.setChecked(True)
         tasks.start(mainWindow.scanTask)
+        timer_scanFinish = finishScanTimer(mainWindow)
+        timer_scanFinish.timeout.connect(lambda: mainWindow.finishScan())
+        timer_scanFinish.start()
+        
     
     def finishScan(mainWindow):
         mainWindow.moodButton.setChecked(False)
         mainWindow.dataButton.setChecked(False)
+
+        print("Starting capture moment.")
+        mainWindow.scan_screenshot()
+        finish_msg = QMessageBox()
+        finish_msg.setText("Scan has been finished! \nA screenshot of your scan is in your clipboard.")
+        finish_msg.exec()
     
     def scanTask(mainWindow):
         clocks = ["◴", "◵", "◶", "◷"]
@@ -647,14 +659,6 @@ class MainWindow(QMainWindow):
         tasks.wait(1000)
         print("Scan finished.")
         mainWindow.scanPage_phase2()
-        tasks.wait(1000)
-        print("Starting capture moment.")
-        mainWindow.scan_screenshot()
-        finish_msg = QMessageBox()
-        finish_msg.setText("Scan has been finished! \nA screenshot of your scan is in your clipboard.")
-        mainWindow.finishScan()
-        tasks.wait(1000)
-        finish_msg.exec()
     
     def timerString(mainWindow, clocks, time):
         ret = clocks[time % 4]
@@ -698,10 +702,11 @@ class MainWindow(QMainWindow):
         screenshot = screen.grabWindow(mainWindow.winId())
         screenshot.save('scan_results.png', 'png')
         print("Screenshot saved.")
-        clipboard = QApplication.clipboard()
+        cb = QApplication.clipboard()
+        cb.clear(QClipboard.Mode.Clipboard)
         img = QImage()
         img.load('scan_results.png', 'png')
-        clipboard.setImage(img)
+        cb.setImage(img)
         print("Screenshot in clipboard!")
     
     def processingUI(mainWindow):
@@ -820,7 +825,7 @@ def main():
 
     # ok so this just WORKS so we don't need to adjust this in how it works
     # the only change that needs to be made is what it calls 
-    from modules.tasks import startupTasksTimer
+    
     timer_onStartUp = startupTasksTimer(state.window)
     timer_onStartUp.timeout.connect(lambda: state.window.taskButtonPressed())
     timer_onStartUp.start()

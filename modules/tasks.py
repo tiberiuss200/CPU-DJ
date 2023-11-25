@@ -106,6 +106,12 @@ def startupTasksTimer(window):
     timer_onStartUp.setInterval(0)
     return timer_onStartUp
 
+def finishScanTimer(window):
+    timer_finishScan = QTimer(window)
+    timer_finishScan.setSingleShot(True)
+    timer_finishScan.setInterval(state.SCAN_LENGTH * 1000 + 2000)
+    return timer_finishScan
+
 #eof
 
 
