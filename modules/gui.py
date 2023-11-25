@@ -40,7 +40,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         frameCounter = 0
         mainWindow.setWindowTitle("CPU-DJ")
-        mainWindow.setWindowIcon(QIcon('logo.ico'))
+        mainWindow.setWindowIcon(QIcon('icon.png'))
         mainWindow.setMinimumSize(200, 200)
         mainWindow.resize(1000, 600)
         mainWindow.display = ["empty"]
