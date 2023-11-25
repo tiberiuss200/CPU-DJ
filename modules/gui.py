@@ -123,6 +123,7 @@ class MainWindow(QMainWindow):
 
         mainWindow.songEmbed_sc.setHtml("<html><body style='background-color:#33475b'</body></html>")
         mainWindow.songEmbed_sc.show()
+        mainWindow.scanTimer.setText(mainWindow.timerString(0))
 
         mainWindow.mood_display = QWidget()
         mainWindow.data_display = QWidget()
@@ -649,30 +650,29 @@ class MainWindow(QMainWindow):
         finish_msg.exec()
     
     def scanTask(mainWindow):
-        clocks = ["◴", "◵", "◶", "◷"]
         time = 0
-        mainWindow.scanTimer.setText(mainWindow.timerString(clocks, time))
+        mainWindow.scanTimer.setText(mainWindow.timerString(time))
         while time < state.SCAN_LENGTH:
             tasks.wait(1000)
             time += 1
-            mainWindow.scanTimer.setText(mainWindow.timerString(clocks, time))
+            mainWindow.scanTimer.setText(mainWindow.timerString(time))
         tasks.wait(1000)
         print("Scan finished.")
         mainWindow.scanPage_phase2()
     
-    def timerString(mainWindow, clocks, time):
+    def timerString(mainWindow,time : int):
+        clocks = ["◴", "◵", "◶", "◷"]
         ret = clocks[time % 4]
         down_time = (state.SCAN_LENGTH - time)
-        ret = ret + str(down_time // 60) + ":" + str(down_time % 60)
-        return ret
+        ret = ret + " " + str(down_time // 60) + ":{seconds:02d}"
+        return ret.format(seconds = down_time % 60)
     
     def scanPage_phase2(mainWindow):
         mainWindow.emotionReading_sc.setText("sample text")
         mainWindow.scanInfo.setText("sample text")
         #mainWindow.scanRow3.setAlignment(mainWindow.emotionReading_sc, Qt.AlignmentFlag.AlignCenter)
 
-        clocks = ["◴", "◵", "◶", "◷"]
-        mainWindow.scanTimer.setText(mainWindow.timerString(clocks, 60))
+        mainWindow.scanTimer.setText(mainWindow.timerString(state.SCAN_LENGTH))
 
         mainWindow.startScanButton.setText("Scan Again")
 
@@ -680,10 +680,18 @@ class MainWindow(QMainWindow):
         print(state.currentGenre)
         songs = spotify.main()
         print("URI generated!")
+    
+        # trying to use a second widget has proven annoying, so... we might want to find a way to move this
+        # maybe have only two pages, where one is mood/scan and one is data, idk
+         # ???? why is SETHTML causing problems
+        #mainWindow.songEmbed.setHtml(open("embed.html").read())
+        mainWindow.songEmbed_sc.show()
+        mainWindow.songEmbed_sc.setFixedSize(1000, 250)
 
-        #mainWindow.songEmbed_sc.setHtml(open("embed.html").read())
-        #mainWindow.songEmbed_sc.show()
-        #mainWindow.songEmbed_sc.setFixedSize(1000, 250)
+        item = mainWindow.moodRow4.itemAt(0)
+        rm = item.widget()
+        rm.deleteLater()
+        mainWindow.moodRow4.addWidget(mainWindow.songEmbed)
 
         state.songsGenerated += 1
     
@@ -691,8 +699,7 @@ class MainWindow(QMainWindow):
         mainWindow.emotionReading_sc.setText("")
         mainWindow.scanInfo.setText("")
 
-        clocks = ["◴", "◵", "◶", "◷"]
-        mainWindow.scanTimer.setText(mainWindow.timerString(clocks, 0))
+        mainWindow.scanTimer.setText(mainWindow.timerString(0))
 
         mainWindow.songEmbed_sc.setHtml("<html><body style='background-color:#33475b'</body></html>")
         mainWindow.songEmbed_sc.show()

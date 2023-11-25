@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "CPU-DJ"
+version = "2023.11.25"
+authors = [
+    {name = "Daniel Oravetz", email = "dorav409@live.kutztown.edu"},
+    {name = "Tiberius Shaub", email = "tshau864@live.kutztown.edu"},
+    {name = "R-E Miller", email = "rmill861@live.kutztown.edu"},
+    {name = "Nathaniel Harris", email = "nharr646@live.kutztown.edu"},
+]
+description = "A mood ring for your computer!"
+readme = "README.md"
+requires-python = ">=3.11.4"
+keywords = ["dj"]
+license = {text = "BSD-3-Clause"}
+classifiers = [
+    "Framework :: Qt",
+    "Programming Language :: Python :: 3",
+]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["require_win.txt", "require_mac.txt", "require_linux.txt"]}

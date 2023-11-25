@@ -50,14 +50,18 @@ VENV_DIR = join(getcwd(), '.venv')
 SCRIPT_PATH = join(getcwd(), 'main.py')
 REQ_TXT = get_requirements_txt()
 
-print(VENV_START_BIN)
+#print(VENV_START_BIN)
 
-if (not exists(VENV_START_BIN)):
-    # start venv setup process
-    freeze_support()
-    create_venv(".venv")
-    print("Populating .venv...\n")
-    subprocess.run([join('.venv', VENV_BIN, 'pip'), "install", "-r", join(getcwd(), REQ_TXT)], cwd=getcwd(), stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
+def main():
+    if (not exists(VENV_START_BIN)):
+        # start venv setup process
+        freeze_support()
+        create_venv(".venv")
+        print("Populating .venv...\n")
+        subprocess.run([join('.venv', VENV_BIN, 'pip'), "install", "-r", join(getcwd(), REQ_TXT)], cwd=getcwd(), stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
 
-process = subprocess.Popen([PYTHON_BIN, SCRIPT_PATH], shell=True)
-process.wait()
+    process = subprocess.Popen([PYTHON_BIN, SCRIPT_PATH], shell=True)
+    process.wait()
+
+if __name__ == "__main__":
+    main()

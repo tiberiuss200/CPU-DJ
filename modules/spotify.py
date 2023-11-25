@@ -118,7 +118,7 @@ def uri_to_embed(uri):
     with open(path, 'w') as html:
         html.write(toWrite)
     
-    return path
+    return toWrite
 
 if __name__ == "__main__":
     main()
