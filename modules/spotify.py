@@ -19,7 +19,7 @@ class X:
 client_id = "016b59b007cf4494869123ecdb2f0687"              #Client ID
 client_secret = "113ddc7d11f940f990e85be0a186399f"          #Client Secret
 
-def main():
+def main(embedNum):
     state.update_spotify_values()
     token = get_token()                                                             #Calls to setup the client ID and Secret
     songs = get_track_reccomendation(token, state.currentGenre, state.spotify_dict["energy"] / 10, state.spotify_dict["tempo"] / 10, state.spotify_dict["valence"] / 100)      #Gets the track name from the computer mood
@@ -27,7 +27,7 @@ def main():
     #print(songs)                                                                    #Prints out the song title
     #print(uri)                                                                      #Prints the song URI
     #print("-------------------------------------------")                            #Bar to make output more readable
-    uri_to_embed(songs)
+    uri_to_embed(songs, embedNum)
 
     return songs
 
@@ -91,7 +91,7 @@ def get_uri(token, genre, energy, tempo, valence):
         return song_uri
 
 # moved from processing because of the tasks I created bitching about this function -D
-def uri_to_embed(uri): 
+def uri_to_embed(uri, embedNum): 
     """
     <html>
         <script src=\"https://open.spotify.com/embed-podcast/iframe-api/v1\" async></script>
@@ -114,7 +114,7 @@ def uri_to_embed(uri):
     """
     rough = uri_to_embed.__doc__
     toWrite = rough.replace("[[URI]]", str(uri))
-    path = "embed.html"
+    path = "embed" + str(embedNum) + ".html"
     with open(path, 'w') as html:
         html.write(toWrite)
     

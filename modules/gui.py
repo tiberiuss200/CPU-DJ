@@ -87,8 +87,10 @@ class MainWindow(QMainWindow):
         #initializing labels
         mainWindow.name            = "Test"
         mainWindow.playlistDisplay = QLabel()
+
         mainWindow.songEmbed       = QWebEngineView()
         mainWindow.emotionReading  = QLabel()
+
         mainWindow.genDescription  = QLabel()
         mainWindow.cpuInfo         = QLabel()
         mainWindow.cpuFreq         = QLabel()
@@ -99,9 +101,9 @@ class MainWindow(QMainWindow):
         mainWindow.batteryInfo     = QLabel()
         mainWindow.graphDesc       = QLabel()
 
-        mainWindow.genreList_sc      = QComboBox(mainWindow)
         mainWindow.songEmbed_sc      = QWebEngineView()
         mainWindow.emotionReading_sc = QLabel()
+        mainWindow.genreList_sc      = QComboBox(mainWindow)
         mainWindow.scanInfo          = QLabel()
         mainWindow.scanTimer         = QLabel()
 
@@ -118,11 +120,12 @@ class MainWindow(QMainWindow):
         mainWindow.playlistDisplay.setText("Failed - QLabel Set Text")
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
+        #embed code
         mainWindow.songEmbed.setHtml("<html><body style='background-color:#33475b'</body></html>")
         #mainWindow.songEmbed.show()
 
         mainWindow.songEmbed_sc.setHtml("<html><body style='background-color:#33475b'</body></html>")
-        mainWindow.songEmbed_sc.show()
+        #mainWindow.songEmbed_sc.show()
         mainWindow.scanTimer.setText(mainWindow.timerString(0))
 
         mainWindow.mood_display = QWidget()
@@ -193,13 +196,6 @@ class MainWindow(QMainWindow):
                 border-bottom-right-radius: 3px;
             }
         """)
-
-        mainWindow.happySheet = "QLabel { color: yellow; font-size: 28px; font-family:    Arial, sans-serif; }"
-        mainWindow.sadSheet = "QLabel { color: light-blue; font-size: 28px; font-family:        Courier-New, monospace; }"
-        mainWindow.angrySheet = "QLabel { color: red; font-size: 28px; font-family:       Phosphate, sans-serif; }"
-        mainWindow.surprisedSheet = "QLabel { color: pink; font-size: 28px; font-family:  Impact, sans-serif; }"
-        mainWindow.stressedSheet = "QLabel { color: orange; font-size: 28px; font-family: Cooper, serif; }"
-        mainWindow.neutralSheet = "QLabel { color: white; font-size: 28px; font-family:   Arial, sans-serif; }"
 
         mainWindow.emotionReading.setStyleSheet("font-size: 28px;")
 
@@ -287,6 +283,7 @@ class MainWindow(QMainWindow):
         mainWindow.scanRow3.addWidget(mainWindow.scanInfo)
         mainWindow.scanRow3.addWidget(mainWindow.emotionReading_sc)
         mainWindow.scanRow4.addWidget(mainWindow.songEmbed_sc)
+        mainWindow.scanRow4.setAlignment(mainWindow.songEmbed_sc, Qt.AlignmentFlag.AlignCenter)  # Center horizontally
 
         #add layouts
         containerBench.addLayout(mainWindow.scanRow2)
@@ -637,17 +634,27 @@ class MainWindow(QMainWindow):
         timer_scanFinish = finishScanTimer(mainWindow)
         timer_scanFinish.timeout.connect(lambda: mainWindow.finishScan())
         timer_scanFinish.start()
-        
+
     
     def finishScan(mainWindow):
         mainWindow.moodButton.setChecked(False)
         mainWindow.dataButton.setChecked(False)
+
+        songs = spotify.main(2)
+    
+        # trying to use a second widget has proven annoying, so... we might want to find a way to move this
+        # maybe have only two pages, where one is mood/scan and one is data, idk
+        # ???? why is SETHTML causing problems
+        mainWindow.songEmbed_sc.setHtml(open("embed2.html").read())
+        mainWindow.songEmbed_sc.show()
+        mainWindow.songEmbed_sc.setFixedSize(1000, 250)
 
         print("Starting capture moment.")
         mainWindow.scan_screenshot()
         finish_msg = QMessageBox()
         finish_msg.setText("Scan has been finished! \nA screenshot of your scan is in your clipboard.")
         finish_msg.exec()
+
     
     def scanTask(mainWindow):
         time = 0
@@ -666,7 +673,16 @@ class MainWindow(QMainWindow):
         down_time = (state.SCAN_LENGTH - time)
         ret = ret + " " + str(down_time // 60) + ":{seconds:02d}"
         return ret.format(seconds = down_time % 60)
-    
+        
+    def scanPage_phase1(mainWindow):
+        mainWindow.emotionReading_sc.setText("")
+        mainWindow.scanInfo.setText("")
+
+        mainWindow.scanTimer.setText(mainWindow.timerString(0))
+
+        #mainWindow.songEmbed_sc.show()
+        #mainWindow.songEmbed_sc.setFixedSize(1000, 250)
+
     def scanPage_phase2(mainWindow):
         mainWindow.emotionReading_sc.setText("sample text")
         mainWindow.scanInfo.setText("sample text")
@@ -674,35 +690,18 @@ class MainWindow(QMainWindow):
 
         mainWindow.scanTimer.setText(mainWindow.timerString(state.SCAN_LENGTH))
 
-        mainWindow.startScanButton.setText("Scan Again")
-
         state.currentGenre = mainWindow.genreList_sc.currentText()
         print(state.currentGenre)
-        songs = spotify.main()
+
         print("URI generated!")
-    
-        # trying to use a second widget has proven annoying, so... we might want to find a way to move this
-        # maybe have only two pages, where one is mood/scan and one is data, idk
-         # ???? why is SETHTML causing problems
-        #mainWindow.songEmbed_sc.setHtml(open("embed.html").read())
-        #mainWindow.songEmbed_sc.show()
-        #mainWindow.songEmbed_sc.setFixedSize(1000, 250)
+        mainWindow.startScanButton.setText("Scan Again")
+
 
         #item = mainWindow.scanRow4.itemAt(0)
         #rm = item.widget()
         #rm.deleteLater()
-        #mainWindow.scanRow4.addWidget(mainWindow.songEmbed_sc)
 
         state.songsGenerated += 1
-    
-    def scanPage_phase1(mainWindow):
-        mainWindow.emotionReading_sc.setText("")
-        mainWindow.scanInfo.setText("")
-
-        mainWindow.scanTimer.setText(mainWindow.timerString(0))
-
-        #mainWindow.songEmbed_sc.setHtml("<html><body style='background-color:#33475b'</body></html>")
-        #mainWindow.songEmbed_sc.show()
 
     def scan_screenshot(mainWindow):
         screen = QApplication.primaryScreen()
@@ -736,9 +735,10 @@ class MainWindow(QMainWindow):
             emotionFull = emotionInt + emotionText
 
             mainWindow.emotionReading.setText(emotionFull)
-            mainWindow.emotionReading.setStyleSheet(mainWindow.fontPick(emotionText))
+            mainWindow.emotionReading.setStyleSheet("color: white; font-size: 28px;")
 
-            infoText = "CPU Percent: " + str(state.cpudict["cpu_percent"]) + "%"
+            #this section is for compiling each line of text, and setting the strings to good variables
+            infoText = str(state.cpudict["cpu_percent"]) + "%"
             mainWindow.cpuInfo.setText(infoText)
             totalText = infoText
 
@@ -783,29 +783,16 @@ class MainWindow(QMainWindow):
         print("URI generated!")
         mainWindow.generateButton.setText("Generate New Song")
 
-        songs = spotify.main()
+        songs = spotify.main(1)
 
-        # Refresh the songEmbed with the contents of "embed.html" every time
-        mainWindow.songEmbed.setHtml(open("embed.html").read())
-        #mainWindow.songEmbed.page().runJavaScript('document.getElementById("embed-iframe").style.height = "150px";')
+        # Refresh the song Embed with the contents of "embed.html" every time
+        mainWindow.songEmbed.setHtml(open("embed1.html").read())
         mainWindow.songEmbed.show()
-        #mainWindow.songEmbed.frameSize()
         mainWindow.songEmbed.setFixedSize(1000, 250)
         mainWindow.playlistDisplay.setText(mainWindow.display[0])
 
         state.songsGenerated += 1
         return
-
-    def fontPick(mainWindow, case):
-        switch_dict = {
-            'Happy.': mainWindow.happySheet,
-            'Sad.': mainWindow.sadSheet,
-            'Angry.': mainWindow.angrySheet,
-            'Surprised.': mainWindow.surprisedSheet,
-            'Stressed.': mainWindow.stressedSheet,
-            'Neutral.': mainWindow.neutralSheet,
-        }
-        return switch_dict.get(case, 'This is the default case')
 
 def show_Playlist(songs, mainWindow, QLabel):
     return
