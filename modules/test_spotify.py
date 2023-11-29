@@ -8,7 +8,6 @@
 # on mac:
 # source .venv/bin/activate
 
-
 # cd ./modules
 # python3 -m unittest test_spotify.py
 
@@ -104,7 +103,6 @@ class TestSpotifyFunctions(unittest.TestCase):
         
         print("\ntest GET URI complete!")
         
-
     def test_uri_to_embed(self):
         print("\ntesting URI TO EMBED...")
 

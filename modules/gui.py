@@ -1,6 +1,6 @@
 import sys
 import random
-from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl
+from PyQt6.QtCore import QSize, Qt, QThreadPool, pyqtSignal, QUrl, QTimer
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QComboBox
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QStackedLayout, QScrollBar, QScrollArea, QMessageBox
 from PyQt6.QtWebEngineWidgets import QWebEngineView
@@ -22,8 +22,6 @@ class Color(QWidget):
     def __init__(self, color):
         super(Color, self).__init__()
         self.setAutoFillBackground(True)
-
-
         
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor(color))
@@ -197,7 +195,7 @@ class MainWindow(QMainWindow):
             }
         """)
 
-        mainWindow.emotionReading.setStyleSheet("font-size: 28px;")
+        mainWindow.emotionReading.setStyleSheet("font-size: 28px; font-family: impact, sans-serif; ")
 
         frameCounter+=1
         print(frameCounter)
@@ -207,8 +205,6 @@ class MainWindow(QMainWindow):
     def top_bar(mainWindow):
         #create layouts
         row1 = QHBoxLayout()
-
-
 
         iconBox = QLabel()
         logoBox = QLabel()
@@ -630,33 +626,46 @@ class MainWindow(QMainWindow):
         mainWindow.scanPage_phase1()
         mainWindow.moodButton.setChecked(True)
         mainWindow.dataButton.setChecked(True)
+
         tasks.start(mainWindow.scanTask)
         timer_scanFinish = finishScanTimer(mainWindow)
-        timer_scanFinish.timeout.connect(lambda: mainWindow.finishScan())
-        timer_scanFinish.start()
 
+        timer_scanFinish.timeout.connect(lambda: mainWindow.finishScan())
+
+        timer_scanFinish.start()
+        #nothing runs after the above line of code ^
     
     def finishScan(mainWindow):
         mainWindow.moodButton.setChecked(False)
         mainWindow.dataButton.setChecked(False)
+        #putting the embed here freezes the application
 
-        songs = spotify.main(2)
-    
         # trying to use a second widget has proven annoying, so... we might want to find a way to move this
         # maybe have only two pages, where one is mood/scan and one is data, idk
         # ???? why is SETHTML causing problems
+        songs = spotify.main(2)
         mainWindow.songEmbed_sc.setHtml(open("embed2.html").read())
         mainWindow.songEmbed_sc.show()
         mainWindow.songEmbed_sc.setFixedSize(1000, 250)
 
+        timer_screenShot = tasks.screenShotTimer(mainWindow)
+        timer_screenShot.timeout.connect(lambda: mainWindow.scanSc())
+        timer_screenShot.start()
+
+    
+    def scanSc(mainWindow):
         print("Starting capture moment.")
         mainWindow.scan_screenshot()
+        #putting the embed here freezes the application
+
         finish_msg = QMessageBox()
         finish_msg.setText("Scan has been finished! \nA screenshot of your scan is in your clipboard.")
         finish_msg.exec()
+        # putting the embed here it shows after the screenshot
 
-    
     def scanTask(mainWindow):
+        # putting the embed here freezes the application
+
         time = 0
         mainWindow.scanTimer.setText(mainWindow.timerString(time))
         while time < state.SCAN_LENGTH:
@@ -665,6 +674,8 @@ class MainWindow(QMainWindow):
             mainWindow.scanTimer.setText(mainWindow.timerString(time))
         tasks.wait(1000)
         print("Scan finished.")
+
+        # placing the embed here crashes the program.
         mainWindow.scanPage_phase2()
     
     def timerString(mainWindow,time : int):
@@ -684,6 +695,8 @@ class MainWindow(QMainWindow):
         #mainWindow.songEmbed_sc.setFixedSize(1000, 250)
 
     def scanPage_phase2(mainWindow):
+        #application crashes if embed it put here
+
         mainWindow.emotionReading_sc.setText("sample text")
         mainWindow.scanInfo.setText("sample text")
         #mainWindow.scanRow3.setAlignment(mainWindow.emotionReading_sc, Qt.AlignmentFlag.AlignCenter)
@@ -696,7 +709,6 @@ class MainWindow(QMainWindow):
         print("URI generated!")
         mainWindow.startScanButton.setText("Scan Again")
 
-
         #item = mainWindow.scanRow4.itemAt(0)
         #rm = item.widget()
         #rm.deleteLater()
@@ -704,6 +716,8 @@ class MainWindow(QMainWindow):
         state.songsGenerated += 1
 
     def scan_screenshot(mainWindow):
+        #putting the embed code here runs after the screenshot.
+
         screen = QApplication.primaryScreen()
         screenshot = screen.grabWindow(mainWindow.winId())
         screenshot.save('scan_results.png', 'png')
@@ -735,7 +749,7 @@ class MainWindow(QMainWindow):
             emotionFull = emotionInt + emotionText
 
             mainWindow.emotionReading.setText(emotionFull)
-            mainWindow.emotionReading.setStyleSheet("color: white; font-size: 28px;")
+            mainWindow.emotionReading.setStyleSheet("font-size: 28px; font-family: impact, sans-serif; ")
 
             #this section is for compiling each line of text, and setting the strings to good variables
             infoText = str(state.cpudict["cpu_percent"]) + "%"

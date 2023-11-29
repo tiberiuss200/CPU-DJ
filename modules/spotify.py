@@ -107,11 +107,14 @@ def uri_to_embed(uri, embedNum):
                 IFrameAPI.createController(element, options, callback);
             };
         </script>
+        
         <body style="background-color:#33475b">
             <div id="embed-iframe" scrolling="no"></div>
         </body> 
     </html>
     """
+    #<body style="background-color:#33475b">
+    
     rough = uri_to_embed.__doc__
     toWrite = rough.replace("[[URI]]", str(uri))
     path = "embed" + str(embedNum) + ".html"
