@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pyinstaller -F --icon=.\logo.ico --noconsole \main.py
+pyinstaller --windowed --onedir --noconsole --clean --icon=./icon.icns ./main.py
