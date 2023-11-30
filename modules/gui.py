@@ -648,11 +648,47 @@ class MainWindow(QMainWindow):
         mainWindow.songEmbed_sc.show()
         mainWindow.songEmbed_sc.setFixedSize(1000, 250)
 
+        # min comp stats
+
+        infoMinText = "Min CPU Usage: " + str(state.mindict["cpu_percent"]) + "%"
+        mainWindow.cpuInfo.setText(infoMinText)
+        totalMinText = infoMinText
+
+        infoMinText = "Min CPU Speed: " + str(round(state.mindict["cpu_freq"], 4))
+        mainWindow.cpuFreq.setText(infoMinText)
+        totalMinText = totalMinText + "\n" + infoMinText
+
+        infoMinText = "Min RAM Usage: " + str(state.mindict["ram_percent"]) + "%"
+        mainWindow.ramInfo.setText(infoMinText)
+        totalMinText = totalMinText + "\n" + infoMinText
+
+        infoMinText = "Min RAM Swap: " + str(state.mindict["swap_percent"]) + "%"
+        mainWindow.swapInfo.setText(infoMinText)
+        totalMinText = totalMinText + "\n" + infoMinText
+
+        #max comp stats
+
+        infoMaxText = "\nMax CPU Usage: " + str(state.maxdict["cpu_percent"]) + "%"
+        mainWindow.cpuInfo.setText(infoMaxText)
+        totalMaxText = infoMaxText
+
+        infoMaxText = "Max CPU Speed: " + str(round(state.maxdict["cpu_freq"], 4))
+        mainWindow.cpuFreq.setText(infoMaxText)
+        totalMaxText = totalMaxText + "\n" + infoMaxText
+
+        infoMaxText = "Max RAM Usage: " + str(state.maxdict["ram_percent"]) + "%"
+        mainWindow.ramInfo.setText(infoMaxText)
+        totalMaxText = totalMaxText + "\n" + infoMaxText
+
+        infoMaxText = "Max RAM Swap: " + str(state.maxdict["swap_percent"]) + "%"
+        mainWindow.swapInfo.setText(infoMaxText)
+        totalMaxText = totalMaxText + "\n" + infoMaxText
+
+        mainWindow.scanInfo.setText(totalMinText + totalMaxText)
         timer_screenShot = tasks.screenShotTimer(mainWindow)
         timer_screenShot.timeout.connect(lambda: mainWindow.scanSc())
         timer_screenShot.start()
 
-    
     def scanSc(mainWindow):
         print("Starting capture moment.")
         mainWindow.scan_screenshot()
@@ -752,14 +788,13 @@ class MainWindow(QMainWindow):
             mainWindow.emotionReading.setStyleSheet("font-size: 28px; font-family: impact, sans-serif; ")
 
             #this section is for compiling each line of text, and setting the strings to good variables
-            infoText = str(state.cpudict["cpu_percent"]) + "%"
+            infoText = "CPU Usage: " + str(state.cpudict["cpu_percent"]) + "%"
             mainWindow.cpuInfo.setText(infoText)
             totalText = infoText
 
             infoText = "CPU Speed: " + str(round(state.cpudict["cpu_freq"], 4))
             mainWindow.cpuFreq.setText(infoText)
             totalText = totalText + "\n" + infoText
-
 
             infoText = "RAM Usage: " + str(state.cpudict["ram_percent"]) + "%"
             mainWindow.ramInfo.setText(infoText)
@@ -782,6 +817,7 @@ class MainWindow(QMainWindow):
             mainWindow.batteryInfo.setText(infoText)
             totalText = totalText + "\n" + infoText
             '''
+            
 
             mainWindow.genDescription.setText(totalText)
             #print(totalText)
