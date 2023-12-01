@@ -202,7 +202,7 @@ class MainWindow(QMainWindow):
             }
         """)
 
-        mainWindow.emotionReading.setStyleSheet("font-size: 28px; font-family: impact, sans-serif; ")
+        mainWindow.emotionReading.setStyleSheet("font-size: 28px;  ")
 
         frameCounter+=1
         print(frameCounter)
@@ -704,19 +704,19 @@ class MainWindow(QMainWindow):
 
         #average comp stats
 
-        infoAveText = "CPU Usage: " + str(round(state.sumdict["cpu_percent"]/32,2)) + "%"
+        infoAveText = "CPU Usage: " + str(round(state.avg_stat_value("cpu_percent"),2)) + "%"
         mainWindow.cpuInfo.setText(infoAveText)
         totalAveText = infoAveText
 
-        infoAveText = "CPU Speed: " + str(round(state.sumdict["cpu_freq"]/32, 2)) + " Hz"
+        infoAveText = "CPU Speed: " + str(round(state.avg_stat_value("cpu_freq"),2)) + " Hz"
         mainWindow.cpuFreq.setText(infoAveText)
         totalAveText = totalAveText + "\n" + infoAveText
 
-        infoAveText = "RAM Usage: " + str(round(state.sumdict["ram_percent"]/32,2)) + "%"
+        infoAveText = "RAM Usage: " + str(round(state.avg_stat_value("ram_percent"),2)) + "%"
         mainWindow.ramInfo.setText(infoAveText)
         totalAveText = totalAveText + "\n" + infoAveText
 
-        infoAveText = "RAM Swap: " + str(round(state.sumdict["swap_percent"]/32,2)) + "%"
+        infoAveText = "RAM Swap: " + str(round(state.avg_stat_value("swap_percent"),2)) + "%"
         mainWindow.swapInfo.setText(infoAveText)
         totalAveText = totalAveText + "\n" + infoAveText
 
@@ -730,7 +730,7 @@ class MainWindow(QMainWindow):
         scanFull = scanInt + scanText
 
         mainWindow.emotionReading_sc.setText(scanFull)
-        mainWindow.emotionReading_sc.setStyleSheet("font-size: 28px; font-family: impact, sans-serif; ")
+        mainWindow.emotionReading_sc.setStyleSheet("font-size: 28px; ")
 
         timer_screenShot = tasks.screenShotTimer(mainWindow)
         timer_screenShot.timeout.connect(lambda: mainWindow.scanSc())
@@ -842,7 +842,7 @@ class MainWindow(QMainWindow):
             emotionFull = emotionInt + emotionText
 
             mainWindow.emotionReading.setText(emotionFull)
-            mainWindow.emotionReading.setStyleSheet("font-size: 28px; font-family: impact, sans-serif; ")
+            mainWindow.emotionReading.setStyleSheet("font-size: 28px;")
 
             #this section is for compiling each line of text, and setting the strings to good variables
             infoText = "CPU Usage: " + str(state.cpudict["cpu_percent"]) + "%"
