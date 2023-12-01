@@ -102,7 +102,14 @@ class MainWindow(QMainWindow):
         mainWindow.songEmbed_sc      = QWebEngineView()
         mainWindow.emotionReading_sc = QLabel()
         mainWindow.genreList_sc      = QComboBox(mainWindow)
-        mainWindow.scanInfo          = QLabel()
+
+        mainWindow.scanMaxTitle      = QLabel()
+        mainWindow.scanMinTitle      = QLabel()
+        mainWindow.scanAveTitle      = QLabel()
+        mainWindow.scanMaxInfo       = QLabel()
+        mainWindow.scanMinInfo       = QLabel()
+        mainWindow.scanAveInfo       = QLabel()
+
         mainWindow.scanTimer         = QLabel()
 
         mainWindow.genreList.addItems(state.genreList)
@@ -242,7 +249,6 @@ class MainWindow(QMainWindow):
         #add widgets
         mainWindow.moodRow2.addWidget(mainWindow.genreList)
         mainWindow.moodRow2.addWidget(mainWindow.generateButton)
-        mainWindow.moodRow2.addWidget(mainWindow.taskButton)
 
         mainWindow.moodRow3.addWidget(Color('#8B0000'))
 
@@ -268,6 +274,16 @@ class MainWindow(QMainWindow):
         mainWindow.scanRow3 = QHBoxLayout()
         mainWindow.scanRow4 = QHBoxLayout()
         mainWindow.scanRow5 = QHBoxLayout()
+        mainWindow.minsCol = QVBoxLayout()
+        mainWindow.maxsCol = QVBoxLayout()
+        mainWindow.avesCol = QVBoxLayout()
+
+        mainWindow.minsCol.addWidget(mainWindow.scanMinTitle)
+        mainWindow.minsCol.addWidget(mainWindow.scanMinInfo)
+        mainWindow.maxsCol.addWidget(mainWindow.scanMaxTitle)
+        mainWindow.maxsCol.addWidget(mainWindow.scanMaxInfo)
+        mainWindow.avesCol.addWidget(mainWindow.scanAveTitle)
+        mainWindow.avesCol.addWidget(mainWindow.scanAveInfo)
 
         #add widgets
         #mainWindow.scanRow2.addWidget(Color('#8B0000'))
@@ -276,7 +292,9 @@ class MainWindow(QMainWindow):
         mainWindow.scanRow2.addWidget(mainWindow.genreList_sc)
         mainWindow.scanRow2.addWidget(mainWindow.scanTimer)
         mainWindow.scanRow2.addWidget(mainWindow.startScanButton)
-        mainWindow.scanRow3.addWidget(mainWindow.scanInfo)
+        mainWindow.scanRow3.addLayout(mainWindow.minsCol)
+        mainWindow.scanRow3.addLayout(mainWindow.maxsCol)
+        mainWindow.scanRow3.addLayout(mainWindow.avesCol)
         mainWindow.scanRow3.addWidget(mainWindow.emotionReading_sc)
         mainWindow.scanRow4.addWidget(mainWindow.songEmbed_sc)
         mainWindow.scanRow4.setAlignment(mainWindow.songEmbed_sc, Qt.AlignmentFlag.AlignCenter)  # Center horizontally
@@ -395,6 +413,7 @@ class MainWindow(QMainWindow):
         mainWindow.rightSide.addWidget(mainWindow.cpu_swap_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_fan_graph)
         mainWindow.rightSide.addWidget(mainWindow.cpu_temp_graph)
+
         #add layouts
         leftSide.addLayout(mainWindow.dataRow2, 1)  #Adding rows to leftside display
         leftSide.addLayout(mainWindow.dataRow3, 1)
@@ -408,7 +427,6 @@ class MainWindow(QMainWindow):
         scrollField.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scrollField.setLayout(leftSide)
         #scrollField.setMaximumSize(500, 400)
-
 
         return containerBench
 
@@ -650,41 +668,70 @@ class MainWindow(QMainWindow):
 
         # min comp stats
 
-        infoMinText = "Min CPU Usage: " + str(state.mindict["cpu_percent"]) + "%"
+        infoMinText = "CPU Usage: " + str(state.mindict["cpu_percent"]) + "%"
         mainWindow.cpuInfo.setText(infoMinText)
         totalMinText = infoMinText
 
-        infoMinText = "Min CPU Speed: " + str(round(state.mindict["cpu_freq"], 4))
+        infoMinText = "CPU Speed: " + str(round(state.mindict["cpu_freq"], 4)) + " Hz"
         mainWindow.cpuFreq.setText(infoMinText)
         totalMinText = totalMinText + "\n" + infoMinText
 
-        infoMinText = "Min RAM Usage: " + str(state.mindict["ram_percent"]) + "%"
+        infoMinText = "RAM Usage: " + str(state.mindict["ram_percent"]) + "%"
         mainWindow.ramInfo.setText(infoMinText)
         totalMinText = totalMinText + "\n" + infoMinText
 
-        infoMinText = "Min RAM Swap: " + str(state.mindict["swap_percent"]) + "%"
+        infoMinText = "RAM Swap: " + str(state.mindict["swap_percent"]) + "%"
         mainWindow.swapInfo.setText(infoMinText)
         totalMinText = totalMinText + "\n" + infoMinText
 
         #max comp stats
 
-        infoMaxText = "\nMax CPU Usage: " + str(state.maxdict["cpu_percent"]) + "%"
+        infoMaxText = "CPU Usage: " + str(state.maxdict["cpu_percent"]) + "%"
         mainWindow.cpuInfo.setText(infoMaxText)
         totalMaxText = infoMaxText
 
-        infoMaxText = "Max CPU Speed: " + str(round(state.maxdict["cpu_freq"], 4))
+        infoMaxText = "CPU Speed: " + str(round(state.maxdict["cpu_freq"], 4)) + " Hz"
         mainWindow.cpuFreq.setText(infoMaxText)
         totalMaxText = totalMaxText + "\n" + infoMaxText
 
-        infoMaxText = "Max RAM Usage: " + str(state.maxdict["ram_percent"]) + "%"
+        infoMaxText = "RAM Usage: " + str(state.maxdict["ram_percent"]) + "%"
         mainWindow.ramInfo.setText(infoMaxText)
         totalMaxText = totalMaxText + "\n" + infoMaxText
 
-        infoMaxText = "Max RAM Swap: " + str(state.maxdict["swap_percent"]) + "%"
+        infoMaxText = "RAM Swap: " + str(state.maxdict["swap_percent"]) + "%"
         mainWindow.swapInfo.setText(infoMaxText)
         totalMaxText = totalMaxText + "\n" + infoMaxText
 
-        mainWindow.scanInfo.setText(totalMinText + totalMaxText)
+        #average comp stats
+
+        infoAveText = "CPU Usage: " + str(round(state.sumdict["cpu_percent"]/32,2)) + "%"
+        mainWindow.cpuInfo.setText(infoAveText)
+        totalAveText = infoAveText
+
+        infoAveText = "CPU Speed: " + str(round(state.sumdict["cpu_freq"]/32, 2)) + " Hz"
+        mainWindow.cpuFreq.setText(infoAveText)
+        totalAveText = totalAveText + "\n" + infoAveText
+
+        infoAveText = "RAM Usage: " + str(round(state.sumdict["ram_percent"]/32,2)) + "%"
+        mainWindow.ramInfo.setText(infoAveText)
+        totalAveText = totalAveText + "\n" + infoAveText
+
+        infoAveText = "RAM Swap: " + str(round(state.sumdict["swap_percent"]/32,2)) + "%"
+        mainWindow.swapInfo.setText(infoAveText)
+        totalAveText = totalAveText + "\n" + infoAveText
+
+        mainWindow.scanMaxInfo.setText(totalMaxText)
+        mainWindow.scanMinInfo.setText(totalMinText)
+        mainWindow.scanAveInfo.setText(totalAveText)
+
+
+        scanInt = "Your computer is feeling "
+        scanText = state.determine_emotion()
+        scanFull = scanInt + scanText
+
+        mainWindow.emotionReading_sc.setText(scanFull)
+        mainWindow.emotionReading_sc.setStyleSheet("font-size: 28px; font-family: impact, sans-serif; ")
+
         timer_screenShot = tasks.screenShotTimer(mainWindow)
         timer_screenShot.timeout.connect(lambda: mainWindow.scanSc())
         timer_screenShot.start()
@@ -723,7 +770,9 @@ class MainWindow(QMainWindow):
         
     def scanPage_phase1(mainWindow):
         mainWindow.emotionReading_sc.setText("")
-        mainWindow.scanInfo.setText("")
+        mainWindow.scanMaxInfo.setText("")
+        mainWindow.scanMinInfo.setText("")
+        mainWindow.scanAveInfo.setText("")
 
         mainWindow.scanTimer.setText(mainWindow.timerString(0))
 
@@ -733,8 +782,16 @@ class MainWindow(QMainWindow):
     def scanPage_phase2(mainWindow):
         #application crashes if embed it put here
 
-        mainWindow.emotionReading_sc.setText("sample text")
-        mainWindow.scanInfo.setText("sample text")
+        mainWindow.emotionReading_sc.setText("")
+
+        mainWindow.scanMaxTitle.setText("Maximums")
+        mainWindow.scanMinTitle.setText("Minimums")
+        mainWindow.scanAveTitle.setText("Averages")
+
+        mainWindow.scanMaxTitle.setStyleSheet("font-size: 18px; ")
+        mainWindow.scanMinTitle.setStyleSheet("font-size: 18px; ")
+        mainWindow.scanAveTitle.setStyleSheet("font-size: 18px; ")
+
         #mainWindow.scanRow3.setAlignment(mainWindow.emotionReading_sc, Qt.AlignmentFlag.AlignCenter)
 
         mainWindow.scanTimer.setText(mainWindow.timerString(state.SCAN_LENGTH))
